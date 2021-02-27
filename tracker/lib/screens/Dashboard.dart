@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tracker/screens/About.dart';
+import 'package:tracker/screens/Pharmacies.dart';
 import 'package:tracker/screens/Tips.dart';
 
 class Dashboard extends StatefulWidget {
@@ -265,7 +266,14 @@ class _DashboardState extends State<Dashboard> {
                             //
                             // The second VIEW PHARMACIES Button
                             GestureDetector(
-                              onTap: () {},
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => Pharmacies(),
+                                  ),
+                                );
+                              },
                               child: Container(
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(

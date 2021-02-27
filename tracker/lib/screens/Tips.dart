@@ -325,7 +325,7 @@ class _TipsState extends State<Tips> {
                           if (index > 0) {
                             page.previousPage(
                                 duration: Duration(milliseconds: 250),
-                                curve: Curves.bounceInOut);
+                                curve: Curves.easeIn);
                             setState(() {
                               index--;
                             });
@@ -448,7 +448,7 @@ class _TipsState extends State<Tips> {
                           if (index < 3) {
                             page.nextPage(
                                 duration: Duration(milliseconds: 250),
-                                curve: Curves.bounceInOut);
+                                curve: Curves.easeIn);
                           }
                           print(page.page);
                         },
