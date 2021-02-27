@@ -224,6 +224,7 @@ class _DashboardState extends State<Dashboard> {
                           'This section is for finding the recommended and trusted pharmacies and clinics. They are recommended by the distributors themselves and thus have no chance of housing fake medicine or malpractice',
                           style: TextStyle(
                             fontSize: width / 30,
+                            color: Colors.grey[700],
                           ),
                         ),
                         SizedBox(
@@ -322,6 +323,7 @@ class _DashboardState extends State<Dashboard> {
                           'This sections deals with the extra functionality such as the tips section and the about section of the application',
                           style: TextStyle(
                             fontSize: width / 30,
+                            color: Colors.grey[700],
                           ),
                         ),
                         SizedBox(
