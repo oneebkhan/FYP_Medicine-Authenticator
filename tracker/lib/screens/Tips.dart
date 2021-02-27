@@ -235,7 +235,7 @@ class _TipsState extends State<Tips> {
                                     const EdgeInsets.symmetric(horizontal: 50),
                                 child: Container(
                                   child: Text(
-                                    'The application here is meant to make your medicine buying experience easier. Since there are a lot of counterfeit medicine circling around, the app helps you avoid getting fooled. Take special care of the following tips:',
+                                    'Always make sure to consult a professional when asking for medicine. Make sure the pharmacy you buy medicine from is trusted and has a certificate from a known health authority. Additionaly make sure that the doctor you consult for a prescription also has an active license',
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       color: Colors.grey[700],
@@ -280,7 +280,7 @@ class _TipsState extends State<Tips> {
                           }
                         },
                       ),
-                      SizedBox(width: width / 8),
+                      SizedBox(width: width / 4.5),
                       //
                       //
                       // Grey index indicator
@@ -356,7 +356,7 @@ class _TipsState extends State<Tips> {
                           ),
                         ),
                       ),
-                      SizedBox(width: width / 8),
+                      SizedBox(width: width / 4.5),
                       //
                       //
                       // the next page button
