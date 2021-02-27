@@ -153,6 +153,9 @@ class _AboutState extends State<About> {
               SizedBox(
                 height: 30,
               ),
+              //
+              //
+              // The contact developers button
               Center(
                 child: FlatButton(
                   padding: EdgeInsets.all(0),
@@ -178,6 +181,9 @@ class _AboutState extends State<About> {
               SizedBox(
                 height: 10,
               ),
+              //
+              //
+              // The Request medicine button
               Center(
                 child: FlatButton(
                   padding: EdgeInsets.all(0),
@@ -211,6 +217,9 @@ class _AboutState extends State<About> {
   }
 }
 
+//
+//
+// The rows in teh containers
 class AvatarRow extends StatelessWidget {
   final double size;
   final String imageURL;
