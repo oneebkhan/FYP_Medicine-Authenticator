@@ -10,11 +10,13 @@ class _DashboardState extends State<Dashboard> {
   var width;
   var height;
   var density;
+  var safePadding;
   @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
     density = width * height;
+    safePadding = MediaQuery.of(context).padding.top;
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 246, 246, 248),
       body: SingleChildScrollView(
@@ -25,7 +27,7 @@ class _DashboardState extends State<Dashboard> {
             mainAxisSize: MainAxisSize.min,
             children: [
               SizedBox(
-                height: width / 9,
+                height: (width / 7),
               ),
               Text(
                 'Welcome,',

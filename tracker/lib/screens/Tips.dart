@@ -41,6 +41,7 @@ class _TipsState extends State<Tips> {
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
+    var page = PageController(initialPage: 0);
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 248, 252, 255),
       appBar: AppBar(
@@ -88,20 +89,26 @@ class _TipsState extends State<Tips> {
                   // The top Image adn text that needs to be changed
                   Flexible(
                     child: PageView(
+                      controller: page,
+                      onPageChanged: (i) {
+                        setState(() {
+                          index = i;
+                        });
+                      },
                       children: [
                         Container(
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               SizedBox(
-                                height: width / 1.3,
+                                height: width / 1.4,
                                 child: Lottie.asset(
                                   'assets/lottie/phone.json',
                                   repeat: true,
                                 ),
                               ),
                               SizedBox(
-                                height: width / 10,
+                                height: width / 5,
                               ),
                               //
                               //
@@ -137,12 +144,114 @@ class _TipsState extends State<Tips> {
                             ],
                           ),
                         ),
+                        //
+                        //
+                        // The second page
+                        Container(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              SizedBox(
+                                height: width / 1.4,
+                                child: Lottie.asset(
+                                  'assets/lottie/medicine_bottle.json',
+                                  repeat: true,
+                                ),
+                              ),
+                              SizedBox(
+                                height: width / 4,
+                              ),
+                              //
+                              //
+                              // The title text
+                              Container(
+                                child: Text(
+                                  'Sealed Bottle Cap',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: width / 12,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              //
+                              //
+                              // The explanation text
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 50),
+                                child: Container(
+                                  child: Text(
+                                    'Make sure the bottle cap of any bottled medicine is sealed. No burn or melted marks can be seen near the bottle cap',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: Colors.grey[700],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        //
+                        //
+                        // The third page
+                        Container(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              SizedBox(
+                                height: width / 1.4,
+                                child: Lottie.asset(
+                                  'assets/lottie/proper_doctor.json',
+                                  repeat: true,
+                                ),
+                              ),
+                              SizedBox(
+                                height: width / 4,
+                              ),
+                              //
+                              //
+                              // The title text
+                              Container(
+                                child: Text(
+                                  'Consult Professional',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: width / 12,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              //
+                              //
+                              // The explanation text
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 50),
+                                child: Container(
+                                  child: Text(
+                                    'The application here is meant to make your medicine buying experience easier. Since there are a lot of counterfeit medicine circling around, the app helps you avoid getting fooled. Take special care of the following tips:',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: Colors.grey[700],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ],
                     ),
                   ),
 
                   SizedBox(
-                    height: width / 5,
+                    height: width / 10,
                   ),
                   //
                   //
@@ -150,12 +259,21 @@ class _TipsState extends State<Tips> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+                      //
+                      //
+                      // the previous page button
                       IconButton(
-                        icon: Icon(
-                          Icons.arrow_back_ios_outlined,
-                        ),
+                        icon: index == 0
+                            ? Container()
+                            : Icon(
+                                Icons.arrow_back_ios_outlined,
+                              ),
                         onPressed: () {
+                          print(page.page);
                           if (index > 0) {
+                            page.previousPage(
+                                duration: Duration(milliseconds: 250),
+                                curve: Curves.bounceInOut);
                             setState(() {
                               index--;
                             });
@@ -168,6 +286,9 @@ class _TipsState extends State<Tips> {
                       // Grey index indicator
                       GestureDetector(
                         onTap: () {
+                          page.animateToPage(0,
+                              duration: Duration(milliseconds: 250),
+                              curve: Curves.bounceInOut);
                           setState(() {
                             index = 0;
                           });
@@ -191,6 +312,9 @@ class _TipsState extends State<Tips> {
                       // Grey index indicator
                       GestureDetector(
                         onTap: () {
+                          page.animateToPage(1,
+                              duration: Duration(milliseconds: 250),
+                              curve: Curves.bounceInOut);
                           setState(() {
                             index = 1;
                           });
@@ -214,6 +338,9 @@ class _TipsState extends State<Tips> {
                       // Grey index indicator
                       GestureDetector(
                         onTap: () {
+                          page.animateToPage(2,
+                              duration: Duration(milliseconds: 250),
+                              curve: Curves.bounceInOut);
                           setState(() {
                             index = 2;
                           });
@@ -230,16 +357,22 @@ class _TipsState extends State<Tips> {
                         ),
                       ),
                       SizedBox(width: width / 8),
+                      //
+                      //
+                      // the next page button
                       IconButton(
-                        icon: Icon(
-                          Icons.arrow_forward_ios_outlined,
-                        ),
+                        icon: index == 2
+                            ? Container()
+                            : Icon(
+                                Icons.arrow_forward_ios_outlined,
+                              ),
                         onPressed: () {
                           if (index < 2) {
-                            setState(() {
-                              index++;
-                            });
+                            page.nextPage(
+                                duration: Duration(milliseconds: 250),
+                                curve: Curves.bounceInOut);
                           }
+                          print(page.page);
                         },
                       ),
                     ],
