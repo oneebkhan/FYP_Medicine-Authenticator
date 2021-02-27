@@ -217,7 +217,7 @@ class _TipsState extends State<Tips> {
                               // The title text
                               Container(
                                 child: Text(
-                                  'Consult Professional',
+                                  'Consult a Professional',
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: width / 12,
@@ -236,6 +236,58 @@ class _TipsState extends State<Tips> {
                                 child: Container(
                                   child: Text(
                                     'Always make sure to consult a professional when asking for medicine. Make sure the pharmacy you buy medicine from is trusted and has a certificate from a known health authority. Additionaly make sure that the doctor you consult for a prescription also has an active license',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: Colors.grey[700],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        //
+                        //
+                        // Fourth tips page
+                        Container(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              SizedBox(
+                                height: width / 1.4,
+                                child: Lottie.asset(
+                                  'assets/lottie/phone_use.json',
+                                  repeat: true,
+                                ),
+                              ),
+                              SizedBox(
+                                height: width / 4,
+                              ),
+                              //
+                              //
+                              // The title text
+                              Container(
+                                child: Text(
+                                  'Read Medicine Info',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: width / 12,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              //
+                              //
+                              // The explanation text
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 50),
+                                child: Container(
+                                  child: Text(
+                                    'Reading the medicine information after scanning can help you identify fake medicine. For example, reading the pharmacy distributed to can help identify where this medicine was supposed to be found. If the medicine was purchased at another pharmacy, the medicine is most probably fake',
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       color: Colors.grey[700],
@@ -356,18 +408,44 @@ class _TipsState extends State<Tips> {
                           ),
                         ),
                       ),
+                      SizedBox(
+                        width: width / 25,
+                      ),
+                      //
+                      //
+                      // Grey index indicator
+                      GestureDetector(
+                        onTap: () {
+                          page.animateToPage(3,
+                              duration: Duration(milliseconds: 250),
+                              curve: Curves.bounceInOut);
+                          setState(() {
+                            index = 3;
+                          });
+                        },
+                        child: Container(
+                          height: 10,
+                          width: 10,
+                          decoration: BoxDecoration(
+                            color: index == 3
+                                ? Color.fromARGB(255, 149, 192, 255)
+                                : Colors.grey[400],
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                      ),
                       SizedBox(width: width / 4.5),
                       //
                       //
                       // the next page button
                       IconButton(
-                        icon: index == 2
+                        icon: index == 3
                             ? Container()
                             : Icon(
                                 Icons.arrow_forward_ios_outlined,
                               ),
                         onPressed: () {
-                          if (index < 2) {
+                          if (index < 3) {
                             page.nextPage(
                                 duration: Duration(milliseconds: 250),
                                 curve: Curves.bounceInOut);
