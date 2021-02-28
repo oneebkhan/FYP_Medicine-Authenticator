@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tracker/screens/About.dart';
+import 'package:tracker/screens/Clinics.dart';
 import 'package:tracker/screens/Pharmacies.dart';
 import 'package:tracker/screens/Tips.dart';
 
@@ -245,7 +246,14 @@ class _DashboardState extends State<Dashboard> {
                             Padding(
                               padding: const EdgeInsets.only(bottom: 15),
                               child: GestureDetector(
-                                onTap: () {},
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => Clinics(),
+                                    ),
+                                  );
+                                },
                                 child: Container(
                                   child: Padding(
                                     padding: const EdgeInsets.symmetric(
