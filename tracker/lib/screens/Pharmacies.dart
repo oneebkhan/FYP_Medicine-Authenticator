@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:tracker/Widgets/InfoContainer.dart';
 
 class Pharmacies extends StatefulWidget {
-  Pharmacies({Key key}) : super(key: key);
-
   @override
   _PharmaciesState createState() => _PharmaciesState();
 }
@@ -12,6 +10,19 @@ class _PharmaciesState extends State<Pharmacies> {
   var width;
   var height;
   var safePadding;
+
+  double opac;
+  @override
+  void initState() {
+    super.initState();
+    opac = 0;
+
+    Future.delayed(Duration(milliseconds: 500), () {
+      setState(() {
+        opac = 1.0;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,31 +63,39 @@ class _PharmaciesState extends State<Pharmacies> {
               //
               //
               // The container fields
-              InfoContainer(
-                color: Colors.green,
-                description: '5 Pharmacies',
-                func: null,
-                imageUrls: [
-                  'https://picsum.photos/250?image=9',
-                  'https://picsum.photos/250?image=9',
-                  'https://picsum.photos/250?image=9',
-                  'https://picsum.photos/250?image=9',
-                ],
-                title: 'Hajji Ltd.',
-                width: width,
-              ),
-              InfoContainer(
-                color: Colors.green,
-                description: '5 Pharmacies',
-                func: null,
-                imageUrls: [
-                  'https://picsum.photos/250?image=9',
-                  'https://picsum.photos/250?image=9',
-                  'https://picsum.photos/250?image=9',
-                  'https://picsum.photos/250?image=9',
-                ],
-                title: 'Hajji Ltd.',
-                width: width,
+              AnimatedOpacity(
+                opacity: opac,
+                duration: Duration(milliseconds: 500),
+                child: Column(
+                  children: [
+                    InfoContainer(
+                      color: Colors.green,
+                      description: '5 Pharmacies',
+                      func: null,
+                      imageUrls: [
+                        'https://picsum.photos/250?image=9',
+                        'https://picsum.photos/250?image=9',
+                        'https://picsum.photos/250?image=9',
+                        'https://picsum.photos/250?image=9',
+                      ],
+                      title: 'Hajji Ltd.',
+                      width: width,
+                    ),
+                    InfoContainer(
+                      color: Colors.green,
+                      description: '5 Pharmacies',
+                      func: null,
+                      imageUrls: [
+                        'https://picsum.photos/250?image=9',
+                        'https://picsum.photos/250?image=9',
+                        'https://picsum.photos/250?image=9',
+                        'https://picsum.photos/250?image=9',
+                      ],
+                      title: 'Hajji Ltd.',
+                      width: width,
+                    ),
+                  ],
+                ),
               ),
             ],
           ),

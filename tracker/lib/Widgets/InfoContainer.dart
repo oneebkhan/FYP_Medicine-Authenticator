@@ -186,7 +186,7 @@ class _InfoContainerState extends State<InfoContainer> {
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.only(
-                                      left: 135,
+                                      left: 140,
                                       top: 7,
                                     ),
                                     child: Center(

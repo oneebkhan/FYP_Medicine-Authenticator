@@ -12,6 +12,19 @@ class _ClinicsState extends State<Clinics> {
   var width;
   var height;
   var safePadding;
+  double opac;
+
+  @override
+  void initState() {
+    super.initState();
+    opac = 0;
+
+    Future.delayed(Duration(milliseconds: 500), () {
+      setState(() {
+        opac = 1.0;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,31 +65,39 @@ class _ClinicsState extends State<Clinics> {
               //
               //
               // The container fields
-              InfoContainer(
-                color: Colors.green,
-                description: '5 Clinics',
-                func: null,
-                imageUrls: [
-                  'https://picsum.photos/250?image=9',
-                  'https://picsum.photos/250?image=9',
-                  'https://picsum.photos/250?image=9',
-                  'https://picsum.photos/250?image=9',
-                ],
-                title: 'Hajji Ltd.',
-                width: width,
-              ),
-              InfoContainer(
-                color: Colors.green,
-                description: '5 Clinics',
-                func: null,
-                imageUrls: [
-                  'https://picsum.photos/250?image=9',
-                  'https://picsum.photos/250?image=9',
-                  'https://picsum.photos/250?image=9',
-                  'https://picsum.photos/250?image=9',
-                ],
-                title: 'Hajji Ltd.',
-                width: width,
+              AnimatedOpacity(
+                opacity: opac,
+                duration: Duration(milliseconds: 500),
+                child: Column(
+                  children: [
+                    InfoContainer(
+                      color: Colors.green,
+                      description: '5 Clinics',
+                      func: null,
+                      imageUrls: [
+                        'https://picsum.photos/250?image=9',
+                        'https://picsum.photos/250?image=9',
+                        'https://picsum.photos/250?image=9',
+                        'https://picsum.photos/250?image=9',
+                      ],
+                      title: 'Hajji Ltd.',
+                      width: width,
+                    ),
+                    InfoContainer(
+                      color: Colors.green,
+                      description: '5 Clinics',
+                      func: null,
+                      imageUrls: [
+                        'https://picsum.photos/250?image=9',
+                        'https://picsum.photos/250?image=9',
+                        'https://picsum.photos/250?image=9',
+                        'https://picsum.photos/250?image=9',
+                      ],
+                      title: 'Hajji Ltd.',
+                      width: width,
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
