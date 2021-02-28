@@ -80,6 +80,7 @@ class _DashboardState extends State<Dashboard> {
                           style: TextStyle(
                             fontSize: width / 30,
                             color: Colors.white,
+                            fontWeight: FontWeight.w300,
                           ),
                         ),
                         SizedBox(
@@ -226,6 +227,7 @@ class _DashboardState extends State<Dashboard> {
                           style: TextStyle(
                             fontSize: width / 30,
                             color: Colors.grey[700],
+                            fontWeight: FontWeight.w300,
                           ),
                         ),
                         SizedBox(
@@ -332,6 +334,7 @@ class _DashboardState extends State<Dashboard> {
                           style: TextStyle(
                             fontSize: width / 30,
                             color: Colors.grey[700],
+                            fontWeight: FontWeight.w300,
                           ),
                         ),
                         SizedBox(
