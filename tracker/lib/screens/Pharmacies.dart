@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tracker/Widgets/InfoContainer.dart';
+import 'package:tracker/screens/ViewPharmacyOrClinic.dart';
 
 class Pharmacies extends StatefulWidget {
   @override
@@ -29,7 +30,6 @@ class _PharmaciesState extends State<Pharmacies> {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
     safePadding = MediaQuery.of(context).padding.top;
-    var contHeight;
 
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 246, 246, 248),
@@ -71,7 +71,17 @@ class _PharmaciesState extends State<Pharmacies> {
                     InfoContainer(
                       color: Colors.green,
                       description: '5 Pharmacies',
-                      func: null,
+                      func: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => ViewPharmacyOrClinic(
+                              admin: false,
+                              pageName: 'Hajji Ltd.',
+                            ),
+                          ),
+                        );
+                      },
                       imageUrls: [
                         'https://picsum.photos/250?image=9',
                         'https://picsum.photos/250?image=9',
@@ -82,7 +92,7 @@ class _PharmaciesState extends State<Pharmacies> {
                       width: width,
                     ),
                     InfoContainer(
-                      color: Colors.green,
+                      color: Colors.purple,
                       description: '5 Pharmacies',
                       func: null,
                       imageUrls: [

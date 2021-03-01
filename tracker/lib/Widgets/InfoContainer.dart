@@ -29,7 +29,7 @@ class _InfoContainerState extends State<InfoContainer> {
       padding: const EdgeInsets.only(bottom: 15.0),
       child: GestureDetector(
         onTap: () {
-          widget.func;
+          widget.func();
         },
         child: Container(
           width: widget.width,

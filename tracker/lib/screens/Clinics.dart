@@ -31,7 +31,6 @@ class _ClinicsState extends State<Clinics> {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
     safePadding = MediaQuery.of(context).padding.top;
-    var contHeight;
 
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 246, 246, 248),
