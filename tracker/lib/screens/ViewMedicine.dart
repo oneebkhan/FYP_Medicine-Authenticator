@@ -4,18 +4,28 @@ import 'package:tracker/Widgets/InfoContainer.dart';
 import 'package:tracker/Widgets/RowInfo.dart';
 import 'package:tracker/screens/About.dart';
 
-class ViewPharmacyOrClinic extends StatefulWidget {
+class ViewMedicine extends StatefulWidget {
   // The name of the category opened
   final String pageName;
+  final List<String> imageUrls;
+  final List<String> location;
+  final List<String> title;
+  final List<Function> func;
 
-  const ViewPharmacyOrClinic({Key key, @required this.pageName})
-      : super(key: key);
+  const ViewMedicine({
+    Key key,
+    @required this.pageName,
+    @required this.imageUrls,
+    @required this.location,
+    @required this.title,
+    @required this.func,
+  }) : super(key: key);
 
   @override
-  _ViewPharmacyOrClinicState createState() => _ViewPharmacyOrClinicState();
+  _ViewMedicineState createState() => _ViewMedicineState();
 }
 
-class _ViewPharmacyOrClinicState extends State<ViewPharmacyOrClinic> {
+class _ViewMedicineState extends State<ViewMedicine> {
   double opac;
   @override
   void initState() {
@@ -91,25 +101,31 @@ class _ViewPharmacyOrClinicState extends State<ViewPharmacyOrClinic> {
                         //
                         // The row in the Field
                         RowInfo(
-                          imageURL: 'https://picsum.photos/250?image=9',
-                          location: 'Laal Kurti, 220, cake lane',
+                          imageURL: widget.imageUrls[0],
+                          location: widget.location[0],
                           width: width,
-                          title: 'Hajji Ltd. Iqbal Town',
-                          func: () {},
+                          title: widget.title[0],
+                          func: () {
+                            widget.func[0]();
+                          },
                         ),
                         RowInfo(
-                          imageURL: 'https://picsum.photos/250?image=9',
-                          location: 'Laal Kurti, 220, cake lane',
+                          imageURL: widget.imageUrls[1],
+                          location: widget.location[1],
                           width: width,
-                          title: 'Hajji Ltd. Iqbal Town',
-                          func: () {},
+                          title: widget.title[1],
+                          func: () {
+                            widget.func[1]();
+                          },
                         ),
                         RowInfo(
-                          imageURL: 'https://picsum.photos/250?image=9',
-                          location: 'Laal Kurti, 220, cake lane',
+                          imageURL: widget.imageUrls[2],
+                          location: widget.location[2],
                           width: width,
-                          title: 'Hajji Ltd. Iqbal Town',
-                          func: () {},
+                          title: widget.title[2],
+                          func: () {
+                            widget.func[2]();
+                          },
                         ),
                       ],
                     ),

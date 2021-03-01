@@ -76,7 +76,6 @@ class _PharmaciesState extends State<Pharmacies> {
                           context,
                           MaterialPageRoute(
                             builder: (_) => ViewPharmacyOrClinic(
-                              admin: false,
                               pageName: 'Hajji Ltd.',
                             ),
                           ),
@@ -94,14 +93,23 @@ class _PharmaciesState extends State<Pharmacies> {
                     InfoContainer(
                       color: Colors.purple,
                       description: '5 Pharmacies',
-                      func: null,
+                      func: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => ViewPharmacyOrClinic(
+                              pageName: 'Floyd\'s Pharmacy',
+                            ),
+                          ),
+                        );
+                      },
                       imageUrls: [
                         'https://picsum.photos/250?image=9',
                         'https://picsum.photos/250?image=9',
                         'https://picsum.photos/250?image=9',
                         'https://picsum.photos/250?image=9',
                       ],
-                      title: 'Hajji Ltd.',
+                      title: 'Floyd\'s Pharmacy',
                       width: width,
                     ),
                   ],

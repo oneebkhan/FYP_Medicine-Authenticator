@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tracker/Widgets/InfoContainer.dart';
+import 'package:tracker/screens/ViewPharmacyOrClinic.dart';
 
 class Clinics extends StatefulWidget {
   Clinics({Key key}) : super(key: key);
@@ -72,7 +73,16 @@ class _ClinicsState extends State<Clinics> {
                     InfoContainer(
                       color: Colors.green,
                       description: '5 Clinics',
-                      func: null,
+                      func: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => ViewPharmacyOrClinic(
+                              pageName: 'Floyd\'s Pharmacy',
+                            ),
+                          ),
+                        );
+                      },
                       imageUrls: [
                         'https://picsum.photos/250?image=9',
                         'https://picsum.photos/250?image=9',
@@ -85,7 +95,16 @@ class _ClinicsState extends State<Clinics> {
                     InfoContainer(
                       color: Colors.green,
                       description: '5 Clinics',
-                      func: null,
+                      func: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => ViewPharmacyOrClinic(
+                              pageName: 'Floyd\'s Pharmacy',
+                            ),
+                          ),
+                        );
+                      },
                       imageUrls: [
                         'https://picsum.photos/250?image=9',
                         'https://picsum.photos/250?image=9',

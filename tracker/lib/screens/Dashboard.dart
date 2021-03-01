@@ -3,6 +3,7 @@ import 'package:tracker/screens/About.dart';
 import 'package:tracker/screens/Clinics.dart';
 import 'package:tracker/screens/Pharmacies.dart';
 import 'package:tracker/screens/Tips.dart';
+import 'package:tracker/screens/ViewMedicine.dart';
 
 class Dashboard extends StatefulWidget {
   @override
@@ -144,7 +145,36 @@ class _DashboardState extends State<Dashboard> {
                             //
                             // The third VIEW MEDICINE BUTTON
                             GestureDetector(
-                              onTap: () {},
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => ViewMedicine(
+                                      func: [
+                                        null,
+                                        null,
+                                        null,
+                                      ],
+                                      imageUrls: [
+                                        'https://picsum.photos/250?image=9',
+                                        'https://picsum.photos/250?image=9',
+                                        'https://picsum.photos/250?image=9',
+                                      ],
+                                      location: [
+                                        'Laal Kurti, 220 Some kaka',
+                                        'Laal Kurti, 220 Some kaka',
+                                        'Laal Kurti, 220 Some kaka',
+                                      ],
+                                      pageName: 'Medicines',
+                                      title: [
+                                        'Panadol',
+                                        'Paracetamol',
+                                        'Cake',
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
                               child: Container(
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(
