@@ -162,9 +162,9 @@ class _DashboardState extends State<Dashboard> {
                                           'https://picsum.photos/250?image=9',
                                         ],
                                         location: [
-                                          'Laal Kurti, 220 Some kaka',
-                                          'Laal Kurti, 220 Some kaka',
-                                          'Laal Kurti, 220 Some kaka',
+                                          '500mg',
+                                          null,
+                                          null,
                                         ],
                                         pageName: 'Medicines',
                                         title: [

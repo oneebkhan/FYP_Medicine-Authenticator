@@ -6,13 +6,13 @@ class MedicineInfo extends StatefulWidget {
   final List<String> imageUrls;
   final String description;
   final int price;
-  final String quant;
-  final bool authentic;
+  final String quantity;
+  final bool authenticity;
   final String barcode;
   final List<String> sideEffects;
   final List<String> distributors;
   final List<String> pharmacies;
-  final String manufacturer;
+  final String company;
   final List<String> use;
   final String dose;
 
@@ -22,13 +22,13 @@ class MedicineInfo extends StatefulWidget {
     this.imageUrls,
     this.description,
     this.price,
-    this.quant,
-    this.authentic,
+    this.quantity,
+    this.authenticity,
     this.barcode,
     this.sideEffects,
     this.distributors,
     this.pharmacies,
-    this.manufacturer,
+    this.company,
     this.use,
     this.dose,
   }) : super(key: key);
@@ -41,12 +41,11 @@ class _MedicineInfoState extends State<MedicineInfo> {
   double width;
   double height;
   double safePadding;
-
+  //opacity of the normal text
   double opac;
   //opacity of the image;
   double opac2;
-  //The index of the pages
-  int index;
+
   var page = PageController();
   var page2 = PageController();
 
@@ -55,7 +54,6 @@ class _MedicineInfoState extends State<MedicineInfo> {
     super.initState();
     opac = 0;
     opac2 = 0;
-    index = 0;
 
     Future.delayed(Duration(milliseconds: 300), () {
       setState(() {
@@ -264,7 +262,7 @@ class _MedicineInfoState extends State<MedicineInfo> {
           ),
           //
           //
-          // function to allow for scroll in the single child sscroll view
+          // function to allow for scroll in the single child scroll view
           NotificationListener(
             onNotification: (notification) {
               if (notification is OverscrollNotification) {
@@ -368,7 +366,43 @@ class _MedicineInfoState extends State<MedicineInfo> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'List of Distributors',
+                                'Distributors',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                  fontSize: width / 16,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Text(
+                                'GSK, Pakistan\nGSK, Pakistan\nGSK, Pakistan\nGSK, Pakistan\nGSK, Pakistan',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: width / 30,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                        width: width,
+                        decoration: BoxDecoration(
+                          color: Color.fromARGB(255, 50, 50, 50),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(20),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Pharmacies with Medicine',
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white,
