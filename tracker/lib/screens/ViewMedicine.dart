@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:tracker/Widgets/InfoContainer.dart';
 import 'package:tracker/Widgets/RowInfo.dart';
 import 'package:tracker/screens/About.dart';
+import 'package:tracker/screens/MedicineInfo.dart';
 
 class ViewMedicine extends StatefulWidget {
   // The name of the category opened
@@ -106,7 +107,12 @@ class _ViewMedicineState extends State<ViewMedicine> {
                           width: width,
                           title: widget.title[0],
                           func: () {
-                            widget.func[0]();
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => MedicineInfo(),
+                              ),
+                            );
                           },
                         ),
                         RowInfo(
