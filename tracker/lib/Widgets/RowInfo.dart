@@ -12,7 +12,7 @@ class RowInfo extends StatelessWidget {
     Key key,
     @required this.width,
     @required this.title,
-    @required this.location,
+    this.location,
     @required this.imageURL,
     @required this.func,
   }) : super(key: key);
@@ -29,7 +29,7 @@ class RowInfo extends StatelessWidget {
             bottom: 15,
           ),
           child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               CachedNetworkImage(
@@ -53,6 +53,7 @@ class RowInfo extends StatelessWidget {
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     title,
@@ -61,13 +62,15 @@ class RowInfo extends StatelessWidget {
                       fontSize: width / 19,
                     ),
                   ),
-                  Text(
-                    location,
-                    style: TextStyle(
-                      fontSize: width / 28,
-                      fontWeight: FontWeight.w300,
-                    ),
-                  ),
+                  location == null
+                      ? Container()
+                      : Text(
+                          location,
+                          style: TextStyle(
+                            fontSize: width / 28,
+                            fontWeight: FontWeight.w300,
+                          ),
+                        ),
                 ],
               ),
             ],
