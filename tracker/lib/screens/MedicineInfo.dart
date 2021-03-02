@@ -45,6 +45,7 @@ class _MedicineInfoState extends State<MedicineInfo> {
   double opac;
   //opacity of the image;
   double opac2;
+  int index;
 
   var page = PageController();
   var page2 = PageController();
@@ -54,6 +55,7 @@ class _MedicineInfoState extends State<MedicineInfo> {
     super.initState();
     opac = 0;
     opac2 = 0;
+    index = 0;
 
     Future.delayed(Duration(milliseconds: 300), () {
       setState(() {
@@ -97,7 +99,7 @@ class _MedicineInfoState extends State<MedicineInfo> {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.compare_arrows_rounded),
         onPressed: () {
-          if (page.page == 1) {
+          if (index == 1) {
             page.previousPage(
               duration: Duration(milliseconds: 500),
               curve: Curves.ease,
@@ -131,6 +133,11 @@ class _MedicineInfoState extends State<MedicineInfo> {
                 opacity: opac,
                 child: PageView(
                   controller: page2,
+                  onPageChanged: (i) {
+                    setState(() {
+                      index = i;
+                    });
+                  },
                   children: [
                     Container(
                       height: height,
@@ -184,6 +191,7 @@ class _MedicineInfoState extends State<MedicineInfo> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
+
                           SizedBox(
                             width: 15,
                           ),
@@ -198,6 +206,41 @@ class _MedicineInfoState extends State<MedicineInfo> {
                             ),
                           ),
                         ],
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      //
+                      //
+                      // indicator of the number of pictures
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: SizedBox(
+                          height: 10,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            physics: NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            padding: EdgeInsets.all(0),
+                            itemCount: (2),
+                            itemBuilder: (BuildContext context, int ind) {
+                              return Padding(
+                                padding: const EdgeInsets.only(right: 5),
+                                child: Container(
+                                  margin: EdgeInsets.all(0),
+                                  width: 10,
+                                  height: 10,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: index == ind
+                                        ? Colors.blue[200]
+                                        : Colors.grey[700],
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
                       ),
                       SizedBox(
                         height: 20,
