@@ -41,81 +41,83 @@ class _PharmaciesState extends State<Pharmacies> {
         ),
       ),
       body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                height: (width / 50) + safePadding,
-              ),
-              Text(
-                'Pharmacies',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: width / 14,
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: width / 20,
                 ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              //
-              //
-              // The container fields
-              AnimatedOpacity(
-                opacity: opac,
-                duration: Duration(milliseconds: 500),
-                child: Column(
-                  children: [
-                    InfoContainer(
-                      color: Colors.green,
-                      description: '5 Pharmacies',
-                      func: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => ViewPharmacyOrClinic(
-                              pageName: 'Hajji Ltd.',
-                            ),
-                          ),
-                        );
-                      },
-                      imageUrls: [
-                        'https://picsum.photos/250?image=9',
-                        'https://picsum.photos/250?image=9',
-                        'https://picsum.photos/250?image=9',
-                        'https://picsum.photos/250?image=9',
-                      ],
-                      title: 'Hajji Ltd.',
-                      width: width,
-                    ),
-                    InfoContainer(
-                      color: Colors.purple,
-                      description: '5 Pharmacies',
-                      func: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => ViewPharmacyOrClinic(
-                              pageName: 'Floyd\'s Pharmacy',
-                            ),
-                          ),
-                        );
-                      },
-                      imageUrls: [
-                        'https://picsum.photos/250?image=9',
-                        'https://picsum.photos/250?image=9',
-                        'https://picsum.photos/250?image=9',
-                        'https://picsum.photos/250?image=9',
-                      ],
-                      title: 'Floyd\'s Pharmacy',
-                      width: width,
-                    ),
-                  ],
+                Text(
+                  'Pharmacies',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: width / 14,
+                  ),
                 ),
-              ),
-            ],
+                SizedBox(
+                  height: 20,
+                ),
+                //
+                //
+                // The container fields
+                AnimatedOpacity(
+                  opacity: opac,
+                  duration: Duration(milliseconds: 500),
+                  child: Column(
+                    children: [
+                      InfoContainer(
+                        color: Colors.green,
+                        description: '5 Pharmacies',
+                        func: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => ViewPharmacyOrClinic(
+                                pageName: 'Hajji Ltd.',
+                              ),
+                            ),
+                          );
+                        },
+                        imageUrls: [
+                          'https://picsum.photos/250?image=9',
+                          'https://picsum.photos/250?image=9',
+                          'https://picsum.photos/250?image=9',
+                          'https://picsum.photos/250?image=9',
+                        ],
+                        title: 'Hajji Ltd.',
+                        width: width,
+                      ),
+                      InfoContainer(
+                        color: Colors.purple,
+                        description: '5 Pharmacies',
+                        func: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => ViewPharmacyOrClinic(
+                                pageName: 'Floyd\'s Pharmacy',
+                              ),
+                            ),
+                          );
+                        },
+                        imageUrls: [
+                          'https://picsum.photos/250?image=9',
+                          'https://picsum.photos/250?image=9',
+                          'https://picsum.photos/250?image=9',
+                          'https://picsum.photos/250?image=9',
+                        ],
+                        title: 'Floyd\'s Pharmacy',
+                        width: width,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

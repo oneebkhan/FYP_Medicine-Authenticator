@@ -47,6 +47,8 @@ class _MedicineInfoState extends State<MedicineInfo> {
   double opac2;
   //The index of the pages
   int index;
+  var page = PageController();
+  var page2 = PageController();
 
   @override
   void initState() {
@@ -67,16 +69,49 @@ class _MedicineInfoState extends State<MedicineInfo> {
     });
   }
 
+  //
+  //
+  // These two functions make the page scroll up even when the page has a singlechildscrollview
+  _scrollUp() async {
+    await page.previousPage(
+      duration: Duration(milliseconds: 500),
+      curve: Curves.ease,
+    );
+  }
+
+  _scrollDown() async {
+    await page.nextPage(
+      duration: Duration(milliseconds: 500),
+      curve: Curves.ease,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
     safePadding = MediaQuery.of(context).padding.top;
-    var page = PageController(initialPage: 0);
-    var page2 = PageController(initialPage: 0);
+    page = PageController(initialPage: 0);
+    page2 = PageController(initialPage: 0);
     return Scaffold(
       extendBodyBehindAppBar: true,
       backgroundColor: Color.fromARGB(255, 0, 0, 0),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.compare_arrows_rounded),
+        onPressed: () {
+          if (page.page == 1) {
+            page.previousPage(
+              duration: Duration(milliseconds: 500),
+              curve: Curves.ease,
+            );
+          } else {
+            page.nextPage(
+              duration: Duration(milliseconds: 500),
+              curve: Curves.ease,
+            );
+          }
+        },
+      ),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -90,6 +125,9 @@ class _MedicineInfoState extends State<MedicineInfo> {
         children: [
           Stack(
             children: [
+              //
+              //
+              // The image behind the info
               AnimatedOpacity(
                 duration: Duration(milliseconds: 500),
                 opacity: opac,
@@ -127,6 +165,9 @@ class _MedicineInfoState extends State<MedicineInfo> {
                   ],
                 ),
               ),
+              //
+              //
+              // The top page info
               AnimatedOpacity(
                 duration: Duration(milliseconds: 500),
                 opacity: opac2,
@@ -213,15 +254,7 @@ class _MedicineInfoState extends State<MedicineInfo> {
                         ),
                       ),
                       SizedBox(
-                        height: 20,
-                      ),
-                      IconButton(
-                        iconSize: width / 10,
-                        icon: Icon(
-                          Icons.keyboard_arrow_down_rounded,
-                          color: Colors.white,
-                        ),
-                        onPressed: () {},
+                        height: width / 7,
                       ),
                     ],
                   ),
@@ -229,62 +262,285 @@ class _MedicineInfoState extends State<MedicineInfo> {
               ),
             ],
           ),
-          SingleChildScrollView(
-            child: SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Column(
-                  children: [
-                    Container(
-                      width: width,
-                      decoration: BoxDecoration(
-                        color: Color.fromARGB(255, 50, 50, 50),
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                          top: 20,
-                          left: 20,
-                          right: 20,
-                          bottom: 20,
+          //
+          //
+          // function to allow for scroll in the single child sscroll view
+          NotificationListener(
+            onNotification: (notification) {
+              if (notification is OverscrollNotification) {
+                if (notification.overscroll > 0) {
+                  _scrollDown();
+                } else {
+                  _scrollUp();
+                }
+              }
+            },
+            //
+            //
+            // The bottom page info
+            child: SingleChildScrollView(
+              child: SafeArea(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Column(
+                    children: [
+                      Container(
+                        width: width,
+                        decoration: BoxDecoration(
+                          color: Color.fromARGB(255, 50, 50, 50),
+                          borderRadius: BorderRadius.circular(15),
                         ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                        child: Padding(
+                          padding: const EdgeInsets.all(20),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Product Description',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                  fontSize: width / 16,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Text(
+                                'A simple pain relief medicine meant to be taken with water. Can cure headaches or body aches with relative ease. Meant to be taken after a meal, the usual dosage being 2 tablets of 500mg for an average adult.',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: width / 30,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                        width: width,
+                        decoration: BoxDecoration(
+                          color: Color.fromARGB(255, 50, 50, 50),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(20),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Company Name',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                  fontSize: width / 16,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Text(
+                                'GSK, Pakistan',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: width / 30,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                        width: width,
+                        decoration: BoxDecoration(
+                          color: Color.fromARGB(255, 50, 50, 50),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(20),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'List of Distributors',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                  fontSize: width / 16,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Text(
+                                'GSK, Pakistan\nGSK, Pakistan\nGSK, Pakistan\nGSK, Pakistan\nGSK, Pakistan',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: width / 30,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      //
+                      //
+                      // To be removed if there is no barcode search
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              'Product Description',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                                fontSize: width / 16,
+                            Container(
+                              width: width / 2.3,
+                              decoration: BoxDecoration(
+                                color: Color.fromARGB(255, 50, 50, 50),
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(20.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Barcode Number',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                        fontSize: width / 16,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Text(
+                                      'ABC25678-421',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: width / 30,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              'A simple pain relief medicine meant to be taken with water. Can cure headaches or body aches with relative ease. Meant to be taken after a meal, the usual dosage being 2 tablets of 500mg for an average adult.',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: width / 30,
+                            Container(
+                              width: width / 2.3,
+                              decoration: BoxDecoration(
+                                color: Color.fromARGB(255, 104, 204, 127),
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(20.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      Icons.check,
+                                      color: Colors.white,
+                                      size: width / 7,
+                                    ),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Text(
+                                      'Medicine is Authentic',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: width / 30,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ],
                         ),
                       ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Container(
-                      width: width,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        color: Color.fromARGB(255, 50, 50, 50),
-                        borderRadius: BorderRadius.circular(15),
+                      Container(
+                        width: width,
+                        decoration: BoxDecoration(
+                          color: Color.fromARGB(255, 50, 50, 50),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(20),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Uses',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                  fontSize: width / 16,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Text(
+                                'Panadol can be used for relieving fever and/or for the treatment of mild to moderate pain including headache, migraine, muscle ache, dysmenorrhea, sore throat, musculoskeletal pain and pain after dental procedures/ tooth extraction, toothache and pain of osteoarthritis.',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: width / 30,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
-                    )
-                  ],
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                        width: width,
+                        decoration: BoxDecoration(
+                          color: Color.fromARGB(255, 50, 50, 50),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(20),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Side Effects',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                  fontSize: width / 16,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Text(
+                                'Nausea, vomiting, stomach upset, trouble falling asleep, or a shaky/nervous feeling may occur.',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: width / 30,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: width / 4,
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

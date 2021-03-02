@@ -56,89 +56,91 @@ class _ViewMedicineState extends State<ViewMedicine> {
         ),
       ),
       body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                height: (width / 50) + safePadding,
-              ),
-              Text(
-                widget.pageName,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: width / 14,
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: (width / 15),
                 ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              //
-              //
-              // The container fields
-              AnimatedOpacity(
-                opacity: opac,
-                duration: Duration(milliseconds: 500),
-                child: Container(
-                  width: width,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(15),
-                    ),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                      bottom: 10,
-                      left: 20,
-                      right: 20,
-                      top: 20,
-                    ),
-                    child: Column(
-                      children: [
-                        //
-                        //
-                        // The row in the Field
-                        RowInfo(
-                          imageURL: widget.imageUrls[0],
-                          location: widget.location[0],
-                          width: width,
-                          title: widget.title[0],
-                          func: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) => MedicineInfo(),
-                              ),
-                            );
-                          },
-                        ),
-                        RowInfo(
-                          imageURL: widget.imageUrls[1],
-                          location: widget.location[1],
-                          width: width,
-                          title: widget.title[1],
-                          func: () {
-                            widget.func[1]();
-                          },
-                        ),
-                        RowInfo(
-                          imageURL: widget.imageUrls[2],
-                          location: widget.location[2],
-                          width: width,
-                          title: widget.title[2],
-                          func: () {
-                            widget.func[2]();
-                          },
-                        ),
-                      ],
-                    ),
+                Text(
+                  widget.pageName,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: width / 14,
                   ),
                 ),
-              ),
-            ],
+                SizedBox(
+                  height: 20,
+                ),
+                //
+                //
+                // The container fields
+                AnimatedOpacity(
+                  opacity: opac,
+                  duration: Duration(milliseconds: 500),
+                  child: Container(
+                    width: width,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(15),
+                      ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        bottom: 10,
+                        left: 20,
+                        right: 20,
+                        top: 20,
+                      ),
+                      child: Column(
+                        children: [
+                          //
+                          //
+                          // The row in the Field
+                          RowInfo(
+                            imageURL: widget.imageUrls[0],
+                            location: widget.location[0],
+                            width: width,
+                            title: widget.title[0],
+                            func: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => MedicineInfo(),
+                                ),
+                              );
+                            },
+                          ),
+                          RowInfo(
+                            imageURL: widget.imageUrls[1],
+                            location: widget.location[1],
+                            width: width,
+                            title: widget.title[1],
+                            func: () {
+                              widget.func[1]();
+                            },
+                          ),
+                          RowInfo(
+                            imageURL: widget.imageUrls[2],
+                            location: widget.location[2],
+                            width: width,
+                            title: widget.title[2],
+                            func: () {
+                              widget.func[2]();
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
