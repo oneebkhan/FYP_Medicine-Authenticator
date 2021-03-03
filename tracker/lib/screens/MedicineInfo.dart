@@ -46,6 +46,7 @@ class _MedicineInfoState extends State<MedicineInfo> {
   //opacity of the image;
   double opac2;
   int index;
+  int index2;
 
   var page = PageController();
   var page2 = PageController();
@@ -56,6 +57,7 @@ class _MedicineInfoState extends State<MedicineInfo> {
     opac = 0;
     opac2 = 0;
     index = 0;
+    index2 = 0;
 
     Future.delayed(Duration(milliseconds: 300), () {
       setState(() {
@@ -99,7 +101,7 @@ class _MedicineInfoState extends State<MedicineInfo> {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.compare_arrows_rounded),
         onPressed: () {
-          if (index == 1) {
+          if (index2 == 1) {
             page.previousPage(
               duration: Duration(milliseconds: 500),
               curve: Curves.ease,
@@ -122,6 +124,11 @@ class _MedicineInfoState extends State<MedicineInfo> {
       body: PageView(
         scrollDirection: Axis.vertical,
         controller: page,
+        onPageChanged: (i) {
+          setState(() {
+            index2 = i;
+          });
+        },
         children: [
           Stack(
             children: [

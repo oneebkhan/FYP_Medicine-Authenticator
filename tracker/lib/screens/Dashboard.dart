@@ -4,6 +4,9 @@ import 'package:tracker/screens/Clinics.dart';
 import 'package:tracker/screens/Pharmacies.dart';
 import 'package:tracker/screens/Tips.dart';
 import 'package:tracker/screens/ViewMedicine.dart';
+import 'package:qrscan/qrscan.dart' as scanner;
+import 'package:permission_handler/permission_handler.dart';
+import 'package:image_picker/image_picker.dart';
 
 class Dashboard extends StatefulWidget {
   @override
@@ -15,6 +18,20 @@ class _DashboardState extends State<Dashboard> {
   var height;
   var density;
   var safePadding;
+
+//
+//
+// the function to scan the barcode
+  Future _scan() async {
+    await Permission.camera.request();
+    String barcode = await scanner.scan();
+    if (barcode == null) {
+      print('nothing return.');
+    } else {
+      print('$barcode');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
