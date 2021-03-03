@@ -33,8 +33,12 @@ dependencies:
   cupertino_icons: ^1.0.0
   fluttertoast: ^7.1.8
   cached_network_image: ^2.5.0
-  # text scrolling
-  marquee: ^1.7.0
+  # QR and barcode scanner
+  qrscan: ^0.2.22
+  # handles permissions
+  permission_handler: ^5.1.0+2
+  # picks the image using the gallery and the camera
+  image_picker: ^0.6.7+22
 
 dev_dependencies:
   flutter_test:
