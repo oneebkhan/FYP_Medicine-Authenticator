@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:tracker/screens/About.dart';
 import 'package:tracker/screens/Clinics.dart';
 import 'package:tracker/screens/Pharmacies.dart';
@@ -23,12 +24,33 @@ class _DashboardState extends State<Dashboard> {
 //
 // the function to scan the barcode
   Future _scan() async {
-    await Permission.camera.request();
-    String barcode = await scanner.scan();
-    if (barcode == null) {
-      print('nothing return.');
-    } else {
-      print('$barcode');
+    try {
+      await Permission.camera.request();
+      String barcode = await scanner.scan();
+      if (barcode == null) {
+        print('nothing return.');
+      } else {
+        print('$barcode');
+      }
+    } on Exception catch (e) {
+      print(e);
+      Fluttertoast.showToast(msg: '$e');
+    }
+  }
+
+  Future _scanPhoto() async {
+    try {
+      await Permission.storage.request();
+      String barcode = await scanner.scanPhoto();
+
+      if (barcode == null) {
+        print('nothing return.');
+      } else {
+        print('$barcode');
+      }
+    } on Exception catch (e) {
+      print(e);
+      Fluttertoast.showToast(msg: '$e');
     }
   }
 
@@ -118,7 +140,9 @@ class _DashboardState extends State<Dashboard> {
                               Padding(
                                 padding: const EdgeInsets.only(bottom: 15),
                                 child: GestureDetector(
-                                  onTap: () {},
+                                  onTap: () {
+                                    _scan();
+                                  },
                                   child: Container(
                                     child: Padding(
                                       padding: const EdgeInsets.symmetric(
@@ -214,7 +238,9 @@ class _DashboardState extends State<Dashboard> {
                               //
                               // The fourth SCAN FROM GALLERY BARCODE button
                               GestureDetector(
-                                onTap: () {},
+                                onTap: () {
+                                  _scanPhoto();
+                                },
                                 child: Container(
                                   child: Padding(
                                     padding: const EdgeInsets.symmetric(
