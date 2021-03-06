@@ -23,18 +23,22 @@ class _SplashState extends State<Splash> {
   var width;
   var height;
   double opac;
+  bool anim;
+
   @override
   void initState() {
     super.initState();
     opac = 0;
+    anim = false;
 
     Future.delayed(Duration(seconds: 2), () {
       setState(() {
         opac = 1.0;
+        anim = true;
       });
     });
 
-    Future.delayed(Duration(seconds: 4), () {
+    Future.delayed(Duration(seconds: 3), () {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
@@ -57,16 +61,23 @@ class _SplashState extends State<Splash> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SizedBox(
-              height: width / 3,
+              height: height / 9,
             ),
             SizedBox(
-              height: width / 1.5,
+              height: height / 3.5,
               child: Lottie.asset(
                 'assets/lottie/medicine.json',
               ),
             ),
             SizedBox(
-              height: 10,
+              height: height / 9,
+              child: Lottie.asset(
+                'assets/lottie/admin.json',
+                animate: anim,
+              ),
+            ),
+            SizedBox(
+              height: 5,
             ),
             AnimatedOpacity(
               opacity: opac,
@@ -76,26 +87,32 @@ class _SplashState extends State<Splash> {
                   Text(
                     'Medicine',
                     style: TextStyle(
-                        fontSize: width / 17, color: Colors.grey[700]),
+                      fontSize: height / 30,
+                      color: Colors.grey[700],
+                    ),
                   ),
                   Text(
                     'Tracking',
                     style: TextStyle(
-                        fontSize: width / 17, color: Colors.grey[700]),
+                      fontSize: height / 30,
+                      color: Colors.grey[700],
+                    ),
                   ),
                   SizedBox(
-                    height: width / 1.8,
+                    height: height / 3.3,
                   ),
                   Text(
                     'Made By',
                     style: TextStyle(
-                      fontSize: width / 30,
+                      fontSize: height / 50,
                     ),
                   ),
                   Text(
                     'FA17-BSE-C-021/57/39',
                     style: TextStyle(
-                        fontSize: width / 35, color: Colors.grey[700]),
+                      fontSize: height / 55,
+                      color: Colors.grey[700],
+                    ),
                   ),
                 ],
               ),

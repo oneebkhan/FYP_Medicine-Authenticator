@@ -103,14 +103,14 @@ class _TipsState extends State<Tips> {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 SizedBox(
-                                  height: width / 1.4,
+                                  height: height / 3,
                                   child: Lottie.asset(
                                     'assets/lottie/phone.json',
                                     repeat: true,
                                   ),
                                 ),
                                 SizedBox(
-                                  height: width / 5,
+                                  height: width / 4,
                                 ),
                                 //
                                 //
@@ -120,7 +120,7 @@ class _TipsState extends State<Tips> {
                                     'Tips',
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      fontSize: width / 12,
+                                      fontSize: height / 25,
                                     ),
                                   ),
                                 ),
@@ -138,6 +138,7 @@ class _TipsState extends State<Tips> {
                                       'The application here is meant to make your medicine buying experience easier. Since there are a lot of counterfeit medicine circling around, the app helps you avoid getting fooled. Take special care of the following tips:',
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
+                                        fontSize: height / 55,
                                         color: Colors.grey[700],
                                       ),
                                     ),
@@ -154,7 +155,7 @@ class _TipsState extends State<Tips> {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 SizedBox(
-                                  height: width / 1.4,
+                                  height: height / 3,
                                   child: Lottie.asset(
                                     'assets/lottie/medicine_bottle.json',
                                     repeat: true,
@@ -171,7 +172,7 @@ class _TipsState extends State<Tips> {
                                     'Sealed Bottle Cap',
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      fontSize: width / 12,
+                                      fontSize: height / 25,
                                     ),
                                   ),
                                 ),
@@ -189,6 +190,7 @@ class _TipsState extends State<Tips> {
                                       'Make sure the bottle cap of any bottled medicine is sealed. No burn or melted marks can be seen near the bottle cap',
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
+                                        fontSize: height / 55,
                                         color: Colors.grey[700],
                                       ),
                                     ),
@@ -205,7 +207,7 @@ class _TipsState extends State<Tips> {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 SizedBox(
-                                  height: width / 1.4,
+                                  height: height / 3,
                                   child: Lottie.asset(
                                     'assets/lottie/proper_doctor.json',
                                     repeat: true,
@@ -222,7 +224,7 @@ class _TipsState extends State<Tips> {
                                     'Consult a Professional',
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      fontSize: width / 12,
+                                      fontSize: height / 25,
                                     ),
                                   ),
                                 ),
@@ -240,6 +242,7 @@ class _TipsState extends State<Tips> {
                                       'Always make sure to consult a professional when asking for medicine. Make sure the pharmacy you buy medicine from is trusted and has a certificate from a known health authority. Additionaly make sure that the doctor you consult for a prescription also has an active license',
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
+                                        fontSize: height / 55,
                                         color: Colors.grey[700],
                                       ),
                                     ),
@@ -256,7 +259,7 @@ class _TipsState extends State<Tips> {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 SizedBox(
-                                  height: width / 1.4,
+                                  height: height / 3,
                                   child: Lottie.asset(
                                     'assets/lottie/phone_use.json',
                                     repeat: true,
@@ -274,7 +277,7 @@ class _TipsState extends State<Tips> {
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      fontSize: width / 12,
+                                      fontSize: height / 25,
                                     ),
                                   ),
                                 ),
@@ -292,6 +295,7 @@ class _TipsState extends State<Tips> {
                                       'Reading the medicine information after scanning can help you identify fake medicine. For example, reading the pharmacy distributed to can help identify where this medicine was supposed to be found. If the medicine was purchased at another pharmacy, the medicine is most probably fake',
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
+                                        fontSize: height / 55,
                                         color: Colors.grey[700],
                                       ),
                                     ),

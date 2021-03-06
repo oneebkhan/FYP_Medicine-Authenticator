@@ -40,7 +40,7 @@ dependencies:
   # picks the image using the gallery and the camera
   image_picker: ^0.6.7+22
   # provides the file path on both IOS and android
-  path_provider: ^2.0.1
+  # path_provider: ^2.0.1
 
 dev_dependencies:
   flutter_test:

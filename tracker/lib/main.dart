@@ -55,10 +55,10 @@ class _SplashScreenState extends State<SplashScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SizedBox(
-              height: width / 3,
+              height: height / 6,
             ),
             SizedBox(
-              height: width / 1.5,
+              height: height / 3,
               child: Lottie.asset(
                 'assets/lottie/medicine.json',
               ),
@@ -74,26 +74,32 @@ class _SplashScreenState extends State<SplashScreen> {
                   Text(
                     'Medicine',
                     style: TextStyle(
-                        fontSize: width / 17, color: Colors.grey[700]),
+                      fontSize: height / 30,
+                      color: Colors.grey[700],
+                    ),
                   ),
                   Text(
                     'Tracking',
                     style: TextStyle(
-                        fontSize: width / 17, color: Colors.grey[700]),
+                      fontSize: height / 30,
+                      color: Colors.grey[700],
+                    ),
                   ),
                   SizedBox(
-                    height: width / 1.8,
+                    height: height / 3,
                   ),
                   Text(
                     'Made By',
                     style: TextStyle(
-                      fontSize: width / 30,
+                      fontSize: height / 50,
                     ),
                   ),
                   Text(
                     'FA17-BSE-C-021/57/39',
                     style: TextStyle(
-                        fontSize: width / 35, color: Colors.grey[700]),
+                      fontSize: height / 55,
+                      color: Colors.grey[700],
+                    ),
                   ),
                 ],
               ),
