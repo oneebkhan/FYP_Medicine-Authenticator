@@ -86,7 +86,7 @@ class _LoginScreenState extends State<LoginScreen> {
               child: SingleChildScrollView(
                 child: Container(
                   width: width,
-                  height: height / 2,
+                  height: width <= 450 ? height / 1.75 : height / 2,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(35),
