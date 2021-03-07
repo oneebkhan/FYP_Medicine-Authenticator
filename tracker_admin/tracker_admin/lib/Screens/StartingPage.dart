@@ -81,7 +81,7 @@ class _StartingPageState extends State<StartingPage> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             SizedBox(
-                              height: height / 8,
+                              height: height / 7,
                             ),
                             SizedBox(
                               height: height / 3.5,
@@ -98,10 +98,7 @@ class _StartingPageState extends State<StartingPage> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           SizedBox(
-                            height: height / 9,
-                          ),
-                          SizedBox(
-                            height: height / 4,
+                            height: height / 2.5,
                           ),
                           SizedBox(
                             height: 5,
