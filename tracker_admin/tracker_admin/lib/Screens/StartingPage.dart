@@ -3,6 +3,7 @@ import 'package:lottie/lottie.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_awesome_icons/line_awesome_icons.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:tracker_admin/screens/LoginScreen.dart';
 
 class StartingPage extends StatefulWidget {
   StartingPage({Key key}) : super(key: key);
@@ -29,11 +30,8 @@ class _StartingPageState extends State<StartingPage> {
     opac2 = 0;
     anim = false;
     lottieAsset = 'assets/lottie/admin_working.json';
-    //lottieAsset = 'assets/lottie/pharmacist.json';
     backColor = Color.fromARGB(255, 170, 200, 240);
-
     floatingButtonColor = Color.fromARGB(255, 130, 150, 250);
-    //backColor = Color.fromARGB(255, 168, 225, 166);
     selectedIndex = 0;
 
     Future.delayed(Duration(milliseconds: 500), () {
@@ -52,6 +50,9 @@ class _StartingPageState extends State<StartingPage> {
     return Stack(
       children: [
         Scaffold(
+          //
+          //
+          // The Go button at the bottom
           floatingActionButton: Padding(
             padding: const EdgeInsets.only(bottom: 20),
             child: FloatingActionButton(
@@ -60,7 +61,16 @@ class _StartingPageState extends State<StartingPage> {
                 'Go',
                 style: TextStyle(fontSize: height / 40),
               ),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => LoginScreen(
+                      i: selectedIndex,
+                    ),
+                  ),
+                );
+              },
             ),
           ),
           floatingActionButtonLocation:
@@ -68,6 +78,9 @@ class _StartingPageState extends State<StartingPage> {
           body: Center(
               child: Stack(
             children: [
+              //
+              //
+              // The background
               AnimatedContainer(
                 duration: Duration(milliseconds: 500),
                 curve: Curves.ease,
@@ -76,6 +89,9 @@ class _StartingPageState extends State<StartingPage> {
                 color: backColor,
                 child: Stack(
                   children: [
+                    //
+                    //
+                    // The circles at the sides
                     Container(
                       width: width,
                       height: height,
@@ -86,6 +102,9 @@ class _StartingPageState extends State<StartingPage> {
                         ),
                       ),
                     ),
+                    //
+                    //
+                    // The lottie asset
                     AnimatedOpacity(
                       opacity: opac2,
                       duration: Duration(milliseconds: 250),
@@ -106,6 +125,9 @@ class _StartingPageState extends State<StartingPage> {
                         ),
                       ),
                     ),
+                    //
+                    //
+                    // The Login ass.. text
                     Center(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -154,6 +176,9 @@ class _StartingPageState extends State<StartingPage> {
             ],
           )),
         ),
+        //
+        //
+        // The bottom nav bar that is floating
         Padding(
           padding: EdgeInsets.only(
             bottom: 120,

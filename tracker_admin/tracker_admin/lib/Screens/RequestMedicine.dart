@@ -169,20 +169,19 @@ class ContainerText extends StatelessWidget {
         textInputAction: TextInputAction.next,
         onEditingComplete: () => node.nextFocus(),
         decoration: InputDecoration(
-          fillColor: Colors.grey[300],
+          fillColor: Colors.grey[200],
           hintText: hint,
           filled: true,
-          isDense: true,
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(15),
             borderSide: BorderSide(
-              color: Colors.grey[300],
+              color: Colors.grey[200],
             ),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(15),
             borderSide: BorderSide(
-              color: Colors.grey[300],
+              color: Colors.grey[200],
             ),
           ),
         ),
