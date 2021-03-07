@@ -76,6 +76,16 @@ class _StartingPageState extends State<StartingPage> {
                 color: backColor,
                 child: Stack(
                   children: [
+                    Container(
+                      width: width,
+                      height: height,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          fit: BoxFit.fitWidth,
+                          image: AssetImage('assets/images/back.png'),
+                        ),
+                      ),
+                    ),
                     AnimatedOpacity(
                       opacity: opac2,
                       duration: Duration(milliseconds: 250),
@@ -139,16 +149,6 @@ class _StartingPageState extends State<StartingPage> {
                       ),
                     ),
                   ],
-                ),
-              ),
-              Container(
-                width: width,
-                height: height,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    fit: BoxFit.fitWidth,
-                    image: AssetImage('assets/images/back.png'),
-                  ),
                 ),
               ),
             ],
