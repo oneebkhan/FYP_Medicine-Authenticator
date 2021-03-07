@@ -52,13 +52,16 @@ class _StartingPageState extends State<StartingPage> {
     return Stack(
       children: [
         Scaffold(
-          floatingActionButton: FloatingActionButton(
-            backgroundColor: floatingButtonColor,
-            child: Text(
-              'Go',
-              style: TextStyle(fontSize: height / 40),
+          floatingActionButton: Padding(
+            padding: const EdgeInsets.only(bottom: 20),
+            child: FloatingActionButton(
+              backgroundColor: floatingButtonColor,
+              child: Text(
+                'Go',
+                style: TextStyle(fontSize: height / 40),
+              ),
+              onPressed: () {},
             ),
-            onPressed: () {},
           ),
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerFloat,
@@ -152,16 +155,15 @@ class _StartingPageState extends State<StartingPage> {
           )),
         ),
         Padding(
-          padding: const EdgeInsets.only(
-            bottom: 100,
-            left: 100,
-            right: 100,
+          padding: EdgeInsets.only(
+            bottom: 120,
+            left: width / 5.8,
+            right: width / 5.8,
           ),
           child: Scaffold(
             extendBody: true,
             backgroundColor: Colors.transparent,
             bottomNavigationBar: Container(
-              width: width / 2,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(100),
                 color: Colors.white,
@@ -172,54 +174,53 @@ class _StartingPageState extends State<StartingPage> {
                   )
                 ],
               ),
-              child: SafeArea(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10.0,
-                    vertical: 10,
-                  ),
-                  child: GNav(
-                    haptic: true,
-                    rippleColor: backColor,
-                    hoverColor: backColor,
-                    gap: 8,
-                    activeColor: floatingButtonColor,
-                    iconSize: 24,
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                    duration: Duration(milliseconds: 400),
-                    tabBackgroundColor: Colors.grey[100],
-                    tabs: [
-                      GButton(
-                        icon: LineIcons.userShield,
-                        text: 'Admin',
-                      ),
-                      GButton(
-                        icon: LineIcons.stethoscope,
-                        text: 'Distributor',
-                      ),
-                    ],
-                    selectedIndex: selectedIndex,
-                    onTabChange: (index) {
-                      setState(() {
-                        selectedIndex = index;
-                        if (index == 1) {
-                          setState(() {
-                            backColor = Color.fromARGB(255, 168, 225, 166);
-                            floatingButtonColor =
-                                Color.fromARGB(255, 110, 200, 110);
-                            lottieAsset = 'assets/lottie/pharmacist.json';
-                          });
-                        } else {
-                          setState(() {
-                            backColor = Color.fromARGB(255, 170, 200, 240);
-                            floatingButtonColor =
-                                Color.fromARGB(255, 130, 150, 250);
-                            lottieAsset = 'assets/lottie/admin_working.json';
-                          });
-                        }
-                      });
-                    },
-                  ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10.0,
+                  vertical: 10,
+                ),
+                child: GNav(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  haptic: true,
+                  rippleColor: backColor,
+                  hoverColor: backColor,
+                  gap: 8,
+                  activeColor: floatingButtonColor,
+                  iconSize: 24,
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                  duration: Duration(milliseconds: 400),
+                  tabBackgroundColor: Colors.grey[100],
+                  tabs: [
+                    GButton(
+                      icon: LineIcons.userShield,
+                      text: 'Admin',
+                    ),
+                    GButton(
+                      icon: LineIcons.stethoscope,
+                      text: 'Distributor',
+                    ),
+                  ],
+                  selectedIndex: selectedIndex,
+                  onTabChange: (index) {
+                    setState(() {
+                      selectedIndex = index;
+                      if (index == 1) {
+                        setState(() {
+                          backColor = Color.fromARGB(255, 168, 225, 166);
+                          floatingButtonColor =
+                              Color.fromARGB(255, 110, 200, 110);
+                          lottieAsset = 'assets/lottie/pharmacist.json';
+                        });
+                      } else {
+                        setState(() {
+                          backColor = Color.fromARGB(255, 170, 200, 240);
+                          floatingButtonColor =
+                              Color.fromARGB(255, 130, 150, 250);
+                          lottieAsset = 'assets/lottie/admin_working.json';
+                        });
+                      }
+                    });
+                  },
                 ),
               ),
             ),
