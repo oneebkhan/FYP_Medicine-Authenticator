@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:tracker_admin/Screens/Dashboard.dart';
 import 'package:lottie/lottie.dart';
+import 'package:tracker_admin/screens/StartingPage.dart';
 
 void main() {
   runApp(
@@ -42,7 +45,7 @@ class _SplashState extends State<Splash> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (_) => Dashboard(),
+          builder: (_) => StartingPage(),
         ),
       );
     });
