@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:tracker_admin/screens/Dashboard_Admin.dart';
+import 'package:tracker_admin/screens/Dashboard_Distributor.dart';
 import 'package:tracker_admin/screens/RequestMedicine.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -86,7 +88,6 @@ class _LoginScreenState extends State<LoginScreen> {
               child: SingleChildScrollView(
                 child: Container(
                   width: width,
-                  height: width <= 450 ? height / 1.75 : height / 2,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(35),
@@ -97,10 +98,11 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Padding(
                     padding: EdgeInsets.symmetric(
                       horizontal: width / 15,
-                      vertical: height / 30,
+                      vertical: height / 25,
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Text(
                           'Login',
@@ -129,7 +131,23 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         Center(
                           child: FlatButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              if (widget.i == 1) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => Dashboard_Distributor(),
+                                  ),
+                                );
+                              } else {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => Dashboard_Admin(),
+                                  ),
+                                );
+                              }
+                            },
                             padding: EdgeInsets.all(0),
                             child: Container(
                               width: width,
@@ -149,7 +167,10 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                             ),
                           ),
-                        )
+                        ),
+                        SizedBox(
+                          height: height / 40,
+                        ),
                       ],
                     ),
                   ),

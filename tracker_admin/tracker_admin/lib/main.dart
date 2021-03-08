@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:tracker_admin/Screens/Dashboard.dart';
 import 'package:lottie/lottie.dart';
 import 'package:tracker_admin/screens/StartingPage.dart';
 

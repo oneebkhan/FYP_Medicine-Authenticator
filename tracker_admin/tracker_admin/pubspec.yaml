@@ -65,9 +65,9 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
-    - assets/icons/user_medicine_container/
-    - assets/icons/user_pharmacies_clinics/
-    - assets/icons/user_extras/
+    - assets/icons/admin_dashboard_medicine/
+    - assets/icons/admin_pharmacies_clinics/
+    - assets/icons/admin_dashboard_distributors/
     - assets/lottie/
   #   - images/a_dot_ham.jpeg
 
