@@ -3,14 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
-import 'package:tracker_admin/screens/About.dart';
 import 'package:tracker_admin/screens/Clinics.dart';
 import 'package:tracker_admin/screens/Pharmacies.dart';
-import 'package:tracker_admin/screens/Tips.dart';
 import 'package:tracker_admin/screens/ViewMedicine.dart';
-import 'package:qrscan/qrscan.dart' as scanner;
 import 'package:permission_handler/permission_handler.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:fl_chart/fl_chart.dart';
 
 class Dashboard_Admin extends StatefulWidget {
   @override
@@ -25,7 +22,6 @@ class _Dashboard_AdminState extends State<Dashboard_Admin> {
   int index;
   Color col = Color.fromARGB(255, 149, 191, 255);
   Color floatingButtonColor;
-  List<String> title = ['DASHBOARD', 'STATISTICS'];
   int selectedIndex;
   var page = PageController(initialPage: 0);
 
@@ -35,6 +31,10 @@ class _Dashboard_AdminState extends State<Dashboard_Admin> {
     index = 0;
     selectedIndex = 0;
     floatingButtonColor = Color.fromARGB(255, 130, 150, 250);
+  }
+
+  void dispose() {
+    super.dispose();
   }
 
 //
@@ -906,18 +906,80 @@ class _AdminStatisticsState extends State<AdminStatistics> {
                         children: [
                           Container(
                             width: widget.width / 2.5,
-                            height: widget.width / 20,
+                            height: widget.height / 35,
                             decoration: BoxDecoration(
                               color: col,
                               borderRadius: BorderRadius.circular(15),
                             ),
-                            child: Center(
-                              child: Text(
-                                '5',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: widget.width / 30,
-                                ),
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                left: 15,
+                                right: 15,
+                                bottom: 10,
+                                top: 5,
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Container(
+                                    height: widget.height / 5.4,
+                                    width: widget.width,
+                                    child: BarChart(
+                                      BarChartData(
+                                        maxY: 20,
+                                        minY: 0,
+                                        borderData: FlBorderData(show: false),
+                                        titlesData: FlTitlesData(
+                                          show: false,
+                                          bottomTitles: SideTitles(),
+                                        ),
+                                        alignment: BarChartAlignment.center,
+                                        barTouchData:
+                                            BarTouchData(enabled: false),
+                                        barGroups: [
+                                          BarChartGroupData(
+                                            barsSpace: widget.width / 18,
+                                            barRods: [
+                                              BarChartRodData(
+                                                y: 10,
+                                                colors: [Colors.white],
+                                              ),
+                                              BarChartRodData(
+                                                y: 10,
+                                                colors: [Colors.white],
+                                              ),
+                                              BarChartRodData(
+                                                y: 10,
+                                                colors: [Colors.white],
+                                              ),
+                                              BarChartRodData(
+                                                y: 10,
+                                                colors: [Colors.white],
+                                              ),
+                                              BarChartRodData(
+                                                y: 10,
+                                                colors: [Colors.white],
+                                              ),
+                                            ],
+                                            x: null,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: widget.height / 100,
+                                  ),
+                                  Text(
+                                    'Monthly',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: widget.width / 22,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           )

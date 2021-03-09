@@ -284,7 +284,7 @@ class AvatarRow extends StatelessWidget {
 
   const AvatarRow({
     @required this.size,
-    this.imageURL,
+    @required this.imageURL,
     @required this.name,
     @required this.bottomName,
   });
