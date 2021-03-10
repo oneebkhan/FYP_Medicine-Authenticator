@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:tracker_admin/Widgets/BarChartMonthly.dart';
+import 'package:tracker_admin/Widgets/BarChartWeekly.dart';
 import 'package:tracker_admin/screens/Clinics.dart';
 import 'package:tracker_admin/screens/Pharmacies.dart';
 import 'package:tracker_admin/screens/ViewMedicine.dart';
@@ -882,17 +884,19 @@ class _AdminStatisticsState extends State<AdminStatistics> {
                 color: Colors.white,
               ),
               child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                padding: const EdgeInsets.symmetric(vertical: 20),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      'Medcine Distribution',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: widget.width / 16,
+                    Padding(
+                      padding: const EdgeInsets.only(left: 20),
+                      child: Text(
+                        'Medcine Distribution',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: widget.width / 16,
+                        ),
                       ),
                     ),
                     SizedBox(
@@ -904,9 +908,47 @@ class _AdminStatisticsState extends State<AdminStatistics> {
                         scrollDirection: Axis.horizontal,
                         shrinkWrap: true,
                         children: [
+                          SizedBox(
+                            width: 20,
+                          ),
                           Container(
                             width: widget.width / 2.5,
-                            height: widget.height / 35,
+                            decoration: BoxDecoration(
+                              color: col,
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            child: Padding(
+                                padding: const EdgeInsets.only(
+                                  left: 15,
+                                  right: 15,
+                                  bottom: 10,
+                                  top: 15,
+                                ),
+                                child: BarChartMonthly()),
+                          ),
+                          SizedBox(
+                            width: 20,
+                          ),
+                          Container(
+                            width: widget.width / 2.5,
+                            decoration: BoxDecoration(
+                              color: col,
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            child: Padding(
+                                padding: const EdgeInsets.only(
+                                  left: 15,
+                                  right: 15,
+                                  bottom: 10,
+                                  top: 15,
+                                ),
+                                child: BarChartWeekly()),
+                          ),
+                          SizedBox(
+                            width: 20,
+                          ),
+                          Container(
+                            width: widget.width / 2.5,
                             decoration: BoxDecoration(
                               color: col,
                               borderRadius: BorderRadius.circular(15),
@@ -916,73 +958,50 @@ class _AdminStatisticsState extends State<AdminStatistics> {
                                 left: 15,
                                 right: 15,
                                 bottom: 10,
-                                top: 5,
+                                top: 15,
                               ),
                               child: Column(
-                                mainAxisAlignment: MainAxisAlignment.end,
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  Container(
-                                    height: widget.height / 5.4,
-                                    width: widget.width,
-                                    child: BarChart(
-                                      BarChartData(
-                                        maxY: 20,
-                                        minY: 0,
-                                        borderData: FlBorderData(show: false),
-                                        titlesData: FlTitlesData(
-                                          show: false,
-                                          bottomTitles: SideTitles(),
-                                        ),
-                                        alignment: BarChartAlignment.center,
-                                        barTouchData:
-                                            BarTouchData(enabled: false),
-                                        barGroups: [
-                                          BarChartGroupData(
-                                            barsSpace: widget.width / 18,
-                                            barRods: [
-                                              BarChartRodData(
-                                                y: 10,
-                                                colors: [Colors.white],
-                                              ),
-                                              BarChartRodData(
-                                                y: 10,
-                                                colors: [Colors.white],
-                                              ),
-                                              BarChartRodData(
-                                                y: 10,
-                                                colors: [Colors.white],
-                                              ),
-                                              BarChartRodData(
-                                                y: 10,
-                                                colors: [Colors.white],
-                                              ),
-                                              BarChartRodData(
-                                                y: 10,
-                                                colors: [Colors.white],
-                                              ),
-                                            ],
-                                            x: null,
-                                          ),
-                                        ],
-                                      ),
+                                  Text(
+                                    'Daily',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                   SizedBox(
-                                    height: widget.height / 100,
+                                    height: widget.width / 23,
                                   ),
-                                  Text(
-                                    'Monthly',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: widget.width / 22,
+                                  Center(
+                                    child: Container(
+                                      height: widget.width / 4,
+                                      width: widget.width / 4,
+                                      decoration: BoxDecoration(
+                                        color:
+                                            Color.fromARGB(255, 189, 210, 255),
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          '10',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 40,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 ],
                               ),
                             ),
-                          )
+                          ),
+                          SizedBox(
+                            width: 20,
+                          ),
                         ],
                       ),
                     ),
