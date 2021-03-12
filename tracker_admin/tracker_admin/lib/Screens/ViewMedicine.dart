@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:tracker_admin/Widgets/InfoContainer.dart';
 import 'package:tracker_admin/Widgets/RowInfo.dart';
-import 'package:tracker_admin/screens/About.dart';
 import 'package:tracker_admin/screens/MedicineInfo.dart';
 
 class ViewMedicine extends StatefulWidget {

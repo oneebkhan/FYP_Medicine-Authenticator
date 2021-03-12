@@ -1,44 +1,38 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
-class MedicineInfo extends StatefulWidget {
-  final String medicineName;
+class Pharmacy_Clinics_Info extends StatefulWidget {
+  final String name;
   final List<String> imageUrls;
-  final String description;
-  final int price;
-  final String quantity;
-  final bool authenticity;
-  final String barcode;
-  final List<String> sideEffects;
-  final List<String> distributors;
-  final List<String> pharmacies;
+  final String location;
+  // latitude and logitude
+  final String gps;
+  final int cellNumber;
   final String company;
-  final List<String> use;
-  final String dose;
+  final List<String> employee;
+  final String timings;
+  final int review;
 
-  MedicineInfo({
+  Pharmacy_Clinics_Info({
     Key key,
-    this.medicineName,
     this.imageUrls,
-    this.description,
-    this.price,
-    this.quantity,
-    this.authenticity,
-    this.barcode,
-    this.sideEffects,
-    this.distributors,
-    this.pharmacies,
     this.company,
-    this.use,
-    this.dose,
+    this.name,
+    this.location,
+    this.gps,
+    this.cellNumber,
+    this.review,
+    this.employee,
+    this.timings,
   }) : super(key: key);
 
   @override
-  _MedicineInfoState createState() => _MedicineInfoState();
+  _Pharmacy_Clinics_InfoState createState() => _Pharmacy_Clinics_InfoState();
 }
 
-class _MedicineInfoState extends State<MedicineInfo> {
+class _Pharmacy_Clinics_InfoState extends State<Pharmacy_Clinics_Info> {
   double width;
   double height;
   double safePadding;
@@ -99,23 +93,55 @@ class _MedicineInfoState extends State<MedicineInfo> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       backgroundColor: Colors.black,
-      floatingActionButton: FloatingActionButton(
-        child: Icon(index2 == 0
-            ? Icons.keyboard_arrow_down_outlined
-            : Icons.keyboard_arrow_up_outlined),
-        onPressed: () {
-          if (index2 == 1) {
-            page.previousPage(
-              duration: Duration(milliseconds: 500),
-              curve: Curves.ease,
-            );
-          } else {
-            page.nextPage(
-              duration: Duration(milliseconds: 500),
-              curve: Curves.ease,
-            );
-          }
-        },
+      floatingActionButton: SpeedDial(
+        backgroundColor: Colors.blue[500],
+        overlayColor: Colors.black,
+        overlayOpacity: 0.4,
+        animatedIcon: AnimatedIcons.menu_close,
+        animatedIconTheme: IconThemeData(color: Colors.white),
+        children: [
+          SpeedDialChild(
+            child: Icon(
+              Icons.location_on,
+              color: Colors.white,
+            ),
+            label: 'Go to Location',
+            backgroundColor: Colors.blue[500],
+            onTap: () {},
+          ),
+          SpeedDialChild(
+            child: Icon(
+              Icons.edit,
+              color: Colors.white,
+            ),
+            label: 'Edit Info',
+            backgroundColor: Colors.blue[500],
+            onTap: () {},
+          ),
+          SpeedDialChild(
+            child: Icon(
+              index2 == 0
+                  ? Icons.keyboard_arrow_down_outlined
+                  : Icons.keyboard_arrow_up_outlined,
+              color: Colors.white,
+            ),
+            onTap: () {
+              if (index2 == 1) {
+                page.previousPage(
+                  duration: Duration(milliseconds: 500),
+                  curve: Curves.ease,
+                );
+              } else {
+                page.nextPage(
+                  duration: Duration(milliseconds: 500),
+                  curve: Curves.ease,
+                );
+              }
+            },
+            backgroundColor: Colors.blue[500],
+            label: index2 == 0 ? 'Go to Next Page' : 'Go to Previous Page',
+          ),
+        ],
       ),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -156,9 +182,9 @@ class _MedicineInfoState extends State<MedicineInfo> {
                         image: DecorationImage(
                           colorFilter: new ColorFilter.mode(
                               Colors.black.withOpacity(0.4), BlendMode.dstATop),
-                          fit: BoxFit.fitWidth,
+                          fit: BoxFit.cover,
                           image: CachedNetworkImageProvider(
-                            'https://i-cf5.gskstatic.com/content/dam/cf-consumer-healthcare/panadol/en_ie/ireland-products/panadol-tablets/MGK5158-GSK-Panadol-Tablets-455x455.png?auto=format',
+                            'https://www.localguidesconnect.com/t5/image/serverpage/image-id/514546i92C317AC7411A8F0/image-size/medium?v=1.0&px=400',
                           ),
                         ),
                       ),
@@ -170,9 +196,9 @@ class _MedicineInfoState extends State<MedicineInfo> {
                         image: DecorationImage(
                           colorFilter: new ColorFilter.mode(
                               Colors.black.withOpacity(0.4), BlendMode.dstATop),
-                          fit: BoxFit.fitWidth,
+                          fit: BoxFit.cover,
                           image: CachedNetworkImageProvider(
-                            'https://pentagonenterprises.com/wp-content/uploads/2020/11/panadol-600x600.png',
+                            'https://pharmsci.uci.edu/wp-content/uploads/2020/12/Screen-Shot-2020-12-14-at-9.04.57-AM.png',
                           ),
                         ),
                       ),
@@ -193,26 +219,15 @@ class _MedicineInfoState extends State<MedicineInfo> {
                     children: [
                       Row(
                         children: [
-                          Text(
-                            'Panadol',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: width / 10,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-
-                          SizedBox(
-                            width: 15,
-                          ),
-                          //
-                          //
-                          // The Green tick for medicine authentication
                           Container(
-                            child: Icon(
-                              Icons.check_circle,
-                              size: width / 13,
-                              color: Color.fromARGB(255, 130, 255, 159),
+                            width: width / 1.2,
+                            child: Text(
+                              'Mahtab Pharmacy',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: width / 10,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                         ],
@@ -261,7 +276,7 @@ class _MedicineInfoState extends State<MedicineInfo> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Price:',
+                              'Location: ',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: width / 17,
@@ -269,7 +284,7 @@ class _MedicineInfoState extends State<MedicineInfo> {
                               ),
                             ),
                             Text(
-                              'Rs. 100/500mg Leaf',
+                              'Phase 1, Plot No, 23, Sector F Commercial Area Sector F',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: width / 22,
@@ -287,7 +302,7 @@ class _MedicineInfoState extends State<MedicineInfo> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Doses:',
+                              'Phone Number:',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: width / 17,
@@ -295,7 +310,7 @@ class _MedicineInfoState extends State<MedicineInfo> {
                               ),
                             ),
                             Text(
-                              '500/1000 mg',
+                              '04235897071',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: width / 22,
@@ -347,7 +362,7 @@ class _MedicineInfoState extends State<MedicineInfo> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Product Description',
+                                'Pharmacy Location',
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white,
@@ -358,7 +373,7 @@ class _MedicineInfoState extends State<MedicineInfo> {
                                 height: 5,
                               ),
                               Text(
-                                'A simple pain relief medicine meant to be taken with water. Can cure headaches or body aches with relative ease. Meant to be taken after a meal, the usual dosage being 2 tablets of 500mg for an average adult.',
+                                'Pharmacy is located in  Phase 1, Plot No, 23, Sector F Commercial Area Sector F Dha Phase 1, Lahore, Punjab',
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: width / 30,
@@ -394,7 +409,7 @@ class _MedicineInfoState extends State<MedicineInfo> {
                                 height: 5,
                               ),
                               Text(
-                                'GSK, Pakistan',
+                                'Mahtab, Pakistan',
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: width / 30,
@@ -419,7 +434,7 @@ class _MedicineInfoState extends State<MedicineInfo> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Distributors',
+                                'Notable Employees',
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white,
@@ -430,7 +445,7 @@ class _MedicineInfoState extends State<MedicineInfo> {
                                 height: 5,
                               ),
                               Text(
-                                'GSK, Pakistan\nGSK, Pakistan\nGSK, Pakistan\nGSK, Pakistan\nGSK, Pakistan',
+                                'Marham, Psychologist',
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: width / 30,
@@ -443,42 +458,7 @@ class _MedicineInfoState extends State<MedicineInfo> {
                       SizedBox(
                         height: 10,
                       ),
-                      Container(
-                        width: width,
-                        decoration: BoxDecoration(
-                          color: Color.fromARGB(255, 50, 50, 50),
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(20),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Pharmacies with Medicine',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                  fontSize: width / 16,
-                                ),
-                              ),
-                              SizedBox(
-                                height: 5,
-                              ),
-                              Text(
-                                'GSK, Pakistan\nGSK, Pakistan\nGSK, Pakistan\nGSK, Pakistan\nGSK, Pakistan',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: width / 30,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
+
                       //
                       //
                       // To be removed if there is no barcode search
@@ -488,6 +468,7 @@ class _MedicineInfoState extends State<MedicineInfo> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Container(
+                              height: 110,
                               width: width / 2.3,
                               decoration: BoxDecoration(
                                 color: Color.fromARGB(255, 50, 50, 50),
@@ -499,7 +480,7 @@ class _MedicineInfoState extends State<MedicineInfo> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      'Barcode Number',
+                                      'Timings',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         color: Colors.white,
@@ -510,7 +491,7 @@ class _MedicineInfoState extends State<MedicineInfo> {
                                       height: 5,
                                     ),
                                     Text(
-                                      'ABC25678-421',
+                                      '24/7',
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontSize: width / 30,
@@ -522,107 +503,37 @@ class _MedicineInfoState extends State<MedicineInfo> {
                             ),
                             Container(
                               width: width / 2.3,
+                              height: 110,
                               decoration: BoxDecoration(
-                                color: Color.fromARGB(255, 104, 204, 127),
+                                color: Color.fromARGB(255, 254, 192, 70),
                                 borderRadius: BorderRadius.circular(15),
                               ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(20.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      Icons.check,
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.star,
+                                    color: Colors.white,
+                                    size: width / 6,
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text(
+                                    '5/5',
+                                    style: TextStyle(
                                       color: Colors.white,
-                                      size: width / 7,
+                                      fontSize: width / 15,
                                     ),
-                                    SizedBox(
-                                      height: 5,
-                                    ),
-                                    Text(
-                                      'Medicine is Authentic',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: width / 30,
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
                             ),
                           ],
                         ),
                       ),
-                      Container(
-                        width: width,
-                        decoration: BoxDecoration(
-                          color: Color.fromARGB(255, 50, 50, 50),
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(20),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Uses',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                  fontSize: width / 16,
-                                ),
-                              ),
-                              SizedBox(
-                                height: 5,
-                              ),
-                              Text(
-                                'Panadol can be used for relieving fever and/or for the treatment of mild to moderate pain including headache, migraine, muscle ache, dysmenorrhea, sore throat, musculoskeletal pain and pain after dental procedures/ tooth extraction, toothache and pain of osteoarthritis.',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: width / 30,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Container(
-                        width: width,
-                        decoration: BoxDecoration(
-                          color: Color.fromARGB(255, 50, 50, 50),
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(20),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Side Effects',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                  fontSize: width / 16,
-                                ),
-                              ),
-                              SizedBox(
-                                height: 5,
-                              ),
-                              Text(
-                                'Nausea, vomiting, stomach upset, trouble falling asleep, or a shaky/nervous feeling may occur.',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: width / 30,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
+
                       SizedBox(
                         height: width / 4,
                       ),

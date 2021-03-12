@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
-class RequestMedicine extends StatelessWidget {
+class AddDistributor extends StatelessWidget {
   var width;
   var height;
   var safePadding;
@@ -53,7 +53,7 @@ class RequestMedicine extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Request Medicine',
+                            'Add Distributor',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: width / 16,
@@ -63,7 +63,7 @@ class RequestMedicine extends StatelessWidget {
                             height: 20,
                           ),
                           ContainerText(
-                            hint: 'Name of Medicine',
+                            hint: 'Name',
                             node: node,
                             controller: medName,
                           ),
@@ -71,7 +71,15 @@ class RequestMedicine extends StatelessWidget {
                             height: 10,
                           ),
                           ContainerText(
-                            hint: 'Barcode',
+                            hint: 'Email',
+                            node: node,
+                            controller: medName,
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          ContainerText(
+                            hint: 'Password',
                             node: node,
                             controller: medName,
                           ),
@@ -87,25 +95,12 @@ class RequestMedicine extends StatelessWidget {
                             height: 10,
                           ),
                           ContainerText(
-                            hint: 'Price',
-                            node: node,
-                            controller: medName,
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          ContainerText(
                             hint: 'Location',
                             node: node,
                             controller: medName,
                           ),
                           SizedBox(
                             height: 10,
-                          ),
-                          ContainerText(
-                            hint: 'Barcode',
-                            node: node,
-                            controller: medName,
                           ),
                           SizedBox(
                             height: 15,

@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:tracker_admin/Widgets/InfoContainer.dart';
 import 'package:tracker_admin/Widgets/RowInfo.dart';
-import 'package:tracker_admin/screens/About.dart';
+import 'package:tracker_admin/screens/Pharmacy_Clinics_Info.dart';
 
 class ViewPharmacyOrClinic extends StatefulWidget {
   // The name of the category opened
@@ -96,7 +96,14 @@ class _ViewPharmacyOrClinicState extends State<ViewPharmacyOrClinic> {
                             location: 'Laal Kurti, 220, cake lane',
                             width: width,
                             title: 'Hajji Ltd. Iqbal Town',
-                            func: () {},
+                            func: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => Pharmacy_Clinics_Info(),
+                                ),
+                              );
+                            },
                           ),
                           RowInfo(
                             imageURL: 'https://picsum.photos/250?image=9',

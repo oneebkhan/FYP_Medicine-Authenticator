@@ -5,6 +5,8 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:tracker_admin/Widgets/BarChartMonthly.dart';
 import 'package:tracker_admin/Widgets/BarChartWeekly.dart';
+import 'package:tracker_admin/Widgets/RowInfo.dart';
+import 'package:tracker_admin/screens/AddDistributor.dart';
 import 'package:tracker_admin/screens/Clinics.dart';
 import 'package:tracker_admin/screens/Pharmacies.dart';
 import 'package:tracker_admin/screens/ViewMedicine.dart';
@@ -41,7 +43,7 @@ class _Dashboard_AdminState extends State<Dashboard_Admin> {
 
 //
 //
-// the function to scan the barcode
+// The main widget and the bottom navigation bar
   @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
@@ -105,12 +107,14 @@ class _Dashboard_AdminState extends State<Dashboard_Admin> {
                     selectedIndex = index;
                   });
                   if (index == 0) {
-                    page.previousPage(
+                    page.animateToPage(
+                      0,
                       duration: Duration(milliseconds: 500),
                       curve: Curves.ease,
                     );
                   } else {
-                    page.nextPage(
+                    page.animateToPage(
+                      1,
                       duration: Duration(milliseconds: 500),
                       curve: Curves.ease,
                     );
@@ -183,6 +187,9 @@ class _AdminDashboardState extends State<AdminDashboard> {
           SizedBox(
             height: (widget.width / 15),
           ),
+          //
+          //
+          // The top title and the notification row
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
@@ -246,7 +253,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
           ),
           //
           //
-          // The first MEDICINE container
+          // The first Distributor Container
           Center(
             child: Container(
               width: widget.width,
@@ -349,7 +356,14 @@ class _AdminDashboardState extends State<AdminDashboard> {
                         Padding(
                           padding: const EdgeInsets.only(bottom: 15),
                           child: GestureDetector(
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => AddDistributor(),
+                                ),
+                              );
+                            },
                             child: Container(
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(
@@ -392,41 +406,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                             ),
                           ),
                         ),
-                        //
-                        //
-                        // The third VIEW MEDICINE BUTTON
-                        // GestureDetector(
-                        //   onTap: () {
-                        //     Navigator.push(
-                        //       context,
-                        //       MaterialPageRoute(
-                        //         builder: (_) => ViewMedicine(
-                        //           func: [
-                        //             null,
-                        //             null,
-                        //             null,
-                        //           ],
-                        //           imageUrls: [
-                        //             'https://picsum.photos/250?image=9',
-                        //             'https://picsum.photos/250?image=9',
-                        //             'https://picsum.photos/250?image=9',
-                        //           ],
-                        //           location: [
-                        //             '500mg',
-                        //             null,
-                        //             null,
-                        //           ],
-                        //           pageName: 'Medicines',
-                        //           title: [
-                        //             'Panadol',
-                        //             'Paracetamol',
-                        //             'Cake',
-                        //           ],
-                        //         ),
-                        //       ),
-                        //     );
-                        //   },
-                        /*child:*/ Container(
+                        Container(
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
                                 vertical: 5, horizontal: 5),
@@ -443,14 +423,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                             color: col,
                           ),
                         ),
-                        //),
-                        //
-                        //
-                        // The fourth SCAN FROM GALLERY BARCODE button
                       ],
-                    ),
-                    SizedBox(
-                      height: 10,
                     ),
                   ],
                 ),
@@ -458,7 +431,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
             ),
           ),
           SizedBox(
-            height: 30,
+            height: 35,
           ),
           //
           //
@@ -630,7 +603,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
           ),
           //
           //
-          // The third EXTRAS container
+          // The third MEDICINE container
           Center(
             child: Container(
               width: widget.width,
@@ -731,7 +704,32 @@ class _AdminDashboardState extends State<AdminDashboard> {
                         Padding(
                           padding: const EdgeInsets.only(bottom: 15),
                           child: GestureDetector(
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => ViewMedicine(
+                                    pageName: 'View Medicine',
+                                    imageUrls: [
+                                      'https://picsum.photos/250?image=9',
+                                      'https://picsum.photos/250?image=9',
+                                      'https://picsum.photos/250?image=9',
+                                    ],
+                                    location: ['500mg', '400mg', '100mg'],
+                                    title: [
+                                      'Some Medicine',
+                                      'ooga booga',
+                                      'confused unga bunga',
+                                    ],
+                                    func: [
+                                      null,
+                                      null,
+                                      null,
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
                             child: Container(
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(
@@ -788,6 +786,9 @@ class _AdminDashboardState extends State<AdminDashboard> {
   }
 }
 
+//
+//
+// The STATISTICS PAGE
 class AdminStatistics extends StatefulWidget {
   final double width;
   final double height;
@@ -812,6 +813,9 @@ class _AdminStatisticsState extends State<AdminStatistics> {
           SizedBox(
             height: (widget.width / 15),
           ),
+          //
+          //
+          // The top title and the notification icon
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
@@ -875,7 +879,7 @@ class _AdminStatisticsState extends State<AdminStatistics> {
           ),
           //
           //
-          // The first MEDICINE container
+          // The first MEDICINE DISTRIBUTION AND GRAPHS
           Center(
             child: Container(
               width: widget.width,
@@ -903,7 +907,7 @@ class _AdminStatisticsState extends State<AdminStatistics> {
                       height: 15,
                     ),
                     Container(
-                      height: widget.height / 4,
+                      height: widget.height < 800 ? 200 : widget.height / 4,
                       child: ListView(
                         scrollDirection: Axis.horizontal,
                         shrinkWrap: true,
@@ -1018,7 +1022,7 @@ class _AdminStatisticsState extends State<AdminStatistics> {
           ),
           //
           //
-          // The second PHARMACIES AND CLINICS container
+          // The second TOP DISTRIBUTORS
           Center(
             child: Container(
               width: widget.width,
@@ -1032,150 +1036,22 @@ class _AdminStatisticsState extends State<AdminStatistics> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Pharmacies and Clinics',
+                      'Top Distributors',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: widget.width / 16,
                       ),
                     ),
                     SizedBox(
-                      height: 5,
+                      height: widget.height / 30,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Number of Total Pharmacies:',
-                          style: TextStyle(
-                            fontSize: widget.width / 30,
-                            color: Colors.grey[700],
-                            fontWeight: FontWeight.w300,
-                          ),
-                        ),
-                        Container(
-                          width: widget.width / 15,
-                          height: widget.width / 20,
-                          decoration: BoxDecoration(
-                            color: col,
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: Center(
-                            child: Text(
-                              '5',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: widget.width / 30,
-                              ),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Number of Total Clinics:',
-                          style: TextStyle(
-                            fontSize: widget.width / 30,
-                            color: Colors.grey[700],
-                            fontWeight: FontWeight.w300,
-                          ),
-                        ),
-                        Container(
-                          width: widget.width / 15,
-                          height: widget.width / 20,
-                          decoration: BoxDecoration(
-                            color: col,
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: Center(
-                            child: Text(
-                              '5',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: widget.width / 30,
-                              ),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    //
-                    //
-                    // The buttons
-                    Wrap(
-                      spacing: 15,
-                      children: [
-                        //
-                        //
-                        // The first VIEW CLINICS button
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 15),
-                          child: GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => Clinics(),
-                                ),
-                              );
-                            },
-                            child: Container(
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 5, horizontal: 5),
-                                child: Image(
-                                  width: widget.width / 4.9,
-                                  height: widget.width / 4.6,
-                                  image: AssetImage(
-                                      'assets/icons/admin_pharmacies_clinics/viewClinics.png'),
-                                ),
-                              ),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: col,
-                              ),
-                            ),
-                          ),
-                        ),
-                        //
-                        //
-                        // The second VIEW PHARMACIES Button
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) => Pharmacies(),
-                              ),
-                            );
-                          },
-                          child: Container(
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 5, horizontal: 5),
-                              child: Image(
-                                width: widget.width / 4.9,
-                                height: widget.width / 4.6,
-                                image: AssetImage(
-                                    'assets/icons/admin_pharmacies_clinics/viewPharmacies.png'),
-                              ),
-                            ),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: col,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                    RowInfo(
+                      width: widget.width,
+                      title: 'Marhabba',
+                      location: 'Laal Kurti District',
+                      imageURL: 'https://picsum.photos/250?image=9',
+                      func: null,
+                    )
                   ],
                 ),
               ),
@@ -1183,160 +1059,6 @@ class _AdminStatisticsState extends State<AdminStatistics> {
           ),
           SizedBox(
             height: 30,
-          ),
-          //
-          //
-          // The third EXTRAS container
-          Center(
-            child: Container(
-              width: widget.width,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15), color: Colors.white),
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Medicine',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: widget.width / 16,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Number of Authenticated Medicines:',
-                          style: TextStyle(
-                            fontSize: widget.width / 30,
-                            color: Colors.grey[700],
-                            fontWeight: FontWeight.w300,
-                          ),
-                        ),
-                        Container(
-                          width: widget.width / 15,
-                          height: widget.width / 20,
-                          decoration: BoxDecoration(
-                            color: col,
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: Center(
-                            child: Text(
-                              '5',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: widget.width / 30,
-                              ),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Number of Total Medicines:',
-                          style: TextStyle(
-                            fontSize: widget.width / 30,
-                            color: Colors.grey[700],
-                            fontWeight: FontWeight.w300,
-                          ),
-                        ),
-                        Container(
-                          width: widget.width / 15,
-                          height: widget.width / 20,
-                          decoration: BoxDecoration(
-                            color: col,
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: Center(
-                            child: Text(
-                              '5',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: widget.width / 30,
-                              ),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    //
-                    //
-                    // The buttons
-                    Wrap(
-                      spacing: 15,
-                      children: [
-                        //
-                        //
-                        // The first ABOUT button
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 15),
-                          child: GestureDetector(
-                            onTap: () {},
-                            child: Container(
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 5, horizontal: 5),
-                                child: Image(
-                                  width: widget.width / 4.9,
-                                  height: widget.width / 4.6,
-                                  image: AssetImage(
-                                      'assets/icons/admin_dashboard_medicine/viewMedicine.png'),
-                                ),
-                              ),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: col,
-                              ),
-                            ),
-                          ),
-                        ),
-                        //
-                        //
-                        // The second TIPS Button
-                        GestureDetector(
-                          onTap: () {},
-                          child: Container(
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 5, horizontal: 5),
-                              child: Image(
-                                width: widget.width / 4.9,
-                                height: widget.width / 4.6,
-                                image: AssetImage(
-                                    'assets/icons/admin_dashboard_medicine/searchMedicine.png'),
-                              ),
-                            ),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: col,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          SizedBox(
-            height: 20,
           ),
         ],
       ),
