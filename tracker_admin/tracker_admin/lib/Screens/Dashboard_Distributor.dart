@@ -933,7 +933,7 @@ class _AdminStatisticsState extends State<AdminStatistics> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Top Distributors',
+                      'Top Medicine',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: widget.width / 16,
@@ -944,9 +944,9 @@ class _AdminStatisticsState extends State<AdminStatistics> {
                     ),
                     RowInfo(
                       width: widget.width,
-                      title: 'Marhabba',
-                      location: 'Laal Kurti District',
-                      imageURL: 'https://picsum.photos/250?image=9',
+                      title: 'Panadol',
+                      imageURL:
+                          'https://i-cf5.gskstatic.com/content/dam/cf-consumer-healthcare/panadol/en_ie/ireland-products/panadol-tablets/MGK5158-GSK-Panadol-Tablets-455x455.png?auto=format',
                       func: null,
                     )
                   ],
