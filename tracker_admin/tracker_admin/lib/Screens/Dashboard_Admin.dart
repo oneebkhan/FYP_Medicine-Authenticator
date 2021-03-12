@@ -9,6 +9,7 @@ import 'package:tracker_admin/Widgets/RowInfo.dart';
 import 'package:tracker_admin/screens/AddDistributor.dart';
 import 'package:tracker_admin/screens/Clinics.dart';
 import 'package:tracker_admin/screens/Pharmacies.dart';
+import 'package:tracker_admin/screens/Requests.dart';
 import 'package:tracker_admin/screens/ViewMedicine.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -216,7 +217,14 @@ class _AdminDashboardState extends State<AdminDashboard> {
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: FlatButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => Requests(),
+                            ),
+                          );
+                        },
                         padding: const EdgeInsets.all(0),
                         child: Icon(
                           Icons.notifications_none,
@@ -842,7 +850,14 @@ class _AdminStatisticsState extends State<AdminStatistics> {
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: FlatButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => Requests(),
+                            ),
+                          );
+                        },
                         padding: const EdgeInsets.all(0),
                         child: Icon(
                           Icons.notifications_none,
