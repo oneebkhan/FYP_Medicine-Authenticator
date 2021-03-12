@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
 class MedicineInfo extends StatefulWidget {
   final String medicineName;
@@ -99,23 +100,46 @@ class _MedicineInfoState extends State<MedicineInfo> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       backgroundColor: Colors.black,
-      floatingActionButton: FloatingActionButton(
-        child: Icon(index2 == 0
-            ? Icons.keyboard_arrow_down_outlined
-            : Icons.keyboard_arrow_up_outlined),
-        onPressed: () {
-          if (index2 == 1) {
-            page.previousPage(
-              duration: Duration(milliseconds: 500),
-              curve: Curves.ease,
-            );
-          } else {
-            page.nextPage(
-              duration: Duration(milliseconds: 500),
-              curve: Curves.ease,
-            );
-          }
-        },
+      floatingActionButton: SpeedDial(
+        backgroundColor: Colors.blue[500],
+        overlayColor: Colors.black,
+        overlayOpacity: 0.4,
+        animatedIcon: AnimatedIcons.menu_close,
+        animatedIconTheme: IconThemeData(color: Colors.white),
+        children: [
+          SpeedDialChild(
+            child: Icon(
+              Icons.edit,
+              color: Colors.white,
+            ),
+            label: 'Edit Info',
+            backgroundColor: Colors.blue[500],
+            onTap: () {},
+          ),
+          SpeedDialChild(
+            child: Icon(
+              index2 == 0
+                  ? Icons.keyboard_arrow_down_outlined
+                  : Icons.keyboard_arrow_up_outlined,
+              color: Colors.white,
+            ),
+            onTap: () {
+              if (index2 == 1) {
+                page.previousPage(
+                  duration: Duration(milliseconds: 500),
+                  curve: Curves.ease,
+                );
+              } else {
+                page.nextPage(
+                  duration: Duration(milliseconds: 500),
+                  curve: Curves.ease,
+                );
+              }
+            },
+            backgroundColor: Colors.blue[500],
+            label: index2 == 0 ? 'Go to Next Page' : 'Go to Previous Page',
+          ),
+        ],
       ),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
