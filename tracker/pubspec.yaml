@@ -36,12 +36,16 @@ dependencies:
   # QR and barcode scanner
   qrscan: ^0.2.22
   # handles permissions
-  permission_handler: ^5.1.0+2
+  permission_handler: ^6.1.0
   # picks the image using the gallery and the camera
-  image_picker: ^0.6.7+22
+  image_picker: ^0.7.2+1
   # provides the file path on both IOS and android
   path_provider: ^2.0.1
   flutter_speed_dial: ^2.1.1
+  firebase_core: ^1.0.1
+  cloud_firestore: ^1.0.1
+  plugin_platform_interface: ^2.0.0
+  
 
 dev_dependencies:
   flutter_test:
