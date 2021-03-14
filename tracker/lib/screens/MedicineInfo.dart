@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -48,18 +50,21 @@ class _MedicineInfoState extends State<MedicineInfo> {
   double opac2;
   int index;
   int index2;
-  var medSnap;
 
   var page = PageController();
   var page2 = PageController();
+  var med;
 
   getMedicineInfo() async {
     try {
-      FirebaseFirestore firestore = FirebaseFirestore.instance;
-      DocumentSnapshot snap =
-          await firestore.collection('Medicine').doc('Panadol').get();
-      setState(() {
-        medSnap = snap;
+      StreamSubscription<DocumentSnapshot> stream = FirebaseFirestore.instance
+          .collection('Medicine')
+          .doc('Panadol')
+          .snapshots()
+          .listen((event) {
+        setState(() {
+          med = event.data();
+        });
       });
     } on Exception catch (e) {
       print(e);
@@ -111,6 +116,7 @@ class _MedicineInfoState extends State<MedicineInfo> {
     safePadding = MediaQuery.of(context).padding.top;
     page = PageController(initialPage: 0);
     page2 = PageController(initialPage: 0);
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       backgroundColor: Color.fromARGB(255, 0, 0, 0),
@@ -139,7 +145,7 @@ class _MedicineInfoState extends State<MedicineInfo> {
           color: Colors.white,
         ),
       ),
-      body: medSnap == null
+      body: med == null
           ? Center(
               child: CircularProgressIndicator(),
             )
@@ -178,7 +184,7 @@ class _MedicineInfoState extends State<MedicineInfo> {
                                     BlendMode.dstATop),
                                 fit: BoxFit.fitWidth,
                                 image: CachedNetworkImageProvider(
-                                  medSnap['imageURL'][0],
+                                  med['imageURL'][0].toString(),
                                 ),
                               ),
                             ),
@@ -193,7 +199,7 @@ class _MedicineInfoState extends State<MedicineInfo> {
                                     BlendMode.dstATop),
                                 fit: BoxFit.fitWidth,
                                 image: CachedNetworkImageProvider(
-                                  'https://pentagonenterprises.com/wp-content/uploads/2020/11/panadol-600x600.png',
+                                  med['imageURL'][1].toString(),
                                 ),
                               ),
                             ),
@@ -215,7 +221,7 @@ class _MedicineInfoState extends State<MedicineInfo> {
                             Row(
                               children: [
                                 Text(
-                                  medSnap['name'],
+                                  med['name'],
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontSize: width / 10,
@@ -290,7 +296,7 @@ class _MedicineInfoState extends State<MedicineInfo> {
                                     ),
                                   ),
                                   Text(
-                                    'Rs. 100/500mg Leaf',
+                                    'Rs.' + med['price'].toString(),
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontSize: width / 22,
@@ -308,7 +314,7 @@ class _MedicineInfoState extends State<MedicineInfo> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'Doses:',
+                                    'Dose:',
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontSize: width / 17,
@@ -316,7 +322,7 @@ class _MedicineInfoState extends State<MedicineInfo> {
                                     ),
                                   ),
                                   Text(
-                                    '500/1000 mg',
+                                    med['dose'],
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontSize: width / 22,
@@ -379,7 +385,7 @@ class _MedicineInfoState extends State<MedicineInfo> {
                                       height: 5,
                                     ),
                                     Text(
-                                      'A simple pain relief medicine meant to be taken with water. Can cure headaches or body aches with relative ease. Meant to be taken after a meal, the usual dosage being 2 tablets of 500mg for an average adult.',
+                                      med['description'],
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontSize: width / 30,
@@ -415,7 +421,7 @@ class _MedicineInfoState extends State<MedicineInfo> {
                                       height: 5,
                                     ),
                                     Text(
-                                      'GSK, Pakistan',
+                                      med['companyName'],
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontSize: width / 30,
@@ -450,12 +456,19 @@ class _MedicineInfoState extends State<MedicineInfo> {
                                     SizedBox(
                                       height: 5,
                                     ),
-                                    Text(
-                                      'GSK, Pakistan\nGSK, Pakistan\nGSK, Pakistan\nGSK, Pakistan\nGSK, Pakistan',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: width / 30,
-                                      ),
+                                    ListView.builder(
+                                      shrinkWrap: true,
+                                      itemCount: med['distributors'].length,
+                                      itemBuilder:
+                                          (BuildContext context, int i) {
+                                        return Text(
+                                          med['distributors'][i],
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: width / 30,
+                                          ),
+                                        );
+                                      },
                                     ),
                                   ],
                                 ),
@@ -486,12 +499,19 @@ class _MedicineInfoState extends State<MedicineInfo> {
                                     SizedBox(
                                       height: 5,
                                     ),
-                                    Text(
-                                      'GSK, Pakistan\nGSK, Pakistan\nGSK, Pakistan\nGSK, Pakistan\nGSK, Pakistan',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: width / 30,
-                                      ),
+                                    ListView.builder(
+                                      shrinkWrap: true,
+                                      itemCount: med['pharmaciesList'].length,
+                                      itemBuilder:
+                                          (BuildContext context, int i) {
+                                        return Text(
+                                          med['pharmaciesList'][i],
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: width / 30,
+                                          ),
+                                        );
+                                      },
                                     ),
                                   ],
                                 ),
@@ -602,7 +622,7 @@ class _MedicineInfoState extends State<MedicineInfo> {
                                       height: 5,
                                     ),
                                     Text(
-                                      'Panadol can be used for relieving fever and/or for the treatment of mild to moderate pain including headache, migraine, muscle ache, dysmenorrhea, sore throat, musculoskeletal pain and pain after dental procedures/ tooth extraction, toothache and pain of osteoarthritis.',
+                                      med['uses'],
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontSize: width / 30,
@@ -638,7 +658,7 @@ class _MedicineInfoState extends State<MedicineInfo> {
                                       height: 5,
                                     ),
                                     Text(
-                                      'Nausea, vomiting, stomach upset, trouble falling asleep, or a shaky/nervous feeling may occur.',
+                                      med['sideEffects'],
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontSize: width / 30,
