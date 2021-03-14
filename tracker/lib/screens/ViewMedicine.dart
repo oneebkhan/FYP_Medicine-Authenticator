@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:tracker/Widgets/InfoContainer.dart';
 import 'package:tracker/Widgets/RowInfo.dart';
@@ -28,10 +31,26 @@ class ViewMedicine extends StatefulWidget {
 
 class _ViewMedicineState extends State<ViewMedicine> {
   double opac;
+  var m;
+
+  getMedicine() async {
+    try {
+      setState(() {
+        m = FirebaseFirestore.instance
+            .collection('Medicine')
+            .orderBy('name')
+            .snapshots();
+      });
+    } on Exception catch (e) {
+      print(e);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     opac = 0;
+    getMedicine();
 
     Future.delayed(Duration(milliseconds: 500), () {
       setState(() {
@@ -97,45 +116,39 @@ class _ViewMedicineState extends State<ViewMedicine> {
                         right: 20,
                         top: 20,
                       ),
-                      child: Column(
-                        children: [
-                          //
-                          //
-                          // The row in the Field
-                          RowInfo(
-                            imageURL: widget.imageUrls[0],
-                            location: widget.location[0],
-                            width: width,
-                            title: widget.title[0],
-                            func: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => MedicineInfo(),
-                                ),
+                      child: StreamBuilder<QuerySnapshot>(
+                          stream: m,
+                          builder: (BuildContext context, snapshot) {
+                            if (snapshot.hasData == false) {
+                              return Center(
+                                child: CircularProgressIndicator(),
                               );
-                            },
-                          ),
-                          RowInfo(
-                            imageURL: widget.imageUrls[1],
-                            location: widget.location[1],
-                            width: width,
-                            title: widget.title[1],
-                            func: () {
-                              widget.func[1]();
-                            },
-                          ),
-                          RowInfo(
-                            imageURL: widget.imageUrls[2],
-                            location: widget.location[2],
-                            width: width,
-                            title: widget.title[2],
-                            func: () {
-                              widget.func[2]();
-                            },
-                          ),
-                        ],
-                      ),
+                            }
+                            return ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: snapshot.data.docs.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                QueryDocumentSnapshot item =
+                                    snapshot.data.docs[index];
+                                return RowInfo(
+                                  imageURL: item['imageURL'][0].toString(),
+                                  location: item['dose'],
+                                  width: width,
+                                  title: item['name'],
+                                  func: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (_) => MedicineInfo(
+                                          medicineName: item['name'],
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                );
+                              },
+                            );
+                          }),
                     ),
                   ),
                 ),

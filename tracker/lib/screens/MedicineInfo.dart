@@ -3,37 +3,14 @@ import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class MedicineInfo extends StatefulWidget {
   final String medicineName;
-  final List<String> imageUrls;
-  final String description;
-  final int price;
-  final String quantity;
-  final bool authenticity;
-  final String barcode;
-  final List<String> sideEffects;
-  final List<String> distributors;
-  final List<String> pharmacies;
-  final String company;
-  final List<String> use;
-  final String dose;
 
   MedicineInfo({
     Key key,
     this.medicineName,
-    this.imageUrls,
-    this.description,
-    this.price,
-    this.quantity,
-    this.authenticity,
-    this.barcode,
-    this.sideEffects,
-    this.distributors,
-    this.pharmacies,
-    this.company,
-    this.use,
-    this.dose,
   }) : super(key: key);
 
   @override
@@ -54,12 +31,32 @@ class _MedicineInfoState extends State<MedicineInfo> {
   var page = PageController();
   var page2 = PageController();
   var med;
+  List<Widget> numberOfImagesIndex;
+
+  getImages() {
+    for (int i = 0; i < med['imageURL'].length; i++) {
+      numberOfImagesIndex.add(Container(
+        height: height,
+        width: width,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            colorFilter: new ColorFilter.mode(
+                Colors.black.withOpacity(0.4), BlendMode.dstATop),
+            fit: BoxFit.fitWidth,
+            image: CachedNetworkImageProvider(
+              med['imageURL'][i].toString(),
+            ),
+          ),
+        ),
+      ));
+    }
+  }
 
   getMedicineInfo() async {
     try {
       StreamSubscription<DocumentSnapshot> stream = FirebaseFirestore.instance
           .collection('Medicine')
-          .doc('Panadol')
+          .doc(widget.medicineName)
           .snapshots()
           .listen((event) {
         setState(() {
@@ -68,6 +65,7 @@ class _MedicineInfoState extends State<MedicineInfo> {
       });
     } on Exception catch (e) {
       print(e);
+      Fluttertoast.showToast(msg: '$e');
     }
   }
 
@@ -78,11 +76,13 @@ class _MedicineInfoState extends State<MedicineInfo> {
     opac2 = 0;
     index = 0;
     index2 = 0;
+    numberOfImagesIndex = [];
     getMedicineInfo();
 
     Future.delayed(Duration(milliseconds: 300), () {
       setState(() {
         opac = 1.0;
+        getImages();
       });
     });
     Future.delayed(Duration(milliseconds: 1000), () {
@@ -167,45 +167,15 @@ class _MedicineInfoState extends State<MedicineInfo> {
                       duration: Duration(milliseconds: 500),
                       opacity: opac,
                       child: PageView(
-                        controller: page2,
-                        onPageChanged: (i) {
-                          setState(() {
-                            index = i;
-                          });
-                        },
-                        children: [
-                          Container(
-                            height: height,
-                            width: width,
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                colorFilter: new ColorFilter.mode(
-                                    Colors.black.withOpacity(0.4),
-                                    BlendMode.dstATop),
-                                fit: BoxFit.fitWidth,
-                                image: CachedNetworkImageProvider(
-                                  med['imageURL'][0].toString(),
-                                ),
-                              ),
-                            ),
-                          ),
-                          Container(
-                            height: height,
-                            width: width,
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                colorFilter: new ColorFilter.mode(
-                                    Colors.black.withOpacity(0.4),
-                                    BlendMode.dstATop),
-                                fit: BoxFit.fitWidth,
-                                image: CachedNetworkImageProvider(
-                                  med['imageURL'][1].toString(),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                          controller: page2,
+                          onPageChanged: (i) {
+                            setState(() {
+                              index = i;
+                            });
+                          },
+                          children: numberOfImagesIndex == null
+                              ? CircularProgressIndicator()
+                              : numberOfImagesIndex),
                     ),
                     //
                     //
@@ -250,87 +220,97 @@ class _MedicineInfoState extends State<MedicineInfo> {
                             //
                             //
                             // indicator of the number of pictures
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: SizedBox(
-                                height: 10,
-                                child: ListView.builder(
-                                  scrollDirection: Axis.horizontal,
-                                  physics: NeverScrollableScrollPhysics(),
-                                  shrinkWrap: true,
-                                  padding: EdgeInsets.all(0),
-                                  itemCount: (2),
-                                  itemBuilder: (BuildContext context, int ind) {
-                                    return Padding(
-                                      padding: const EdgeInsets.only(right: 5),
-                                      child: Container(
-                                        margin: EdgeInsets.all(0),
-                                        width: 10,
-                                        height: 10,
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: index == ind
-                                              ? Colors.blue[200]
-                                              : Colors.grey[700],
-                                        ),
+                            med['imageURL'][0] == null
+                                ? Container()
+                                : Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: SizedBox(
+                                      height: 10,
+                                      child: ListView.builder(
+                                        scrollDirection: Axis.horizontal,
+                                        physics: NeverScrollableScrollPhysics(),
+                                        shrinkWrap: true,
+                                        padding: EdgeInsets.all(0),
+                                        itemCount: med['imageURL'].length,
+                                        itemBuilder:
+                                            (BuildContext context, int ind) {
+                                          return Padding(
+                                            padding:
+                                                const EdgeInsets.only(right: 5),
+                                            child: Container(
+                                              margin: EdgeInsets.all(0),
+                                              width: 10,
+                                              height: 10,
+                                              decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                color: index == ind
+                                                    ? Colors.blue[200]
+                                                    : Colors.grey[700],
+                                              ),
+                                            ),
+                                          );
+                                        },
                                       ),
-                                    );
-                                  },
-                                ),
-                              ),
-                            ),
+                                    ),
+                                  ),
                             SizedBox(
                               height: 20,
                             ),
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Price:',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: width / 17,
-                                      fontWeight: FontWeight.bold,
+                            med['price'] == null
+                                ? Container()
+                                : Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'Price:',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: width / 17,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        Text(
+                                          'Rs.' + med['price'].toString(),
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: width / 22,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                  Text(
-                                    'Rs.' + med['price'].toString(),
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: width / 22,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
                             SizedBox(
                               height: 20,
                             ),
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Dose:',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: width / 17,
-                                      fontWeight: FontWeight.bold,
+                            med['dose'] == null
+                                ? Container()
+                                : Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'Dose:',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: width / 17,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        Text(
+                                          med['dose'],
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: width / 22,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                  Text(
-                                    med['dose'],
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: width / 22,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
                             SizedBox(
                               height: width / 7,
                             ),
