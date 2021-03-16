@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:tracker/screens/About.dart';
-import 'package:tracker/screens/Clinics.dart';
-import 'package:tracker/screens/Pharmacies.dart';
+import 'package:tracker/screens/Clinic/DistributorClinics.dart';
+import 'package:tracker/screens/Pharmacy/DistributorPharmacies.dart';
 import 'package:tracker/screens/Tips.dart';
 import 'package:tracker/screens/ViewMedicine.dart';
 import 'package:qrscan/qrscan.dart' as scanner;
@@ -192,27 +192,7 @@ class _DashboardState extends State<Dashboard> {
                                     context,
                                     MaterialPageRoute(
                                       builder: (_) => ViewMedicine(
-                                        func: [
-                                          null,
-                                          null,
-                                          null,
-                                        ],
-                                        imageUrls: [
-                                          'https://picsum.photos/250?image=9',
-                                          'https://picsum.photos/250?image=9',
-                                          'https://picsum.photos/250?image=9',
-                                        ],
-                                        location: [
-                                          '500mg',
-                                          null,
-                                          null,
-                                        ],
                                         pageName: 'Medicines',
-                                        title: [
-                                          'Panadol',
-                                          'Paracetamol',
-                                          'Cake',
-                                        ],
                                       ),
                                     ),
                                   );
@@ -324,7 +304,7 @@ class _DashboardState extends State<Dashboard> {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (_) => Clinics(),
+                                        builder: (_) => DistributorClinics(),
                                       ),
                                     );
                                   },
@@ -354,7 +334,7 @@ class _DashboardState extends State<Dashboard> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (_) => Pharmacies(),
+                                      builder: (_) => DistributorPharmacies(),
                                     ),
                                   );
                                 },

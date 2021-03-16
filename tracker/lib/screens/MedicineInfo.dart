@@ -33,34 +33,44 @@ class _MedicineInfoState extends State<MedicineInfo> {
   var med;
   List<Widget> numberOfImagesIndex;
 
-  getImages() {
+  //
+  //
+  // makes a list of widgets for the first page view
+  Future getImages() {
     for (int i = 0; i < med['imageURL'].length; i++) {
-      numberOfImagesIndex.add(Container(
-        height: height,
-        width: width,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            colorFilter: new ColorFilter.mode(
-                Colors.black.withOpacity(0.4), BlendMode.dstATop),
-            fit: BoxFit.fitWidth,
-            image: CachedNetworkImageProvider(
-              med['imageURL'][i].toString(),
+      setState(() {
+        numberOfImagesIndex.add(Container(
+          height: height,
+          width: width,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              colorFilter: new ColorFilter.mode(
+                  Colors.black.withOpacity(0.4), BlendMode.dstATop),
+              fit: BoxFit.fitWidth,
+              image: CachedNetworkImageProvider(
+                med['imageURL'][i].toString(),
+              ),
             ),
           ),
-        ),
-      ));
+        ));
+      });
     }
   }
 
+  //
+  //
+  // gets the firebase data of that particular medicine
   getMedicineInfo() async {
     try {
-      StreamSubscription<DocumentSnapshot> stream = FirebaseFirestore.instance
+      StreamSubscription<DocumentSnapshot> stream = await FirebaseFirestore
+          .instance
           .collection('Medicine')
           .doc(widget.medicineName)
           .snapshots()
           .listen((event) {
         setState(() {
           med = event.data();
+          getImages();
         });
       });
     } on Exception catch (e) {
@@ -69,6 +79,9 @@ class _MedicineInfoState extends State<MedicineInfo> {
     }
   }
 
+  //
+  //
+  // initial state
   @override
   void initState() {
     super.initState();
@@ -78,15 +91,15 @@ class _MedicineInfoState extends State<MedicineInfo> {
     index2 = 0;
     numberOfImagesIndex = [];
     getMedicineInfo();
-
     Future.delayed(Duration(milliseconds: 300), () {
       setState(() {
-        opac = 1.0;
         getImages();
       });
     });
+
     Future.delayed(Duration(milliseconds: 1000), () {
       setState(() {
+        getImages();
         opac2 = 1.0;
       });
     });
@@ -145,6 +158,9 @@ class _MedicineInfoState extends State<MedicineInfo> {
           color: Colors.white,
         ),
       ),
+      //
+      //
+      // Shows a progress indicator if the medicine information is not retrieved
       body: med == null
           ? Center(
               child: CircularProgressIndicator(),
@@ -163,20 +179,18 @@ class _MedicineInfoState extends State<MedicineInfo> {
                     //
                     //
                     // The image behind the info
-                    AnimatedOpacity(
-                      duration: Duration(milliseconds: 500),
-                      opacity: opac,
-                      child: PageView(
-                          controller: page2,
-                          onPageChanged: (i) {
-                            setState(() {
-                              index = i;
-                            });
-                          },
-                          children: numberOfImagesIndex == null
-                              ? CircularProgressIndicator()
-                              : numberOfImagesIndex),
-                    ),
+                    PageView(
+                        controller: page2,
+                        onPageChanged: (i) {
+                          setState(() {
+                            index = i;
+                          });
+                        },
+                        children: numberOfImagesIndex == null
+                            ? CircularProgressIndicator(
+                                backgroundColor: Colors.blue,
+                              )
+                            : numberOfImagesIndex),
                     //
                     //
                     // The top page info
@@ -256,6 +270,9 @@ class _MedicineInfoState extends State<MedicineInfo> {
                             SizedBox(
                               height: 20,
                             ),
+                            //
+                            //
+                            // shows the price of the medicine
                             med['price'] == null
                                 ? Container()
                                 : Align(
@@ -285,6 +302,9 @@ class _MedicineInfoState extends State<MedicineInfo> {
                             SizedBox(
                               height: 20,
                             ),
+                            //
+                            //
+                            // Shows the dosage fo the medicine
                             med['dose'] == null
                                 ? Container()
                                 : Align(
@@ -342,6 +362,9 @@ class _MedicineInfoState extends State<MedicineInfo> {
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         child: Column(
                           children: [
+                            //
+                            //
+                            // description container
                             Container(
                               width: width,
                               decoration: BoxDecoration(
@@ -365,7 +388,9 @@ class _MedicineInfoState extends State<MedicineInfo> {
                                       height: 5,
                                     ),
                                     Text(
-                                      med['description'],
+                                      med['description'] == null
+                                          ? 'N/A'
+                                          : med['description'],
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontSize: width / 30,
@@ -378,6 +403,9 @@ class _MedicineInfoState extends State<MedicineInfo> {
                             SizedBox(
                               height: 10,
                             ),
+                            //
+                            //
+                            // company name container
                             Container(
                               width: width,
                               decoration: BoxDecoration(
@@ -401,7 +429,9 @@ class _MedicineInfoState extends State<MedicineInfo> {
                                       height: 5,
                                     ),
                                     Text(
-                                      med['companyName'],
+                                      med['companyName'] == null
+                                          ? 'N/A'
+                                          : med['companyName'],
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontSize: width / 30,
@@ -414,6 +444,9 @@ class _MedicineInfoState extends State<MedicineInfo> {
                             SizedBox(
                               height: 10,
                             ),
+                            //
+                            //
+                            // Distributors that sell this medicine
                             Container(
                               width: width,
                               decoration: BoxDecoration(
@@ -436,20 +469,29 @@ class _MedicineInfoState extends State<MedicineInfo> {
                                     SizedBox(
                                       height: 5,
                                     ),
-                                    ListView.builder(
-                                      shrinkWrap: true,
-                                      itemCount: med['distributors'].length,
-                                      itemBuilder:
-                                          (BuildContext context, int i) {
-                                        return Text(
-                                          med['distributors'][i],
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: width / 30,
+                                    med['distributors'][0] == null
+                                        ? Text(
+                                            'N/A',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: width / 30,
+                                            ),
+                                          )
+                                        : ListView.builder(
+                                            shrinkWrap: true,
+                                            itemCount:
+                                                med['distributors'].length,
+                                            itemBuilder:
+                                                (BuildContext context, int i) {
+                                              return Text(
+                                                med['distributors'][i],
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: width / 30,
+                                                ),
+                                              );
+                                            },
                                           ),
-                                        );
-                                      },
-                                    ),
                                   ],
                                 ),
                               ),
@@ -457,6 +499,9 @@ class _MedicineInfoState extends State<MedicineInfo> {
                             SizedBox(
                               height: 10,
                             ),
+                            //
+                            //
+                            // recommended pharmacies that have this medicine
                             Container(
                               width: width,
                               decoration: BoxDecoration(
@@ -479,20 +524,29 @@ class _MedicineInfoState extends State<MedicineInfo> {
                                     SizedBox(
                                       height: 5,
                                     ),
-                                    ListView.builder(
-                                      shrinkWrap: true,
-                                      itemCount: med['pharmaciesList'].length,
-                                      itemBuilder:
-                                          (BuildContext context, int i) {
-                                        return Text(
-                                          med['pharmaciesList'][i],
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: width / 30,
+                                    med['pharmaciesList'][0] == null
+                                        ? Text(
+                                            'N/A',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: width / 30,
+                                            ),
+                                          )
+                                        : ListView.builder(
+                                            shrinkWrap: true,
+                                            itemCount:
+                                                med['pharmaciesList'].length,
+                                            itemBuilder:
+                                                (BuildContext context, int i) {
+                                              return Text(
+                                                med['pharmaciesList'][i],
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: width / 30,
+                                                ),
+                                              );
+                                            },
                                           ),
-                                        );
-                                      },
-                                    ),
                                   ],
                                 ),
                               ),
@@ -579,6 +633,9 @@ class _MedicineInfoState extends State<MedicineInfo> {
                                 ],
                               ),
                             ),
+                            //
+                            //
+                            // What the medicine should be used for
                             Container(
                               width: width,
                               decoration: BoxDecoration(
@@ -602,7 +659,9 @@ class _MedicineInfoState extends State<MedicineInfo> {
                                       height: 5,
                                     ),
                                     Text(
-                                      med['uses'],
+                                      med['uses'] == null
+                                          ? Container()
+                                          : med['uses'],
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontSize: width / 30,
@@ -615,6 +674,9 @@ class _MedicineInfoState extends State<MedicineInfo> {
                             SizedBox(
                               height: 10,
                             ),
+                            //
+                            //
+                            // the side effects of the medicine
                             Container(
                               width: width,
                               decoration: BoxDecoration(
@@ -638,7 +700,9 @@ class _MedicineInfoState extends State<MedicineInfo> {
                                       height: 5,
                                     ),
                                     Text(
-                                      med['sideEffects'],
+                                      med['sideEffects'] == null
+                                          ? Container()
+                                          : med['sideEffects'],
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontSize: width / 30,

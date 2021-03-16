@@ -5,18 +5,17 @@ import 'package:tracker/Widgets/RowInfo.dart';
 import 'package:tracker/screens/About.dart';
 import 'package:tracker/screens/Pharmacy_Clinics_Info.dart';
 
-class ViewPharmacyOrClinic extends StatefulWidget {
+class ViewClinic extends StatefulWidget {
   // The name of the category opened
   final String pageName;
 
-  const ViewPharmacyOrClinic({Key key, @required this.pageName})
-      : super(key: key);
+  const ViewClinic({Key key, @required this.pageName}) : super(key: key);
 
   @override
-  _ViewPharmacyOrClinicState createState() => _ViewPharmacyOrClinicState();
+  _ViewClinicState createState() => _ViewClinicState();
 }
 
-class _ViewPharmacyOrClinicState extends State<ViewPharmacyOrClinic> {
+class _ViewClinicState extends State<ViewClinic> {
   double opac;
   @override
   void initState() {

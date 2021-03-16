@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:tracker/Widgets/InfoContainer.dart';
-import 'package:tracker/screens/ViewPharmacyOrClinic.dart';
+import 'package:tracker/screens/Clinic/ViewClinic.dart';
 
-class Clinics extends StatefulWidget {
-  Clinics({Key key}) : super(key: key);
+class DistributorClinics extends StatefulWidget {
+  DistributorClinics({Key key}) : super(key: key);
 
   @override
-  _ClinicsState createState() => _ClinicsState();
+  _DistributorClinicsState createState() => _DistributorClinicsState();
 }
 
-class _ClinicsState extends State<Clinics> {
+class _DistributorClinicsState extends State<DistributorClinics> {
   var width;
   var height;
   var safePadding;
@@ -78,7 +78,7 @@ class _ClinicsState extends State<Clinics> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (_) => ViewPharmacyOrClinic(
+                              builder: (_) => ViewClinic(
                                 pageName: 'Floyd\'s Pharmacy',
                               ),
                             ),
@@ -100,7 +100,7 @@ class _ClinicsState extends State<Clinics> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (_) => ViewPharmacyOrClinic(
+                              builder: (_) => ViewClinic(
                                 pageName: 'Floyd\'s Pharmacy',
                               ),
                             ),

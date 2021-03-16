@@ -1,31 +1,22 @@
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Pharmacy_Clinics_Info extends StatefulWidget {
   final String name;
-  final List<String> imageUrls;
-  final String location;
-  // latitude and logitude
-  final String gps;
-  final int cellNumber;
-  final String company;
-  final List<String> employee;
-  final String timings;
-  final int review;
+  // if the field is 0 this is a pharmacy otherwise it is a clinic
+  final int pharmOrClinicInt;
 
   Pharmacy_Clinics_Info({
     Key key,
-    this.imageUrls,
-    this.company,
     this.name,
-    this.location,
-    this.gps,
-    this.cellNumber,
-    this.review,
-    this.employee,
-    this.timings,
+    this.pharmOrClinicInt,
   }) : super(key: key);
 
   @override
@@ -45,6 +36,51 @@ class _Pharmacy_Clinics_InfoState extends State<Pharmacy_Clinics_Info> {
 
   var page = PageController();
   var page2 = PageController();
+  var info;
+  String pharmOrClinic;
+  List<Widget> numberOfImagesIndex;
+
+  //
+  //
+  // makes a list of widgets for the first page view
+  getImages() {
+    for (int i = 0; i < info['imageURL'].length; i++) {
+      numberOfImagesIndex.add(Container(
+        height: height,
+        width: width,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            colorFilter: new ColorFilter.mode(
+                Colors.black.withOpacity(0.4), BlendMode.dstATop),
+            fit: BoxFit.fitWidth,
+            image: CachedNetworkImageProvider(
+              info['imageURL'][i].toString(),
+            ),
+          ),
+        ),
+      ));
+    }
+  }
+
+  //
+  //
+  // gets the firebase data of that particular medicine
+  getMedicineInfo() async {
+    try {
+      StreamSubscription<DocumentSnapshot> stream = FirebaseFirestore.instance
+          .collection(pharmOrClinic)
+          .doc(widget.name)
+          .snapshots()
+          .listen((event) {
+        setState(() {
+          info = event.data();
+        });
+      });
+    } on Exception catch (e) {
+      print(e);
+      Fluttertoast.showToast(msg: '$e');
+    }
+  }
 
   @override
   void initState() {
@@ -53,6 +89,17 @@ class _Pharmacy_Clinics_InfoState extends State<Pharmacy_Clinics_Info> {
     opac2 = 0;
     index = 0;
     index2 = 0;
+    numberOfImagesIndex = [];
+    if (widget.pharmOrClinicInt == 0) {
+      setState(() {
+        pharmOrClinic == 'Pharmacy';
+      });
+    } else {
+      setState(() {
+        pharmOrClinic == 'Clinic';
+      });
+    }
+    getMedicineInfo();
 
     Future.delayed(Duration(milliseconds: 300), () {
       setState(() {
@@ -83,6 +130,30 @@ class _Pharmacy_Clinics_InfoState extends State<Pharmacy_Clinics_Info> {
     );
   }
 
+  //
+  //
+  // The method to call the pharmacy or clinic
+  void customLaunch(command) async {
+    if (await canLaunch(command)) {
+      await launch(command);
+    } else {
+      Fluttertoast.showToast(msg: 'Could not Launch $command');
+    }
+  }
+
+  //
+  //
+  // launch google maps
+  static Future<void> openMap(double latitude, double longitude) async {
+    String googleUrl =
+        'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude';
+    if (await canLaunch(googleUrl)) {
+      await launch(googleUrl);
+    } else {
+      throw 'Could not open the map.';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
@@ -107,7 +178,24 @@ class _Pharmacy_Clinics_InfoState extends State<Pharmacy_Clinics_Info> {
             ),
             label: 'Go to Location',
             backgroundColor: Colors.blue[500],
-            onTap: () {},
+            labelBackgroundColor: Colors.grey[800],
+            labelStyle: TextStyle(color: Colors.white),
+            onTap: () {
+              openMap(-3.823216, -38.481700);
+            },
+          ),
+          SpeedDialChild(
+            child: Icon(
+              Icons.phone,
+              color: Colors.white,
+            ),
+            label: 'Call Pharmacy',
+            labelBackgroundColor: Colors.grey[800],
+            labelStyle: TextStyle(color: Colors.white),
+            backgroundColor: Colors.blue[500],
+            onTap: () {
+              customLaunch('tel:+92 3055533774');
+            },
           ),
           SpeedDialChild(
             child: Icon(
@@ -131,6 +219,8 @@ class _Pharmacy_Clinics_InfoState extends State<Pharmacy_Clinics_Info> {
             },
             backgroundColor: Colors.blue[500],
             label: index2 == 0 ? 'Go to Next Page' : 'Go to Previous Page',
+            labelBackgroundColor: Colors.grey[800],
+            labelStyle: TextStyle(color: Colors.white),
           ),
         ],
       ),
@@ -229,35 +319,37 @@ class _Pharmacy_Clinics_InfoState extends State<Pharmacy_Clinics_Info> {
                       //
                       //
                       // indicator of the number of pictures
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: SizedBox(
-                          height: 10,
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            physics: NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            padding: EdgeInsets.all(0),
-                            itemCount: (2),
-                            itemBuilder: (BuildContext context, int ind) {
-                              return Padding(
-                                padding: const EdgeInsets.only(right: 5),
-                                child: Container(
-                                  margin: EdgeInsets.all(0),
-                                  width: 10,
-                                  height: 10,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: index == ind
-                                        ? Colors.blue[200]
-                                        : Colors.grey[700],
-                                  ),
+                      info['imageURL'][0] == null
+                          ? Container()
+                          : Align(
+                              alignment: Alignment.centerLeft,
+                              child: SizedBox(
+                                height: 10,
+                                child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  physics: NeverScrollableScrollPhysics(),
+                                  shrinkWrap: true,
+                                  padding: EdgeInsets.all(0),
+                                  itemCount: info['imageURL'].length,
+                                  itemBuilder: (BuildContext context, int ind) {
+                                    return Padding(
+                                      padding: const EdgeInsets.only(right: 5),
+                                      child: Container(
+                                        margin: EdgeInsets.all(0),
+                                        width: 10,
+                                        height: 10,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: index == ind
+                                              ? Colors.blue[200]
+                                              : Colors.grey[700],
+                                        ),
+                                      ),
+                                    );
+                                  },
                                 ),
-                              );
-                            },
-                          ),
-                        ),
-                      ),
+                              ),
+                            ),
                       SizedBox(
                         height: 20,
                       ),

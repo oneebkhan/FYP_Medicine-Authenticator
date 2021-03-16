@@ -1,48 +1,26 @@
-import 'dart:async';
-
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:tracker/Widgets/InfoContainer.dart';
 import 'package:tracker/Widgets/RowInfo.dart';
 import 'package:tracker/screens/About.dart';
-import 'package:tracker/screens/MedicineInfo.dart';
+import 'package:tracker/screens/Pharmacy_Clinics_Info.dart';
 
-class ViewMedicine extends StatefulWidget {
+class ViewPharmacy extends StatefulWidget {
   // The name of the category opened
   final String pageName;
 
-  const ViewMedicine({
-    Key key,
-    @required this.pageName,
-  }) : super(key: key);
+  const ViewPharmacy({Key key, @required this.pageName}) : super(key: key);
 
   @override
-  _ViewMedicineState createState() => _ViewMedicineState();
+  _ViewPharmacyState createState() => _ViewPharmacyState();
 }
 
-class _ViewMedicineState extends State<ViewMedicine> {
+class _ViewPharmacyState extends State<ViewPharmacy> {
   double opac;
-  var m;
-
-  getMedicine() async {
-    try {
-      setState(() {
-        m = FirebaseFirestore.instance
-            .collection('Medicine')
-            .orderBy('name')
-            .snapshots();
-      });
-    } on Exception catch (e) {
-      print(e);
-    }
-  }
-
   @override
   void initState() {
     super.initState();
     opac = 0;
-    getMedicine();
 
     Future.delayed(Duration(milliseconds: 500), () {
       setState(() {
@@ -75,7 +53,7 @@ class _ViewMedicineState extends State<ViewMedicine> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(
-                  height: (width / 15),
+                  height: width / 20,
                 ),
                 Text(
                   widget.pageName,
@@ -108,39 +86,41 @@ class _ViewMedicineState extends State<ViewMedicine> {
                         right: 20,
                         top: 20,
                       ),
-                      child: StreamBuilder<QuerySnapshot>(
-                          stream: m,
-                          builder: (BuildContext context, snapshot) {
-                            if (snapshot.hasData == false) {
-                              return Center(
-                                child: CircularProgressIndicator(),
+                      child: Column(
+                        children: [
+                          //
+                          //
+                          // The row in the Field
+                          RowInfo(
+                            imageURL: 'https://picsum.photos/250?image=9',
+                            location: 'Laal Kurti, 220, cake lane',
+                            width: width,
+                            title: 'Hajji Ltd. Iqbal Town',
+                            func: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => Pharmacy_Clinics_Info(),
+                                ),
                               );
-                            }
-                            return ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: snapshot.data.docs.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                QueryDocumentSnapshot item =
-                                    snapshot.data.docs[index];
-                                return RowInfo(
-                                  imageURL: item['imageURL'][0].toString(),
-                                  location: item['dose'],
-                                  width: width,
-                                  title: item['name'],
-                                  func: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (_) => MedicineInfo(
-                                          medicineName: item['name'],
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                );
-                              },
-                            );
-                          }),
+                            },
+                          ),
+                          RowInfo(
+                            imageURL: 'https://picsum.photos/250?image=9',
+                            location: 'Laal Kurti, 220, cake lane',
+                            width: width,
+                            title: 'Hajji Ltd. Iqbal Town',
+                            func: () {},
+                          ),
+                          RowInfo(
+                            imageURL: 'https://picsum.photos/250?image=9',
+                            location: 'Laal Kurti, 220, cake lane',
+                            width: width,
+                            title: 'Hajji Ltd. Iqbal Town',
+                            func: () {},
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),

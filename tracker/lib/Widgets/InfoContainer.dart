@@ -3,19 +3,23 @@ import 'package:cached_network_image/cached_network_image.dart';
 
 class InfoContainer extends StatefulWidget {
   final double width;
+  final double height;
   final Color color;
   final String title;
   final String description;
   final List<String> imageUrls;
   final Function func;
+  final int countOfImages;
 
   const InfoContainer({
     @required this.width,
+    @required this.height,
     @required this.color,
     @required this.title,
     @required this.description,
     @required this.imageUrls,
     @required this.func,
+    @required this.countOfImages,
   });
 
   @override
@@ -92,111 +96,47 @@ class _InfoContainerState extends State<InfoContainer> {
                             SizedBox(
                               height: 20,
                             ),
-                            Container(
-                              child: Stack(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 90),
-                                    child: CachedNetworkImage(
-                                      imageUrl:
-                                          // the 4th image URL
-                                          widget.imageUrls[0],
-                                      imageBuilder: (context, imageProvider) =>
-                                          Container(
-                                        width: widget.width / 9,
-                                        height: widget.width / 9,
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          image: DecorationImage(
+                            Row(
+                              children: [
+                                Container(
+                                  height: widget.width / 9,
+                                  width: widget.width / 1.5,
+                                  child: ListView.builder(
+                                    //itemExtent: 4,
+                                    physics: NeverScrollableScrollPhysics(),
+                                    shrinkWrap: true,
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: widget.countOfImages > 4
+                                        ? 4
+                                        : widget.countOfImages,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      return CachedNetworkImage(
+                                        imageUrl:
+                                            // the 4th image URL
+                                            widget.imageUrls[index],
+                                        imageBuilder:
+                                            (context, imageProvider) =>
+                                                Container(
+                                          width: widget.width / 9,
+                                          height: widget.width / 9,
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            image: DecorationImage(
                                               image: imageProvider,
-                                              fit: BoxFit.cover),
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
                                         ),
-                                      ),
-                                      placeholder: (context, url) =>
-                                          CircularProgressIndicator(),
-                                      errorWidget: (context, url, error) =>
-                                          Icon(Icons.error),
-                                    ),
+                                        placeholder: (context, url) =>
+                                            CircularProgressIndicator(),
+                                        errorWidget: (context, url, error) =>
+                                            Icon(Icons.error),
+                                      );
+                                    },
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 60),
-                                    child: CachedNetworkImage(
-                                      imageUrl:
-                                          // The 3rd image URL
-                                          widget.imageUrls[1],
-                                      imageBuilder: (context, imageProvider) =>
-                                          Container(
-                                        width: widget.width / 9,
-                                        height: widget.width / 9,
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          image: DecorationImage(
-                                              image: imageProvider,
-                                              fit: BoxFit.cover),
-                                        ),
-                                      ),
-                                      placeholder: (context, url) =>
-                                          CircularProgressIndicator(),
-                                      errorWidget: (context, url, error) =>
-                                          Icon(Icons.error),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 30),
-                                    child: CachedNetworkImage(
-                                      imageUrl:
-                                          // The 2nd image URL
-                                          widget.imageUrls[2],
-                                      imageBuilder: (context, imageProvider) =>
-                                          Container(
-                                        width: widget.width / 9,
-                                        height: widget.width / 9,
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          image: DecorationImage(
-                                              image: imageProvider,
-                                              fit: BoxFit.cover),
-                                        ),
-                                      ),
-                                      placeholder: (context, url) =>
-                                          CircularProgressIndicator(),
-                                      errorWidget: (context, url, error) =>
-                                          Icon(Icons.error),
-                                    ),
-                                  ),
-                                  CachedNetworkImage(
-                                    imageUrl:
-                                        // The First image URL
-                                        widget.imageUrls[3],
-                                    imageBuilder: (context, imageProvider) =>
-                                        Container(
-                                      width: widget.width / 9,
-                                      height: widget.width / 9,
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        image: DecorationImage(
-                                            image: imageProvider,
-                                            fit: BoxFit.cover),
-                                      ),
-                                    ),
-                                    placeholder: (context, url) =>
-                                        CircularProgressIndicator(),
-                                    errorWidget: (context, url, error) =>
-                                        Icon(Icons.error),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                      left: 140,
-                                      top: 7,
-                                    ),
-                                    child: Center(
-                                      child: Icon(
-                                        Icons.more_horiz_outlined,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
                             SizedBox(
                               height: 10,
