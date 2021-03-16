@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:tracker/Widgets/InfoContainer.dart';
 import 'package:tracker/Widgets/RowInfo.dart';
@@ -8,8 +9,13 @@ import 'package:tracker/screens/Pharmacy_Clinics_Info.dart';
 class ViewPharmacy extends StatefulWidget {
   // The name of the category opened
   final String pageName;
+  final List pharmacies;
 
-  const ViewPharmacy({Key key, @required this.pageName}) : super(key: key);
+  const ViewPharmacy({
+    Key key,
+    @required @required this.pageName,
+    @required this.pharmacies,
+  }) : super(key: key);
 
   @override
   _ViewPharmacyState createState() => _ViewPharmacyState();
@@ -17,10 +23,29 @@ class ViewPharmacy extends StatefulWidget {
 
 class _ViewPharmacyState extends State<ViewPharmacy> {
   double opac;
+  var pharmacyStream;
+
+  //
+  //
+  // get pharmacies
+  getDistributors() async {
+    try {
+      setState(() {
+        pharmacyStream = FirebaseFirestore.instance
+            .collection('Pharmacy')
+            .where('uid', whereIn: widget.pharmacies)
+            .snapshots();
+      });
+    } on Exception catch (e) {
+      print(e);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     opac = 0;
+    getDistributors();
 
     Future.delayed(Duration(milliseconds: 500), () {
       setState(() {
@@ -31,11 +56,16 @@ class _ViewPharmacyState extends State<ViewPharmacy> {
 
   @override
   Widget build(BuildContext context) {
-    var width = MediaQuery.of(context).size.width;
-    var height = MediaQuery.of(context).size.height;
-    var safePadding = MediaQuery.of(context).padding.top;
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+    double safePadding = MediaQuery.of(context).padding.top;
 
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          print(widget.pharmacies);
+        },
+      ),
       backgroundColor: Color.fromARGB(255, 246, 246, 248),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -86,41 +116,40 @@ class _ViewPharmacyState extends State<ViewPharmacy> {
                         right: 20,
                         top: 20,
                       ),
-                      child: Column(
-                        children: [
-                          //
-                          //
-                          // The row in the Field
-                          RowInfo(
-                            imageURL: 'https://picsum.photos/250?image=9',
-                            location: 'Laal Kurti, 220, cake lane',
-                            width: width,
-                            title: 'Hajji Ltd. Iqbal Town',
-                            func: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => Pharmacy_Clinics_Info(),
-                                ),
+                      child: StreamBuilder<QuerySnapshot>(
+                          stream: pharmacyStream,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData == false) {
+                              return Center(
+                                child: CircularProgressIndicator(),
                               );
-                            },
-                          ),
-                          RowInfo(
-                            imageURL: 'https://picsum.photos/250?image=9',
-                            location: 'Laal Kurti, 220, cake lane',
-                            width: width,
-                            title: 'Hajji Ltd. Iqbal Town',
-                            func: () {},
-                          ),
-                          RowInfo(
-                            imageURL: 'https://picsum.photos/250?image=9',
-                            location: 'Laal Kurti, 220, cake lane',
-                            width: width,
-                            title: 'Hajji Ltd. Iqbal Town',
-                            func: () {},
-                          ),
-                        ],
-                      ),
+                            }
+                            return ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: snapshot.data.docs.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                QueryDocumentSnapshot item =
+                                    snapshot.data.docs[index];
+                                return RowInfo(
+                                  imageURL: item['imageURL'][0],
+                                  location: 'Laal Kurti, 220, cake lane',
+                                  width: width,
+                                  title: item['name'],
+                                  func: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (_) => Pharmacy_Clinics_Info(
+                                          name: item['uid'],
+                                          pharmOrClinic: 'Pharmacy',
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                );
+                              },
+                            );
+                          }),
                     ),
                   ),
                 ),

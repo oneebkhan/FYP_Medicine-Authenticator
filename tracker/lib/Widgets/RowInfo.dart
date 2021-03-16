@@ -24,6 +24,7 @@ class RowInfo extends StatelessWidget {
         func();
       },
       child: Container(
+        width: width,
         child: Padding(
           padding: const EdgeInsets.only(
             bottom: 15,

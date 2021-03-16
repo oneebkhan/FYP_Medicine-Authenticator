@@ -71,11 +71,6 @@ class _DistributorPharmaciesState extends State<DistributorPharmacies> {
     safePadding = MediaQuery.of(context).padding.top;
 
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          print(imageURL);
-        },
-      ),
       backgroundColor: Color.fromARGB(255, 246, 246, 248),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -141,6 +136,7 @@ class _DistributorPharmaciesState extends State<DistributorPharmacies> {
                                   MaterialPageRoute(
                                     builder: (_) => ViewPharmacy(
                                       pageName: item['name'],
+                                      pharmacies: item['pharmacyAdded'],
                                     ),
                                   ),
                                 );

@@ -11,12 +11,12 @@ import 'package:url_launcher/url_launcher.dart';
 class Pharmacy_Clinics_Info extends StatefulWidget {
   final String name;
   // if the field is 0 this is a pharmacy otherwise it is a clinic
-  final int pharmOrClinicInt;
+  final String pharmOrClinic;
 
   Pharmacy_Clinics_Info({
     Key key,
     this.name,
-    this.pharmOrClinicInt,
+    this.pharmOrClinic,
   }) : super(key: key);
 
   @override
@@ -37,7 +37,6 @@ class _Pharmacy_Clinics_InfoState extends State<Pharmacy_Clinics_Info> {
   var page = PageController();
   var page2 = PageController();
   var info;
-  String pharmOrClinic;
   List<Widget> numberOfImagesIndex;
 
   //
@@ -65,10 +64,10 @@ class _Pharmacy_Clinics_InfoState extends State<Pharmacy_Clinics_Info> {
   //
   //
   // gets the firebase data of that particular medicine
-  getMedicineInfo() async {
+  getPharmacyInfo() async {
     try {
       StreamSubscription<DocumentSnapshot> stream = FirebaseFirestore.instance
-          .collection(pharmOrClinic)
+          .collection(widget.pharmOrClinic)
           .doc(widget.name)
           .snapshots()
           .listen((event) {
@@ -90,16 +89,7 @@ class _Pharmacy_Clinics_InfoState extends State<Pharmacy_Clinics_Info> {
     index = 0;
     index2 = 0;
     numberOfImagesIndex = [];
-    if (widget.pharmOrClinicInt == 0) {
-      setState(() {
-        pharmOrClinic == 'Pharmacy';
-      });
-    } else {
-      setState(() {
-        pharmOrClinic == 'Clinic';
-      });
-    }
-    getMedicineInfo();
+    getPharmacyInfo();
 
     Future.delayed(Duration(milliseconds: 300), () {
       setState(() {
@@ -319,37 +309,39 @@ class _Pharmacy_Clinics_InfoState extends State<Pharmacy_Clinics_Info> {
                       //
                       //
                       // indicator of the number of pictures
-                      info['imageURL'][0] == null
-                          ? Container()
-                          : Align(
-                              alignment: Alignment.centerLeft,
-                              child: SizedBox(
-                                height: 10,
-                                child: ListView.builder(
-                                  scrollDirection: Axis.horizontal,
-                                  physics: NeverScrollableScrollPhysics(),
-                                  shrinkWrap: true,
-                                  padding: EdgeInsets.all(0),
-                                  itemCount: info['imageURL'].length,
-                                  itemBuilder: (BuildContext context, int ind) {
-                                    return Padding(
-                                      padding: const EdgeInsets.only(right: 5),
-                                      child: Container(
-                                        margin: EdgeInsets.all(0),
-                                        width: 10,
-                                        height: 10,
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: index == ind
-                                              ? Colors.blue[200]
-                                              : Colors.grey[700],
-                                        ),
-                                      ),
-                                    );
-                                  },
+                      // info['imageURL'][0] == null
+                      //     ? Container()
+                      //     :
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: SizedBox(
+                          height: 10,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            physics: NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            padding: EdgeInsets.all(0),
+                            itemCount: //info['imageURL'].length
+                                2,
+                            itemBuilder: (BuildContext context, int ind) {
+                              return Padding(
+                                padding: const EdgeInsets.only(right: 5),
+                                child: Container(
+                                  margin: EdgeInsets.all(0),
+                                  width: 10,
+                                  height: 10,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: index == ind
+                                        ? Colors.blue[200]
+                                        : Colors.grey[700],
+                                  ),
                                 ),
-                              ),
-                            ),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
                       SizedBox(
                         height: 20,
                       ),
