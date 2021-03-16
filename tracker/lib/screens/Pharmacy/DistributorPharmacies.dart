@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:tracker/Widgets/InfoContainer.dart';
 import 'package:tracker/screens/Pharmacy/ViewPharmacy.dart';
+import 'dart:math' as math;
 
 class DistributorPharmacies extends StatefulWidget {
   @override
@@ -125,7 +126,13 @@ class _DistributorPharmaciesState extends State<DistributorPharmacies> {
                             QueryDocumentSnapshot item =
                                 snapshot.data.docs[index];
                             return InfoContainer(
-                              color: Colors.green,
+                              //
+                              //
+                              // function to make the colors change in each container
+                              color: Color(
+                                      (math.Random().nextDouble() * 0xFFFFFF)
+                                          .toInt())
+                                  .withOpacity(1.0),
                               description:
                                   '${item['pharmacyAdded'].length} Pharmacies',
                               func: () {
