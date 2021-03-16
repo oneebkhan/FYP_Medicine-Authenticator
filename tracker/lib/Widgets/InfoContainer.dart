@@ -7,7 +7,7 @@ class InfoContainer extends StatefulWidget {
   final Color color;
   final String title;
   final String description;
-  final List<String> imageUrls;
+  final List imageUrls;
   final Function func;
   final int countOfImages;
 
@@ -114,7 +114,7 @@ class _InfoContainerState extends State<InfoContainer> {
                                       return CachedNetworkImage(
                                         imageUrl:
                                             // the 4th image URL
-                                            widget.imageUrls[index],
+                                            widget.imageUrls[index].toString(),
                                         imageBuilder:
                                             (context, imageProvider) =>
                                                 Container(

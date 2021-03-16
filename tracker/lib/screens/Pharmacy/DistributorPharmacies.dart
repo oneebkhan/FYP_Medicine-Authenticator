@@ -13,13 +13,21 @@ class _DistributorPharmaciesState extends State<DistributorPharmacies> {
   var height;
   var safePadding;
   double opac;
-  List<Widget> numberOfImagesIndex;
-  List<String> pharm;
   // Variable that stores the distributors
-  var distributor;
-  // variable that stores the pharmacies that the distributor added
-  var pharmacies;
-  var temp;
+  var distributorStream;
+  // variable to store urls in the
+  List<String> imageURL;
+
+  //
+  //
+  //
+  convertToStringList(elements) {
+    for (int i; i < elements.length; i++) {
+      setState(() {
+        imageURL.add(elements[i].toString());
+      });
+    }
+  }
 
   //
   //
@@ -27,7 +35,7 @@ class _DistributorPharmaciesState extends State<DistributorPharmacies> {
   getDistributors() async {
     try {
       setState(() {
-        distributor = FirebaseFirestore.instance
+        distributorStream = FirebaseFirestore.instance
             .collection('Distributor')
             .orderBy('name')
             .snapshots();
@@ -37,45 +45,16 @@ class _DistributorPharmaciesState extends State<DistributorPharmacies> {
     }
   }
 
-  //
-  //
-  // The function to get distributors
-  getPharmacies() async {
-    try {
-      setState(() {
-        temp = FirebaseFirestore.instance
-            .collection('Pharmacies')
-            .orderBy('name')
-            .snapshots();
-      });
-    } on Exception catch (e) {
-      print(e);
-    }
-  }
-
-  //
-  //
-  //
-  getList() async {
-    DocumentSnapshot cake = await FirebaseFirestore.instance
-        .collection('Distributor')
-        .doc(distributor['email'].toString())
-        .get();
-
-    setState(() {
-      pharm = cake['pharmacyAdded'];
-    });
-  }
-
   @override
   void initState() {
     super.initState();
     opac = 0;
-    numberOfImagesIndex = [];
-    pharm = [];
+    imageURL = [];
     getDistributors();
-    getPharmacies();
-    getList();
+
+    Future.delayed(Duration(milliseconds: 400), () {
+      //getImageURL();
+    });
 
     Future.delayed(Duration(milliseconds: 500), () {
       setState(() {
@@ -91,6 +70,11 @@ class _DistributorPharmaciesState extends State<DistributorPharmacies> {
     safePadding = MediaQuery.of(context).padding.top;
 
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          print(imageURL);
+        },
+      ),
       backgroundColor: Color.fromARGB(255, 246, 246, 248),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -127,7 +111,7 @@ class _DistributorPharmaciesState extends State<DistributorPharmacies> {
                   opacity: opac,
                   duration: Duration(milliseconds: 500),
                   child: StreamBuilder<QuerySnapshot>(
-                      stream: distributor,
+                      stream: distributorStream,
                       builder: (context, snapshot) {
                         if (snapshot.hasData == false) {
                           return Center(
@@ -154,16 +138,11 @@ class _DistributorPharmaciesState extends State<DistributorPharmacies> {
                                   ),
                                 );
                               },
-                              imageUrls: [
-                                'https://picsum.photos/250?image=9',
-                                'https://picsum.photos/250?image=9',
-                                'https://picsum.photos/250?image=9',
-                                'https://picsum.photos/250?image=9',
-                              ],
+                              imageUrls: item['pharmacyImages'],
                               title: item['name'],
                               width: width,
                               height: height,
-                              countOfImages: item['pharmacyAdded'].length,
+                              countOfImages: item['pharmacyImages'].length,
                             );
                           },
                         );
