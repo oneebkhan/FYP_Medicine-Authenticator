@@ -3,6 +3,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:tracker/screens/About.dart';
 import 'package:tracker/screens/Clinic/DistributorClinics.dart';
 import 'package:tracker/screens/Pharmacy/DistributorPharmacies.dart';
+import 'package:tracker/screens/Search.dart';
 import 'package:tracker/screens/Tips.dart';
 import 'package:tracker/screens/ViewMedicine.dart';
 import 'package:qrscan/qrscan.dart' as scanner;
@@ -166,7 +167,14 @@ class _DashboardState extends State<Dashboard> {
                               //
                               // The second SEARCH MEDICINE Button
                               GestureDetector(
-                                onTap: () {},
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => Search(),
+                                    ),
+                                  );
+                                },
                                 child: Container(
                                   child: Padding(
                                     padding: const EdgeInsets.symmetric(

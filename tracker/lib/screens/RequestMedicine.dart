@@ -241,8 +241,9 @@ class ContainerText extends StatelessWidget {
   final TextEditingController controller;
   final String hint;
   final node;
-  final height;
-  final maxLines;
+  final double height;
+  final int maxLines;
+  final double width;
 
   const ContainerText({
     Key key,
@@ -251,6 +252,7 @@ class ContainerText extends StatelessWidget {
     this.node,
     this.height,
     this.maxLines,
+    this.width,
   });
 
   @override
@@ -261,6 +263,7 @@ class ContainerText extends StatelessWidget {
         borderRadius: BorderRadius.circular(15),
       ),
       height: height,
+      width: width,
       child: TextField(
         controller: controller,
         textInputAction: TextInputAction.next,
