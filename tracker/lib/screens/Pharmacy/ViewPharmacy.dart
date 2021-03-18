@@ -61,11 +61,6 @@ class _ViewPharmacyState extends State<ViewPharmacy> {
     double safePadding = MediaQuery.of(context).padding.top;
 
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          print(widget.pharmacies);
-        },
-      ),
       backgroundColor: Color.fromARGB(255, 246, 246, 248),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -132,7 +127,7 @@ class _ViewPharmacyState extends State<ViewPharmacy> {
                                     snapshot.data.docs[index];
                                 return RowInfo(
                                   imageURL: item['imageURL'][0],
-                                  location: 'Laal Kurti, 220, cake lane',
+                                  location: item['location'],
                                   width: width,
                                   title: item['name'],
                                   func: () {

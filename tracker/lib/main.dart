@@ -29,13 +29,13 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     opac = 0;
 
-    Future.delayed(Duration(seconds: 2), () {
+    Future.delayed(Duration(seconds: 1), () {
       setState(() {
         opac = 1.0;
       });
     });
 
-    Future.delayed(Duration(seconds: 4), () {
+    Future.delayed(Duration(seconds: 2), () {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(

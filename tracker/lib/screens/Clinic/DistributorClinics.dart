@@ -1,10 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:tracker/Widgets/InfoContainer.dart';
-import 'package:tracker/screens/Clinic/ViewClinic.dart';
+import 'package:tracker/screens/Pharmacy/ViewPharmacy.dart';
+import 'dart:math' as math;
 
 class DistributorClinics extends StatefulWidget {
-  DistributorClinics({Key key}) : super(key: key);
-
   @override
   _DistributorClinicsState createState() => _DistributorClinicsState();
 }
@@ -14,11 +14,48 @@ class _DistributorClinicsState extends State<DistributorClinics> {
   var height;
   var safePadding;
   double opac;
+  // Variable that stores the distributors
+  var distributorStream;
+  // variable to store urls in the
+  List<String> imageURL;
+
+  //
+  //
+  //
+  convertToStringList(elements) {
+    for (int i; i < elements.length; i++) {
+      setState(() {
+        imageURL.add(elements[i].toString());
+      });
+    }
+  }
+
+  //
+  //
+  // The function to get distributors
+  getDistributors() async {
+    try {
+      setState(() {
+        distributorStream = FirebaseFirestore.instance
+            .collection('Distributor')
+            .orderBy('name')
+            .snapshots();
+      });
+    } on Exception catch (e) {
+      print(e);
+    }
+  }
 
   @override
   void initState() {
     super.initState();
     opac = 0;
+    imageURL = [];
+    getDistributors();
+
+    Future.delayed(Duration(milliseconds: 400), () {
+      //getImageURL();
+    });
 
     Future.delayed(Duration(milliseconds: 500), () {
       setState(() {
@@ -51,7 +88,7 @@ class _DistributorClinicsState extends State<DistributorClinics> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(
-                  height: width / 15,
+                  height: width / 20,
                 ),
                 Text(
                   'Clinics',
@@ -69,54 +106,50 @@ class _DistributorClinicsState extends State<DistributorClinics> {
                 AnimatedOpacity(
                   opacity: opac,
                   duration: Duration(milliseconds: 500),
-                  child: Column(
-                    children: [
-                      InfoContainer(
-                        color: Colors.green,
-                        description: '5 Clinics',
-                        func: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => ViewClinic(
-                                pageName: 'Floyd\'s Pharmacy',
-                              ),
-                            ),
+                  child: StreamBuilder<QuerySnapshot>(
+                      stream: distributorStream,
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData == false) {
+                          return Center(
+                            child: CircularProgressIndicator(),
                           );
-                        },
-                        imageUrls: [
-                          'https://picsum.photos/250?image=9',
-                          'https://picsum.photos/250?image=9',
-                          'https://picsum.photos/250?image=9',
-                          'https://picsum.photos/250?image=9',
-                        ],
-                        title: 'Hajji Ltd.',
-                        width: width,
-                      ),
-                      InfoContainer(
-                        color: Colors.green,
-                        description: '5 Clinics',
-                        func: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => ViewClinic(
-                                pageName: 'Floyd\'s Pharmacy',
-                              ),
-                            ),
-                          );
-                        },
-                        imageUrls: [
-                          'https://picsum.photos/250?image=9',
-                          'https://picsum.photos/250?image=9',
-                          'https://picsum.photos/250?image=9',
-                          'https://picsum.photos/250?image=9',
-                        ],
-                        title: 'Hajji Ltd.',
-                        width: width,
-                      ),
-                    ],
-                  ),
+                        }
+                        return ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: snapshot.data.docs.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            QueryDocumentSnapshot item =
+                                snapshot.data.docs[index];
+                            return InfoContainer(
+                              //
+                              //
+                              // function to make the colors change in each container
+                              color: Color(
+                                      (math.Random().nextDouble() * 0xFFFFFF)
+                                          .toInt())
+                                  .withOpacity(1.0),
+                              description:
+                                  '${item['clinicAdded'].length} Clinics',
+                              func: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => ViewPharmacy(
+                                      pageName: item['name'],
+                                      pharmacies: item['clinicAdded'],
+                                    ),
+                                  ),
+                                );
+                              },
+                              imageUrls: item['clinicImages'],
+                              title: item['name'],
+                              width: width,
+                              height: height,
+                              countOfImages: item['clinicImages'].length,
+                            );
+                          },
+                        );
+                      }),
                 ),
               ],
             ),

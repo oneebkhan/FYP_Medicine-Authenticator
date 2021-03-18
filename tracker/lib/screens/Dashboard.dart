@@ -31,6 +31,7 @@ class _DashboardState extends State<Dashboard> {
         print('nothing return.');
       } else {
         print('$barcode');
+        Fluttertoast.showToast(msg: '$barcode');
       }
     } on Exception catch (e) {
       print(e);

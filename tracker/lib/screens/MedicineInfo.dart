@@ -39,20 +39,22 @@ class _MedicineInfoState extends State<MedicineInfo> {
   Future getImages() {
     for (int i = 0; i < med['imageURL'].length; i++) {
       setState(() {
-        numberOfImagesIndex.add(Container(
-          height: height,
-          width: width,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              colorFilter: new ColorFilter.mode(
-                  Colors.black.withOpacity(0.4), BlendMode.dstATop),
-              fit: BoxFit.fitWidth,
-              image: CachedNetworkImageProvider(
-                med['imageURL'][i].toString(),
+        numberOfImagesIndex.add(
+          Container(
+            height: height,
+            width: width,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                colorFilter: new ColorFilter.mode(
+                    Colors.black.withOpacity(0.4), BlendMode.dstATop),
+                fit: BoxFit.fitWidth,
+                image: CachedNetworkImageProvider(
+                  med['imageURL'][i].toString(),
+                ),
               ),
             ),
           ),
-        ));
+        );
       });
     }
   }
