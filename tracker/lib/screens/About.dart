@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:tracker/screens/ContactDevs.dart';
 import 'package:tracker/screens/RequestMedicine.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -204,8 +205,11 @@ class _AboutState extends State<About> {
               child: FlatButton(
                 padding: EdgeInsets.all(0),
                 onPressed: () {
-                  Fluttertoast.showToast(
-                    msg: 'Not Implemented yet :\'(',
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => ContactDevs(),
+                    ),
                   );
                 },
                 child: Container(

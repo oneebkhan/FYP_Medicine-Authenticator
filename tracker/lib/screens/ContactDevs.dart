@@ -2,26 +2,24 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:tracker/screens/RequestMedicine.dart';
 
 // ignore: must_be_immutable
-class RequestMedicine extends StatefulWidget {
+class ContactDevs extends StatefulWidget {
   @override
-  _RequestMedicineState createState() => _RequestMedicineState();
+  _ContactDevsState createState() => _ContactDevsState();
 }
 
-class _RequestMedicineState extends State<RequestMedicine> {
+class _ContactDevsState extends State<ContactDevs> {
   double width;
   double height;
   double safePadding;
   bool _isLoading = false;
   int docLen;
-  TextEditingController nameOfMedicine = TextEditingController();
-  TextEditingController barcode = TextEditingController();
-  TextEditingController companyName = TextEditingController();
   TextEditingController nameOfUser = TextEditingController();
   TextEditingController emailOfUser = TextEditingController();
-  TextEditingController cellNumberOfUser = TextEditingController();
-  TextEditingController locationOfUser = TextEditingController();
+  TextEditingController subject = TextEditingController();
+  TextEditingController description = TextEditingController();
 
   //
   //
@@ -44,16 +42,13 @@ class _RequestMedicineState extends State<RequestMedicine> {
     try {
       var firestore = await FirebaseFirestore.instance;
       firestore
-          .collection("RequestsMedicine")
+          .collection("ContactDevelopers")
           .doc('#' + docLen.toString() + ' (${emailOfUser.text})')
           .set({
-        "nameOfMedicine": nameOfMedicine.text,
-        "barcode": barcode.text,
-        "companyName": companyName.text,
         "nameOfUser": nameOfUser.text,
         "emailOfUser": emailOfUser.text,
-        "cellNoOfUser": cellNumberOfUser.text,
-        "locationOfUser": locationOfUser.text,
+        "subject": subject.text,
+        "description": description.text,
       }).then((_) {
         print("success!");
       });
@@ -119,7 +114,7 @@ class _RequestMedicineState extends State<RequestMedicine> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Request Medicine',
+                                'Contact Developers',
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: width / 16,
@@ -127,30 +122,6 @@ class _RequestMedicineState extends State<RequestMedicine> {
                               ),
                               SizedBox(
                                 height: 20,
-                              ),
-                              ContainerText(
-                                hint: 'Name of Medicine',
-                                node: node,
-                                controller: nameOfMedicine,
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              ContainerText(
-                                hint: 'Barcode',
-                                node: node,
-                                controller: barcode,
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              ContainerText(
-                                hint: 'Company Name',
-                                node: node,
-                                controller: companyName,
-                              ),
-                              SizedBox(
-                                height: 10,
                               ),
                               ContainerText(
                                 hint: 'User Name',
@@ -169,17 +140,19 @@ class _RequestMedicineState extends State<RequestMedicine> {
                                 height: 10,
                               ),
                               ContainerText(
-                                hint: 'User Cell Phone Number',
+                                hint: 'Subject',
                                 node: node,
-                                controller: cellNumberOfUser,
+                                controller: subject,
                               ),
                               SizedBox(
                                 height: 10,
                               ),
                               ContainerText(
-                                hint: 'Location of User',
+                                hint: 'Description',
                                 node: node,
-                                controller: locationOfUser,
+                                height: width / 2,
+                                maxLines: 8,
+                                controller: description,
                               ),
                               SizedBox(
                                 height: 15,
@@ -229,57 +202,6 @@ class _RequestMedicineState extends State<RequestMedicine> {
                   ),
                 ],
               ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class ContainerText extends StatelessWidget {
-  final TextEditingController controller;
-  final String hint;
-  final node;
-  final height;
-  final maxLines;
-
-  const ContainerText({
-    Key key,
-    this.controller,
-    this.hint,
-    this.node,
-    this.height,
-    this.maxLines,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.grey[200],
-        borderRadius: BorderRadius.circular(15),
-      ),
-      height: height,
-      child: TextField(
-        controller: controller,
-        textInputAction: TextInputAction.next,
-        onEditingComplete: () => node.nextFocus(),
-        maxLines: maxLines,
-        decoration: InputDecoration(
-          hintText: hint,
-          filled: false,
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(15),
-            borderSide: BorderSide(
-              color: Colors.transparent,
-            ),
-          ),
-          focusColor: Colors.transparent,
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(15),
-            borderSide: BorderSide(
-              color: Colors.transparent,
             ),
           ),
         ),
