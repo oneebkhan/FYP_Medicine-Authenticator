@@ -99,11 +99,7 @@ class _Pharmacy_Clinics_InfoState extends State<Pharmacy_Clinics_Info> {
     index2 = 0;
     numberOfImagesIndex = [];
     getPharmacyInfo();
-    Future.delayed(Duration(milliseconds: 300), () {
-      setState(() {
-        getImages();
-      });
-    });
+
     Future.delayed(Duration(milliseconds: 1000), () {
       setState(() {
         getImages();
@@ -148,9 +144,9 @@ class _Pharmacy_Clinics_InfoState extends State<Pharmacy_Clinics_Info> {
   //
   //
   // launch google maps
-  static Future<void> openMap(double latitude, double longitude) async {
+  static Future<void> openMap(String query) async {
     String googleUrl =
-        'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude';
+        'https://www.google.com/maps/search/?api=1&query=${query}';
     if (await canLaunch(googleUrl)) {
       await launch(googleUrl);
     } else {
@@ -191,7 +187,7 @@ class _Pharmacy_Clinics_InfoState extends State<Pharmacy_Clinics_Info> {
                   labelBackgroundColor: Colors.grey[800],
                   labelStyle: TextStyle(color: Colors.white),
                   onTap: () {
-                    openMap(-3.823216, -38.481700);
+                    openMap(info['location']);
                   },
                 ),
                 SpeedDialChild(

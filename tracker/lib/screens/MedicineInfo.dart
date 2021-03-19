@@ -94,11 +94,6 @@ class _MedicineInfoState extends State<MedicineInfo> {
     index2 = 0;
     numberOfImagesIndex = [];
     getMedicineInfo();
-    Future.delayed(Duration(milliseconds: 300), () {
-      setState(() {
-        getImages();
-      });
-    });
 
     Future.delayed(Duration(milliseconds: 1000), () {
       setState(() {
