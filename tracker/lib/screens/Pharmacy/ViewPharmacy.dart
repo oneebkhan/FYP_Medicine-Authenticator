@@ -69,87 +69,85 @@ class _ViewPharmacyState extends State<ViewPharmacy> {
           color: Colors.grey[700],
         ),
       ),
-      body: SingleChildScrollView(
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: width / 20,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                height: width / 20,
+              ),
+              Text(
+                widget.pageName,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: width / 14,
                 ),
-                Text(
-                  widget.pageName,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: width / 14,
-                  ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                //
-                //
-                // The container fields
-                AnimatedOpacity(
-                  opacity: opac,
-                  duration: Duration(milliseconds: 500),
-                  child: Container(
-                    width: width,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(15),
-                      ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              //
+              //
+              // The container fields
+              AnimatedOpacity(
+                opacity: opac,
+                duration: Duration(milliseconds: 500),
+                child: Container(
+                  width: width,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(15),
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                        bottom: 10,
-                        left: 20,
-                        right: 20,
-                        top: 20,
-                      ),
-                      child: StreamBuilder<QuerySnapshot>(
-                          stream: pharmacyStream,
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData == false) {
-                              return Center(
-                                child: CircularProgressIndicator(),
-                              );
-                            }
-                            return ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: snapshot.data.docs.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                QueryDocumentSnapshot item =
-                                    snapshot.data.docs[index];
-                                return RowInfo(
-                                  imageURL: item['imageURL'][0],
-                                  location: item['location'],
-                                  width: width,
-                                  title: item['name'],
-                                  func: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (_) => Pharmacy_Clinics_Info(
-                                          name: item['uid'],
-                                          pharmOrClinic: 'Pharmacy',
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                );
-                              },
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                      bottom: 10,
+                      left: 20,
+                      right: 20,
+                      top: 20,
+                    ),
+                    child: StreamBuilder<QuerySnapshot>(
+                        stream: pharmacyStream,
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData == false) {
+                            return Center(
+                              child: CircularProgressIndicator(),
                             );
-                          }),
-                    ),
+                          }
+                          return ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: snapshot.data.docs.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              QueryDocumentSnapshot item =
+                                  snapshot.data.docs[index];
+                              return RowInfo(
+                                imageURL: item['imageURL'][0],
+                                location: item['location'],
+                                width: width,
+                                title: item['name'],
+                                func: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => Pharmacy_Clinics_Info(
+                                        name: item['uid'],
+                                        pharmOrClinic: 'Pharmacy',
+                                      ),
+                                    ),
+                                  );
+                                },
+                              );
+                            },
+                          );
+                        }),
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

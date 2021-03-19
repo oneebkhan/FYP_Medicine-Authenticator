@@ -129,14 +129,14 @@ class _DistributorClinicsState extends State<DistributorClinics> {
                                           .toInt())
                                   .withOpacity(1.0),
                               description:
-                                  '${item['clinicAdded'].length} Clinics',
+                                  '${item['clinicsAdded'].length} Clinics',
                               func: () {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                     builder: (_) => ViewPharmacy(
                                       pageName: item['name'],
-                                      pharmacies: item['clinicAdded'],
+                                      pharmacies: item['clinicsAdded'],
                                     ),
                                   ),
                                 );

@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:tracker/screens/About.dart';
 import 'package:tracker/screens/Clinic/DistributorClinics.dart';
+import 'package:tracker/screens/MedicineInfo.dart';
 import 'package:tracker/screens/Pharmacy/DistributorPharmacies.dart';
 import 'package:tracker/screens/Search.dart';
 import 'package:tracker/screens/Tips.dart';
@@ -20,6 +22,7 @@ class _DashboardState extends State<Dashboard> {
   var height;
   var density;
   var safePadding;
+  var medID;
 
 //
 //
@@ -28,11 +31,26 @@ class _DashboardState extends State<Dashboard> {
     try {
       await Permission.camera.request();
       String barcode = await scanner.scan();
+      var result = await FirebaseFirestore.instance
+          .collection("Medicine")
+          .where("barcode", isEqualTo: barcode)
+          .get();
+      result.docs.forEach((res) {
+        setState(() {
+          medID = res.data()['barcode'];
+        });
+      });
       if (barcode == null) {
         print('nothing return.');
       } else {
-        print('$barcode');
-        Fluttertoast.showToast(msg: '$barcode');
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => MedicineInfo(
+              medBarcode: medID,
+            ),
+          ),
+        );
       }
     } on Exception catch (e) {
       print(e);
@@ -45,15 +63,37 @@ class _DashboardState extends State<Dashboard> {
       await Permission.storage.request();
       String barcode = await scanner.scanPhoto();
 
+      var result = await FirebaseFirestore.instance
+          .collection("Medicine")
+          .where("barcode", isEqualTo: barcode)
+          .get();
+      result.docs.forEach((res) {
+        setState(() {
+          medID = res.data()['barcode'];
+        });
+      });
       if (barcode == null) {
         print('nothing return.');
       } else {
-        print('$barcode');
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => MedicineInfo(
+              medBarcode: medID,
+            ),
+          ),
+        );
       }
     } on Exception catch (e) {
       print(e);
       Fluttertoast.showToast(msg: '$e');
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    medID = '';
   }
 
   @override

@@ -195,7 +195,7 @@ class _SearchState extends State<Search> {
                                               context,
                                               MaterialPageRoute(
                                                 builder: (_) => MedicineInfo(
-                                                  medicineName: item['name'],
+                                                  medBarcode: item['barcode'],
                                                 ),
                                               ),
                                             );

@@ -132,7 +132,7 @@ class _ViewMedicineState extends State<ViewMedicine> {
                                       context,
                                       MaterialPageRoute(
                                         builder: (_) => MedicineInfo(
-                                          medicineName: item['name'],
+                                          medBarcode: item['barcode'],
                                         ),
                                       ),
                                     );

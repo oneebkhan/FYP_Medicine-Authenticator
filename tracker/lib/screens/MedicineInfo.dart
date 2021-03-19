@@ -6,11 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class MedicineInfo extends StatefulWidget {
-  final String medicineName;
+  final String medBarcode;
 
   MedicineInfo({
     Key key,
-    this.medicineName,
+    this.medBarcode,
   }) : super(key: key);
 
   @override
@@ -67,7 +67,7 @@ class _MedicineInfoState extends State<MedicineInfo> {
       StreamSubscription<DocumentSnapshot> stream = await FirebaseFirestore
           .instance
           .collection('Medicine')
-          .doc(widget.medicineName)
+          .doc(widget.medBarcode)
           .snapshots()
           .listen((event) {
         setState(() {
@@ -559,82 +559,88 @@ class _MedicineInfoState extends State<MedicineInfo> {
                             //
                             //
                             // To be removed if there is no barcode search
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 10),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Container(
-                                    width: width / 2.3,
-                                    decoration: BoxDecoration(
-                                      color: Color.fromARGB(255, 50, 50, 50),
-                                      borderRadius: BorderRadius.circular(15),
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(20.0),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            'Barcode Number',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.white,
-                                              fontSize: width / 16,
+                            med['barcode'] == null
+                                ? Container()
+                                : Padding(
+                                    padding: const EdgeInsets.only(bottom: 10),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Container(
+                                          width: width / 2.3,
+                                          decoration: BoxDecoration(
+                                            color:
+                                                Color.fromARGB(255, 50, 50, 50),
+                                            borderRadius:
+                                                BorderRadius.circular(15),
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(20.0),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  'Barcode Number',
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.white,
+                                                    fontSize: width / 16,
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  height: 5,
+                                                ),
+                                                Text(
+                                                  med['barcode'],
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: width / 30,
+                                                  ),
+                                                ),
+                                              ],
                                             ),
                                           ),
-                                          SizedBox(
-                                            height: 5,
+                                        ),
+                                        Container(
+                                          width: width / 2.3,
+                                          decoration: BoxDecoration(
+                                            color: Color.fromARGB(
+                                                255, 104, 204, 127),
+                                            borderRadius:
+                                                BorderRadius.circular(15),
                                           ),
-                                          Text(
-                                            'ABC25678-421',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: width / 30,
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(20.0),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Icon(
+                                                  Icons.check,
+                                                  color: Colors.white,
+                                                  size: width / 7,
+                                                ),
+                                                SizedBox(
+                                                  height: 5,
+                                                ),
+                                                Text(
+                                                  'Medicine is Authentic',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: width / 30,
+                                                  ),
+                                                ),
+                                              ],
                                             ),
                                           ),
-                                        ],
-                                      ),
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                  Container(
-                                    width: width / 2.3,
-                                    decoration: BoxDecoration(
-                                      color: Color.fromARGB(255, 104, 204, 127),
-                                      borderRadius: BorderRadius.circular(15),
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(20.0),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Icon(
-                                            Icons.check,
-                                            color: Colors.white,
-                                            size: width / 7,
-                                          ),
-                                          SizedBox(
-                                            height: 5,
-                                          ),
-                                          Text(
-                                            'Medicine is Authentic',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: width / 30,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
                             //
                             //
                             // What the medicine should be used for
