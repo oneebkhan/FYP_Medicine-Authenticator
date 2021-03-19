@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:tracker/Widgets/RowInfo.dart';
 import 'package:tracker/screens/Pharmacy_Clinics_Info.dart';
 
@@ -35,6 +36,7 @@ class _ViewClinicState extends State<ViewClinic> {
       });
     } on Exception catch (e) {
       print(e);
+      Fluttertoast.showToast(msg: '$e');
     }
   }
 
@@ -119,7 +121,7 @@ class _ViewClinicState extends State<ViewClinic> {
                             itemBuilder: (BuildContext context, int index) {
                               QueryDocumentSnapshot item =
                                   snapshot.data.docs[index];
-                              return RowInfo(
+                              return new RowInfo(
                                 imageURL: item['imageURL'][0],
                                 location: item['location'],
                                 width: width,
