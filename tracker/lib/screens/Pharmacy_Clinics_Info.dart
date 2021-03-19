@@ -102,7 +102,6 @@ class _Pharmacy_Clinics_InfoState extends State<Pharmacy_Clinics_Info> {
 
     Future.delayed(Duration(milliseconds: 1000), () {
       setState(() {
-        getImages();
         opac2 = 1.0;
       });
     });
@@ -511,13 +510,30 @@ class _Pharmacy_Clinics_InfoState extends State<Pharmacy_Clinics_Info> {
                                             SizedBox(
                                               height: 5,
                                             ),
-                                            Text(
-                                              info['employees'],
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: width / 30,
-                                              ),
-                                            ),
+                                            info['employees'].length == 0
+                                                ? Text(
+                                                    'N/A',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: width / 30,
+                                                    ),
+                                                  )
+                                                : ListView.builder(
+                                                    shrinkWrap: true,
+                                                    itemCount: info['employees']
+                                                        .length,
+                                                    itemBuilder:
+                                                        (BuildContext context,
+                                                            int i) {
+                                                      return Text(
+                                                        info['employees'][i],
+                                                        style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: width / 30,
+                                                        ),
+                                                      );
+                                                    },
+                                                  ),
                                           ],
                                         ),
                                       ),

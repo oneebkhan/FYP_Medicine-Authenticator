@@ -97,7 +97,6 @@ class _MedicineInfoState extends State<MedicineInfo> {
 
     Future.delayed(Duration(milliseconds: 1000), () {
       setState(() {
-        getImages();
         opac2 = 1.0;
       });
     });
