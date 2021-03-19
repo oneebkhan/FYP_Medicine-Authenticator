@@ -1,11 +1,8 @@
 import 'dart:async';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:tracker/Widgets/InfoContainer.dart';
 import 'package:tracker/Widgets/RowInfo.dart';
-import 'package:tracker/screens/About.dart';
 import 'package:tracker/screens/MedicineInfo.dart';
 
 class ViewMedicine extends StatefulWidget {
@@ -54,8 +51,6 @@ class _ViewMedicineState extends State<ViewMedicine> {
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
-    var height = MediaQuery.of(context).size.height;
-    var safePadding = MediaQuery.of(context).padding.top;
 
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 246, 246, 248),

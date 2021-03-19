@@ -1,9 +1,6 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:tracker/Widgets/InfoContainer.dart';
 import 'package:tracker/Widgets/RowInfo.dart';
-import 'package:tracker/screens/About.dart';
 import 'package:tracker/screens/Pharmacy_Clinics_Info.dart';
 
 class ViewClinic extends StatefulWidget {
@@ -57,8 +54,6 @@ class _ViewClinicState extends State<ViewClinic> {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
-    double safePadding = MediaQuery.of(context).padding.top;
 
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 246, 246, 248),

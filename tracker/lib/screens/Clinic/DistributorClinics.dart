@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:tracker/Widgets/InfoContainer.dart';
-import 'package:tracker/screens/Pharmacy/ViewPharmacy.dart';
+import 'package:tracker/screens/Clinic/ViewClinic.dart';
 import 'dart:math' as math;
 
 class DistributorClinics extends StatefulWidget {
@@ -134,9 +134,9 @@ class _DistributorClinicsState extends State<DistributorClinics> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (_) => ViewPharmacy(
+                                    builder: (_) => ViewClinic(
                                       pageName: item['name'],
-                                      pharmacies: item['clinicsAdded'],
+                                      clinics: item['clinicsAdded'],
                                     ),
                                   ),
                                 );

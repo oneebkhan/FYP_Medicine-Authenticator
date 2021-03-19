@@ -26,6 +26,7 @@ class _RequestMedicineState extends State<RequestMedicine> {
   //
   //
   // Get length of documents to make a unique ID for the firestore doca
+  // ignore: missing_return
   Future<double> _getLengthOfRequestsMedicine() async {
     await FirebaseFirestore.instance
         .collection("RequestsMedicine")
@@ -42,6 +43,7 @@ class _RequestMedicineState extends State<RequestMedicine> {
   // pressing the submit button will submit all the fields and update firestore
   Future<void> _onPressed() async {
     try {
+      // ignore: await_only_futures
       var firestore = await FirebaseFirestore.instance;
       firestore
           .collection("RequestsMedicine")
@@ -194,6 +196,7 @@ class _RequestMedicineState extends State<RequestMedicine> {
                     height: 20,
                   ),
                   Center(
+                    // ignore: deprecated_member_use
                     child: FlatButton(
                       padding: EdgeInsets.all(0),
                       onPressed: () {

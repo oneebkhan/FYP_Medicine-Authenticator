@@ -3,11 +3,11 @@ import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+// ignore: camel_case_types
 class Pharmacy_Clinics_Info extends StatefulWidget {
   final String name;
   // if the field is 0 this is a pharmacy otherwise it is a clinic
@@ -23,6 +23,7 @@ class Pharmacy_Clinics_Info extends StatefulWidget {
   _Pharmacy_Clinics_InfoState createState() => _Pharmacy_Clinics_InfoState();
 }
 
+// ignore: camel_case_types
 class _Pharmacy_Clinics_InfoState extends State<Pharmacy_Clinics_Info> {
   double width;
   double height;
@@ -38,10 +39,12 @@ class _Pharmacy_Clinics_InfoState extends State<Pharmacy_Clinics_Info> {
   var page2 = PageController();
   var info;
   List<Widget> numberOfImagesIndex;
+  StreamSubscription<DocumentSnapshot> stream;
 
   //
   //
   // makes a list of widgets for the first page view
+  // ignore: missing_return
   Future getImages() {
     for (int i = 0; i < info['imageURL'].length; i++) {
       setState(() {
@@ -70,17 +73,8 @@ class _Pharmacy_Clinics_InfoState extends State<Pharmacy_Clinics_Info> {
   // gets the firebase data of that particular medicine
   getPharmacyInfo() async {
     try {
-      StreamSubscription<DocumentSnapshot> stream = await FirebaseFirestore
-          .instance
-          .collection(widget.pharmOrClinic)
-          .doc(widget.name)
-          .snapshots()
-          .listen((event) {
-        setState(() {
-          info = event.data();
-          getImages();
-        });
-      });
+      // ignore: unused_local_variable
+      // ignore: await_only_futures
     } on Exception catch (e) {
       print(e);
       Fluttertoast.showToast(msg: '$e');
@@ -107,6 +101,12 @@ class _Pharmacy_Clinics_InfoState extends State<Pharmacy_Clinics_Info> {
         opac2 = 1.0;
       });
     });
+  }
+
+  @override
+  void dispose() {
+    stream.cancel();
+    super.dispose();
   }
 
   //
@@ -389,6 +389,7 @@ class _Pharmacy_Clinics_InfoState extends State<Pharmacy_Clinics_Info> {
                 //
                 // function to allow for scroll in the single child scroll view
                 NotificationListener(
+                  // ignore: missing_return
                   onNotification: (notification) {
                     if (notification is OverscrollNotification) {
                       if (notification.overscroll > 0) {

@@ -10,7 +10,6 @@ import 'package:tracker/screens/Tips.dart';
 import 'package:tracker/screens/ViewMedicine.dart';
 import 'package:qrscan/qrscan.dart' as scanner;
 import 'package:permission_handler/permission_handler.dart';
-import 'package:image_picker/image_picker.dart';
 
 class Dashboard extends StatefulWidget {
   @override

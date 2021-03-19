@@ -44,8 +44,6 @@ class _SearchState extends State<Search> {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
-    double safePadding = MediaQuery.of(context).padding.top;
     final node = FocusScope.of(context);
 
     return ModalProgressHUD(

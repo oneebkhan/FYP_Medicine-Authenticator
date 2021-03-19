@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:tracker/screens/ContactDevs.dart';
 import 'package:tracker/screens/RequestMedicine.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class About extends StatefulWidget {
   @override
@@ -202,6 +201,7 @@ class _AboutState extends State<About> {
             //
             // The contact developers button
             Center(
+              // ignore: deprecated_member_use
               child: FlatButton(
                 padding: EdgeInsets.all(0),
                 onPressed: () {
@@ -237,6 +237,7 @@ class _AboutState extends State<About> {
             //
             // The Request medicine button
             Center(
+              // ignore: deprecated_member_use
               child: FlatButton(
                 padding: EdgeInsets.all(0),
                 onPressed: () {
