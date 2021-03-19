@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -63,7 +64,19 @@ class _MedicineInfoState extends State<MedicineInfo> {
   //
   // gets the firebase data of that particular medicine
   getMedicineInfo() async {
-    try {} on Exception catch (e) {
+    try {
+      StreamSubscription<DocumentSnapshot> stream = await FirebaseFirestore
+          .instance
+          .collection('Medicine')
+          .doc(widget.medBarcode)
+          .snapshots()
+          .listen((event) {
+        setState(() {
+          med = event.data();
+          getImages();
+        });
+      });
+    } on Exception catch (e) {
       print(e);
       Fluttertoast.showToast(msg: '$e');
     }
@@ -334,7 +347,6 @@ class _MedicineInfoState extends State<MedicineInfo> {
                 //
                 // function to allow for scroll in the single child scroll view
                 NotificationListener(
-                  // ignore: missing_return
                   onNotification: (notification) {
                     if (notification is OverscrollNotification) {
                       if (notification.overscroll > 0) {

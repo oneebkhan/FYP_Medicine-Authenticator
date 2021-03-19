@@ -39,7 +39,6 @@ class _Pharmacy_Clinics_InfoState extends State<Pharmacy_Clinics_Info> {
   var page2 = PageController();
   var info;
   List<Widget> numberOfImagesIndex;
-  StreamSubscription<DocumentSnapshot> stream;
 
   //
   //
@@ -74,7 +73,17 @@ class _Pharmacy_Clinics_InfoState extends State<Pharmacy_Clinics_Info> {
   getPharmacyInfo() async {
     try {
       // ignore: unused_local_variable
-      // ignore: await_only_futures
+      StreamSubscription<DocumentSnapshot> stream = await FirebaseFirestore
+          .instance
+          .collection(widget.pharmOrClinic)
+          .doc(widget.name)
+          .snapshots()
+          .listen((event) {
+        setState(() {
+          info = event.data();
+          getImages();
+        });
+      });
     } on Exception catch (e) {
       print(e);
       Fluttertoast.showToast(msg: '$e');
@@ -105,7 +114,6 @@ class _Pharmacy_Clinics_InfoState extends State<Pharmacy_Clinics_Info> {
 
   @override
   void dispose() {
-    stream.cancel();
     super.dispose();
   }
 
@@ -389,7 +397,6 @@ class _Pharmacy_Clinics_InfoState extends State<Pharmacy_Clinics_Info> {
                 //
                 // function to allow for scroll in the single child scroll view
                 NotificationListener(
-                  // ignore: missing_return
                   onNotification: (notification) {
                     if (notification is OverscrollNotification) {
                       if (notification.overscroll > 0) {

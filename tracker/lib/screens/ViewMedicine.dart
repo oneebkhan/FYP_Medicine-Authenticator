@@ -51,6 +51,8 @@ class _ViewMedicineState extends State<ViewMedicine> {
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
+    var height = MediaQuery.of(context).size.height;
+    var safePadding = MediaQuery.of(context).padding.top;
 
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 246, 246, 248),
