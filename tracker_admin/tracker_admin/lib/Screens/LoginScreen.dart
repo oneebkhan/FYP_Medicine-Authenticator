@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tracker_admin/screens/AddDistributor.dart';
 import 'package:tracker_admin/screens/Dashboard_Admin.dart';
 import 'package:tracker_admin/screens/Dashboard_Distributor.dart';
+import 'package:tracker_admin/screens/Dashboard_Pharmacist.dart';
 
 class LoginScreen extends StatefulWidget {
   final int i;
@@ -136,17 +137,24 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: FlatButton(
                             onPressed: () {
                               if (widget.i == 1) {
-                                Navigator.push(
+                                Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
                                     builder: (_) => Dashboard_Distributor(),
                                   ),
                                 );
-                              } else {
-                                Navigator.push(
+                              } else if (widget.i == 0) {
+                                Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
                                     builder: (_) => Dashboard_Admin(),
+                                  ),
+                                );
+                              } else if (widget.i == 2) {
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => Dashboard_Pharmacist(),
                                   ),
                                 );
                               }
