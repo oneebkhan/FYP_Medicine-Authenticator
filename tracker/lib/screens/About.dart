@@ -124,7 +124,7 @@ class _AboutState extends State<About> {
                         ),
                         AvatarRow(
                           size: width,
-                          name: 'Zaeem Chaudry',
+                          name: 'Zaeem Chaudhary',
                           bottomName: 'Front-end',
                           imageURL: 'assets/images/zaeem.png',
                         ),
