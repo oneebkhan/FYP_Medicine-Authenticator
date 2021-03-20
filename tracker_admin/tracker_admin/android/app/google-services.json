@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "60670633102",
+    "project_id": "tracker-625ca",
+    "storage_bucket": "tracker-625ca.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:60670633102:android:975f2a684f923ae70e95df",
+        "android_client_info": {
+          "package_name": "com.FYP.tracker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "60670633102-bt18e9b666ammtfhebnpqf9klvlsib0n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBqAFe1om295HJ9wW5onKK7_ErwKlE5KUY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "60670633102-bt18e9b666ammtfhebnpqf9klvlsib0n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:60670633102:android:6a5182fa24666f710e95df",
+        "android_client_info": {
+          "package_name": "com.FYP.tracker_admin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "60670633102-bt18e9b666ammtfhebnpqf9klvlsib0n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBqAFe1om295HJ9wW5onKK7_ErwKlE5KUY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "60670633102-bt18e9b666ammtfhebnpqf9klvlsib0n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

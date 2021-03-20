@@ -97,7 +97,7 @@ class _StartingPageState extends State<StartingPage> {
                       height: height,
                       decoration: BoxDecoration(
                         image: DecorationImage(
-                          fit: BoxFit.fitWidth,
+                          fit: BoxFit.cover,
                           image: AssetImage('assets/images/back.png'),
                         ),
                       ),
@@ -182,8 +182,8 @@ class _StartingPageState extends State<StartingPage> {
         Padding(
           padding: EdgeInsets.only(
             bottom: 120,
-            left: width / 5.8,
-            right: width / 5.8,
+            left: width / 10,
+            right: width / 10,
           ),
           child: Scaffold(
             extendBody: true,
@@ -201,7 +201,7 @@ class _StartingPageState extends State<StartingPage> {
               ),
               child: Padding(
                 padding: const EdgeInsets.symmetric(
-                  horizontal: 10.0,
+                  horizontal: 5.0,
                   vertical: 10,
                 ),
                 child: GNav(
@@ -209,9 +209,9 @@ class _StartingPageState extends State<StartingPage> {
                   haptic: true,
                   rippleColor: backColor,
                   hoverColor: backColor,
-                  gap: 8,
+                  gap: 5,
                   activeColor: floatingButtonColor,
-                  iconSize: 24,
+                  iconSize: 22,
                   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                   duration: Duration(milliseconds: 400),
                   tabBackgroundColor: Colors.grey[100],
@@ -221,8 +221,12 @@ class _StartingPageState extends State<StartingPage> {
                       text: 'Admin',
                     ),
                     GButton(
-                      icon: LineIcons.stethoscope,
+                      icon: LineIcons.boxes,
                       text: 'Distributor',
+                    ),
+                    GButton(
+                      icon: LineIcons.medicalClinic,
+                      text: 'Pharmacist',
                     ),
                   ],
                   selectedIndex: selectedIndex,
@@ -236,12 +240,19 @@ class _StartingPageState extends State<StartingPage> {
                               Color.fromARGB(255, 110, 200, 110);
                           lottieAsset = 'assets/lottie/pharmacist.json';
                         });
-                      } else {
+                      } else if (index == 0) {
                         setState(() {
                           backColor = Color.fromARGB(255, 170, 200, 240);
                           floatingButtonColor =
                               Color.fromARGB(255, 130, 150, 250);
                           lottieAsset = 'assets/lottie/admin_working.json';
+                        });
+                      } else if (index == 2) {
+                        setState(() {
+                          backColor = Color.fromARGB(255, 255, 99, 99);
+                          floatingButtonColor =
+                              Color.fromARGB(255, 242, 93, 93);
+                          lottieAsset = 'assets/lottie/pharmacy.json';
                         });
                       }
                     });

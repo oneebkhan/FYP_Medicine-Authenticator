@@ -31,9 +31,12 @@ class _LoginScreenState extends State<LoginScreen> {
     if (widget.i == 1) {
       backColor = Color.fromARGB(255, 168, 225, 166);
       floatingButtonColor = Color.fromARGB(255, 110, 200, 110);
-    } else {
+    } else if (widget.i == 0) {
       backColor = Color.fromARGB(255, 170, 200, 240);
       floatingButtonColor = Color.fromARGB(255, 130, 150, 250);
+    } else if (widget.i == 2) {
+      backColor = Color.fromARGB(255, 255, 99, 99);
+      floatingButtonColor = Color.fromARGB(255, 242, 93, 93);
     }
 
     Future.delayed(Duration(milliseconds: 500), () {
