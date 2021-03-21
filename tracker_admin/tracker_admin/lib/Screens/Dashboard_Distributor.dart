@@ -6,8 +6,8 @@ import 'package:tracker_admin/Widgets/Admin/BarChartWeekly.dart';
 import 'package:tracker_admin/Widgets/Distributor/BarChartMonthly_Distributor.dart';
 import 'package:tracker_admin/Widgets/Distributor/BarChartWeekly_Distributor.dart';
 import 'package:tracker_admin/Widgets/RowInfo.dart';
-import 'package:tracker_admin/screens/Clinics.dart';
-import 'package:tracker_admin/screens/Pharmacies.dart';
+import 'package:tracker_admin/screens/Clinic/ViewClinic.dart';
+import 'package:tracker_admin/screens/Pharmacy/ViewPharmacy.dart';
 import 'package:tracker_admin/screens/Requests.dart';
 import 'package:tracker_admin/screens/ViewMedicine.dart';
 
@@ -288,7 +288,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Number of Total Authenticated Medicines:',
+                          'Total Authenticated Medicine:',
                           style: TextStyle(
                             fontSize: widget.width / 30,
                             color: Colors.grey[700],
@@ -321,7 +321,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Number of Total Medicines:',
+                          'Total Medicine:',
                           style: TextStyle(
                             fontSize: widget.width / 30,
                             color: Colors.grey[700],
@@ -392,22 +392,6 @@ class _AdminDashboardState extends State<AdminDashboard> {
                               MaterialPageRoute(
                                 builder: (_) => ViewMedicine(
                                   pageName: 'View Medicine',
-                                  imageUrls: [
-                                    'https://picsum.photos/250?image=9',
-                                    'https://picsum.photos/250?image=9',
-                                    'https://picsum.photos/250?image=9',
-                                  ],
-                                  location: ['500mg', '400mg', '100mg'],
-                                  title: [
-                                    'Some Medicine',
-                                    'ooga booga',
-                                    'confused unga bunga',
-                                  ],
-                                  func: [
-                                    null,
-                                    null,
-                                    null,
-                                  ],
                                 ),
                               ),
                             );
@@ -486,7 +470,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Number of Total Pharmacies:',
+                          'Total Pharmacies:',
                           style: TextStyle(
                             fontSize: widget.width / 30,
                             color: Colors.grey[700],
@@ -519,7 +503,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Number of Total Clinics:',
+                          'Total Clinics:',
                           style: TextStyle(
                             fontSize: widget.width / 30,
                             color: Colors.grey[700],
@@ -564,7 +548,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (_) => Clinics(),
+                                  builder: (_) => ViewClinic(),
                                 ),
                               );
                             },
@@ -616,7 +600,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (_) => Pharmacies(),
+                                builder: (_) => ViewPharmacy(),
                               ),
                             );
                           },

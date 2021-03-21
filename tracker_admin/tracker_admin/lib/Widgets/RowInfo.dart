@@ -24,6 +24,7 @@ class RowInfo extends StatelessWidget {
         func();
       },
       child: Container(
+        width: width,
         child: Padding(
           padding: const EdgeInsets.only(
             bottom: 15,
@@ -65,7 +66,9 @@ class RowInfo extends StatelessWidget {
                   location == null
                       ? Container()
                       : Text(
-                          location,
+                          location.length > 31
+                              ? location.substring(0, 30) + '...'
+                              : location,
                           style: TextStyle(
                             fontSize: width / 28,
                             fontWeight: FontWeight.w300,

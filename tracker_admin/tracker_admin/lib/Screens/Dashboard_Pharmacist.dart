@@ -6,8 +6,6 @@ import 'package:tracker_admin/Widgets/Admin/BarChartWeekly.dart';
 import 'package:tracker_admin/Widgets/Distributor/BarChartMonthly_Distributor.dart';
 import 'package:tracker_admin/Widgets/Distributor/BarChartWeekly_Distributor.dart';
 import 'package:tracker_admin/Widgets/RowInfo.dart';
-import 'package:tracker_admin/screens/Clinics.dart';
-import 'package:tracker_admin/screens/Pharmacies.dart';
 import 'package:tracker_admin/screens/Requests.dart';
 import 'package:tracker_admin/screens/ViewMedicine.dart';
 
@@ -24,8 +22,8 @@ class _Dashboard_PharmacistState extends State<Dashboard_Pharmacist> {
   double density;
   double safePadding;
   int index;
-  Color col = Color.fromARGB(255, 148, 210, 146);
-  Color floatingButtonColor = Color.fromARGB(255, 110, 200, 110);
+  Color col = Colors.red[400];
+  Color floatingButtonColor = Colors.red[400];
   int selectedIndex;
   var page = PageController(initialPage: 0);
 
@@ -135,7 +133,7 @@ class _Dashboard_PharmacistState extends State<Dashboard_Pharmacist> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: SingleChildScrollView(
-                  child: AdminDashboard(
+                  child: PharmacistDashboard(
                     width: width,
                     height: height,
                   ),
@@ -144,7 +142,7 @@ class _Dashboard_PharmacistState extends State<Dashboard_Pharmacist> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: SingleChildScrollView(
-                  child: AdminStatistics(
+                  child: PharmacistStatistics(
                     width: width,
                     height: height,
                   ),
@@ -162,19 +160,19 @@ class _Dashboard_PharmacistState extends State<Dashboard_Pharmacist> {
 //
 //
 // The Dhasboard part of the admin console
-class AdminDashboard extends StatefulWidget {
+class PharmacistDashboard extends StatefulWidget {
   final double width;
   final double height;
 
-  AdminDashboard({Key key, @required this.width, @required this.height})
+  PharmacistDashboard({Key key, @required this.width, @required this.height})
       : super(key: key);
 
   @override
-  _AdminDashboardState createState() => _AdminDashboardState();
+  _PharmacistDashboardState createState() => _PharmacistDashboardState();
 }
 
-class _AdminDashboardState extends State<AdminDashboard> {
-  Color col = Color.fromARGB(255, 148, 210, 146);
+class _PharmacistDashboardState extends State<PharmacistDashboard> {
+  Color col = Colors.red[400];
 
   @override
   Widget build(BuildContext context) {
@@ -189,70 +187,15 @@ class _AdminDashboardState extends State<AdminDashboard> {
           //
           //
           // The top title and the notification row
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Text(
-                'DASHBOARD',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: widget.width / 17,
-                  color: Colors.grey[600],
-                ),
+          Center(
+            child: Text(
+              'DASHBOARD',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: widget.width / 17,
+                color: Colors.grey[600],
               ),
-              SizedBox(
-                width: widget.width / 7,
-              ),
-              Stack(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 5),
-                    child: Container(
-                      height: widget.width / 9,
-                      width: widget.width / 9,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: FlatButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => Requests(),
-                            ),
-                          );
-                        },
-                        padding: const EdgeInsets.all(0),
-                        child: Icon(
-                          Icons.notifications_none,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    right: 0,
-                    top: 0,
-                    child: Container(
-                      height: widget.width / 18,
-                      width: widget.width / 18,
-                      decoration: BoxDecoration(
-                        color: Colors.red[400],
-                        shape: BoxShape.circle,
-                      ),
-                      child: Center(
-                        child: Text(
-                          '3',
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
+            ),
           ),
           SizedBox(
             height: 30,
@@ -288,7 +231,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Number of Total Authenticated Medicines:',
+                          'Authenticated Medicine:',
                           style: TextStyle(
                             fontSize: widget.width / 30,
                             color: Colors.grey[700],
@@ -314,39 +257,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                         )
                       ],
                     ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Number of Total Medicines:',
-                          style: TextStyle(
-                            fontSize: widget.width / 30,
-                            color: Colors.grey[700],
-                            fontWeight: FontWeight.w300,
-                          ),
-                        ),
-                        Container(
-                          width: widget.width / 15,
-                          height: widget.width / 20,
-                          decoration: BoxDecoration(
-                            color: col,
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: Center(
-                            child: Text(
-                              '5',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: widget.width / 30,
-                              ),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
+
                     SizedBox(
                       height: 20,
                     ),
@@ -371,7 +282,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                   width: widget.width / 4.9,
                                   height: widget.width / 4.6,
                                   image: AssetImage(
-                                    'assets/icons/Distributor_dashboard_medicine/addMedicine.png',
+                                    'assets/icons/pharmacy_dashboard_medicine/authenticateMedicine.png',
                                   ),
                                 ),
                               ),
@@ -392,22 +303,6 @@ class _AdminDashboardState extends State<AdminDashboard> {
                               MaterialPageRoute(
                                 builder: (_) => ViewMedicine(
                                   pageName: 'View Medicine',
-                                  imageUrls: [
-                                    'https://picsum.photos/250?image=9',
-                                    'https://picsum.photos/250?image=9',
-                                    'https://picsum.photos/250?image=9',
-                                  ],
-                                  location: ['500mg', '400mg', '100mg'],
-                                  title: [
-                                    'Some Medicine',
-                                    'ooga booga',
-                                    'confused unga bunga',
-                                  ],
-                                  func: [
-                                    null,
-                                    null,
-                                    null,
-                                  ],
                                 ),
                               ),
                             );
@@ -420,234 +315,8 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                 width: widget.width / 4.9,
                                 height: widget.width / 4.6,
                                 image: AssetImage(
-                                  'assets/icons/Distributor_dashboard_medicine/viewMedicine.png',
+                                  'assets/icons/pharmacy_dashboard_medicine/viewAuthenticated.png',
                                 ),
-                              ),
-                            ),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: col,
-                            ),
-                          ),
-                        ),
-                        Container(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 5, horizontal: 5),
-                            child: Image(
-                              width: widget.width / 4.9,
-                              height: widget.width / 4.6,
-                              image: AssetImage(
-                                'assets/icons/Distributor_dashboard_medicine/searchMedicine.png',
-                              ),
-                            ),
-                          ),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: col,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          SizedBox(
-            height: 35,
-          ),
-          //
-          //
-          // The second PHARMACIES AND CLINICS container
-          Center(
-            child: Container(
-              width: widget.width,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15), color: Colors.white),
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Pharmacies and Clinics',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: widget.width / 16,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Number of Total Pharmacies:',
-                          style: TextStyle(
-                            fontSize: widget.width / 30,
-                            color: Colors.grey[700],
-                            fontWeight: FontWeight.w300,
-                          ),
-                        ),
-                        Container(
-                          width: widget.width / 15,
-                          height: widget.width / 20,
-                          decoration: BoxDecoration(
-                            color: col,
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: Center(
-                            child: Text(
-                              '5',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: widget.width / 30,
-                              ),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Number of Total Clinics:',
-                          style: TextStyle(
-                            fontSize: widget.width / 30,
-                            color: Colors.grey[700],
-                            fontWeight: FontWeight.w300,
-                          ),
-                        ),
-                        Container(
-                          width: widget.width / 15,
-                          height: widget.width / 20,
-                          decoration: BoxDecoration(
-                            color: col,
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: Center(
-                            child: Text(
-                              '5',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: widget.width / 30,
-                              ),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    //
-                    //
-                    // The buttons
-                    Wrap(
-                      spacing: 15,
-                      children: [
-                        //
-                        //
-                        // The first VIEW CLINICS button
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 15),
-                          child: GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => Clinics(),
-                                ),
-                              );
-                            },
-                            child: Container(
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 5, horizontal: 5),
-                                child: Image(
-                                  width: widget.width / 4.9,
-                                  height: widget.width / 4.6,
-                                  image: AssetImage(
-                                      'assets/icons/Distributor_dashboard_pharmacy/viewClinics.png'),
-                                ),
-                              ),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: col,
-                              ),
-                            ),
-                          ),
-                        ),
-                        //
-                        //
-                        // The second ADD CLINICS Button
-                        GestureDetector(
-                          onTap: () {},
-                          child: Container(
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 5, horizontal: 5),
-                              child: Image(
-                                width: widget.width / 4.9,
-                                height: widget.width / 4.6,
-                                image: AssetImage(
-                                    'assets/icons/Distributor_dashboard_pharmacy/addClinic.png'),
-                              ),
-                            ),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: col,
-                            ),
-                          ),
-                        ),
-                        //
-                        //
-                        // The third View Pharmacies
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) => Pharmacies(),
-                              ),
-                            );
-                          },
-                          child: Container(
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 5, horizontal: 5),
-                              child: Image(
-                                width: widget.width / 4.9,
-                                height: widget.width / 4.6,
-                                image: AssetImage(
-                                    'assets/icons/Distributor_dashboard_pharmacy/viewPharmacy.png'),
-                              ),
-                            ),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: col,
-                            ),
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {},
-                          child: Container(
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 5, horizontal: 5),
-                              child: Image(
-                                width: widget.width / 4.9,
-                                height: widget.width / 4.6,
-                                image: AssetImage(
-                                    'assets/icons/Distributor_dashboard_pharmacy/addPharmacy.png'),
                               ),
                             ),
                             decoration: BoxDecoration(
@@ -663,6 +332,10 @@ class _AdminDashboardState extends State<AdminDashboard> {
               ),
             ),
           ),
+          SizedBox(
+            height: 35,
+          ),
+
           SizedBox(
             height: 30,
           ),
@@ -679,19 +352,19 @@ class _AdminDashboardState extends State<AdminDashboard> {
 //
 //
 // The STATISTICS PAGE
-class AdminStatistics extends StatefulWidget {
+class PharmacistStatistics extends StatefulWidget {
   final double width;
   final double height;
 
-  AdminStatistics({Key key, @required this.width, @required this.height})
+  PharmacistStatistics({Key key, @required this.width, @required this.height})
       : super(key: key);
 
   @override
-  _AdminStatisticsState createState() => _AdminStatisticsState();
+  _PharmacistStatisticsState createState() => _PharmacistStatisticsState();
 }
 
-class _AdminStatisticsState extends State<AdminStatistics> {
-  Color col = Color.fromARGB(255, 148, 210, 146);
+class _PharmacistStatisticsState extends State<PharmacistStatistics> {
+  Color col = Colors.red[400];
 
   @override
   Widget build(BuildContext context) {

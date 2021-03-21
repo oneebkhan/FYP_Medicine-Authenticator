@@ -1,17 +1,15 @@
 import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:tracker_admin/Widgets/Admin/BarChartMonthly.dart';
 import 'package:tracker_admin/Widgets/Admin/BarChartWeekly.dart';
 import 'package:tracker_admin/Widgets/RowInfo.dart';
 import 'package:tracker_admin/screens/AddDistributor.dart';
-import 'package:tracker_admin/screens/Clinics.dart';
-import 'package:tracker_admin/screens/Pharmacies.dart';
+import 'package:tracker_admin/screens/Clinic/DistributorClinics.dart';
+import 'package:tracker_admin/screens/Pharmacy/DistributorPharmacies.dart';
 import 'package:tracker_admin/screens/Requests.dart';
 import 'package:tracker_admin/screens/ViewMedicine.dart';
-import 'package:fl_chart/fl_chart.dart';
 
 class Dashboard_Admin extends StatefulWidget {
   @override
@@ -289,7 +287,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Number of Total Distributors:',
+                          'Total Distributors:',
                           style: TextStyle(
                             fontSize: widget.width / 30,
                             color: Colors.grey[700],
@@ -322,7 +320,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Number of Total Distributors:',
+                          'Total Distributors:',
                           style: TextStyle(
                             fontSize: widget.width / 30,
                             color: Colors.grey[700],
@@ -469,7 +467,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Number of Total Pharmacies:',
+                          'Total Pharmacies:',
                           style: TextStyle(
                             fontSize: widget.width / 30,
                             color: Colors.grey[700],
@@ -502,7 +500,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Number of Total Clinics:',
+                          'Total Clinics:',
                           style: TextStyle(
                             fontSize: widget.width / 30,
                             color: Colors.grey[700],
@@ -547,7 +545,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (_) => Clinics(),
+                                  builder: (_) => DistributorClinics(),
                                 ),
                               );
                             },
@@ -577,7 +575,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (_) => Pharmacies(),
+                                builder: (_) => DistributorPharmacies(),
                               ),
                             );
                           },
@@ -637,7 +635,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Number of Authenticated Medicines:',
+                          'Authenticated Medicine:',
                           style: TextStyle(
                             fontSize: widget.width / 30,
                             color: Colors.grey[700],
@@ -670,7 +668,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Number of Total Medicines:',
+                          'Total Medicine:',
                           style: TextStyle(
                             fontSize: widget.width / 30,
                             color: Colors.grey[700],
@@ -717,22 +715,6 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                 MaterialPageRoute(
                                   builder: (_) => ViewMedicine(
                                     pageName: 'View Medicine',
-                                    imageUrls: [
-                                      'https://picsum.photos/250?image=9',
-                                      'https://picsum.photos/250?image=9',
-                                      'https://picsum.photos/250?image=9',
-                                    ],
-                                    location: ['500mg', '400mg', '100mg'],
-                                    title: [
-                                      'Some Medicine',
-                                      'ooga booga',
-                                      'confused unga bunga',
-                                    ],
-                                    func: [
-                                      null,
-                                      null,
-                                      null,
-                                    ],
                                   ),
                                 ),
                               );

@@ -75,6 +75,7 @@ flutter:
     - assets/images/
     - assets/icons/
     - assets/icons/admin_dashboard_medicine/
+    - assets/icons/pharmacy_dashboard_medicine/
     - assets/icons/admin_pharmacies_clinics/
     - assets/icons/admin_dashboard_distributors/
     - assets/icons/Distributor_dashboard_medicine/
