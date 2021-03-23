@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:tracker_admin/screens/AddDistributor.dart';
 import 'package:tracker_admin/screens/Dashboard_Admin.dart';
 import 'package:tracker_admin/screens/Dashboard_Distributor.dart';
@@ -23,6 +24,40 @@ class _LoginScreenState extends State<LoginScreen> {
   Color floatingButtonColor;
   var email = TextEditingController();
   var pass = TextEditingController();
+
+  //
+  //
+  // Validate the Email Address
+  String validateEmail(String value) {
+    if (value.isEmpty) {
+      Fluttertoast.showToast(msg: 'Enter Email');
+      return "enter email";
+    }
+    Pattern pattern =
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+    RegExp regex = new RegExp(pattern);
+    if (!regex.hasMatch(value.trim())) {
+      Fluttertoast.showToast(msg: 'Invalid Email Address');
+      return "the email address is not valid";
+    }
+    return null;
+  }
+
+  //
+  //
+  // validates password
+  String validatePassword(String password) {
+    if (password.isEmpty) {
+      Fluttertoast.showToast(msg: 'Enter Password');
+      return "Enter Password";
+    }
+    if (password.length < 5) {
+      Fluttertoast.showToast(
+          msg: 'Password length should be greater than 5 charecters');
+      return "Password length should be greater than 5 charecters";
+    }
+    return null;
+  }
 
   @override
   void initState() {
@@ -136,27 +171,30 @@ class _LoginScreenState extends State<LoginScreen> {
                         Center(
                           child: FlatButton(
                             onPressed: () {
-                              if (widget.i == 1) {
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (_) => Dashboard_Distributor(),
-                                  ),
-                                );
-                              } else if (widget.i == 0) {
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (_) => Dashboard_Admin(),
-                                  ),
-                                );
-                              } else if (widget.i == 2) {
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (_) => Dashboard_Pharmacist(),
-                                  ),
-                                );
+                              if (validateEmail(email.text) == null &&
+                                  validatePassword(pass.text) == null) {
+                                if (widget.i == 1) {
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => Dashboard_Distributor(),
+                                    ),
+                                  );
+                                } else if (widget.i == 0) {
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => Dashboard_Admin(),
+                                    ),
+                                  );
+                                } else if (widget.i == 2) {
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => Dashboard_Pharmacist(),
+                                    ),
+                                  );
+                                }
                               }
                             },
                             padding: EdgeInsets.all(0),
