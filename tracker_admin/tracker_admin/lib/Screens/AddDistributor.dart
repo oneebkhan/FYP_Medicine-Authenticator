@@ -153,13 +153,16 @@ class ContainerText extends StatelessWidget {
   final TextEditingController controller;
   final String hint;
   final node;
+  final bool hide;
 
-  const ContainerText({Key key, this.controller, this.hint, this.node});
+  const ContainerText(
+      {Key key, this.controller, this.hint, this.node, this.hide});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       child: TextField(
+        obscureText: hide == null ? false : hide,
         controller: controller,
         textInputAction: TextInputAction.next,
         onEditingComplete: () => node.nextFocus(),
