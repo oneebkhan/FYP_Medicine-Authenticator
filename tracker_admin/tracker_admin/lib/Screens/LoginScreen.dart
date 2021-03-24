@@ -180,7 +180,7 @@ class _LoginScreenState extends State<LoginScreen> {
       UserCredential user = await FirebaseAuth.instance
           .signInWithEmailAndPassword(
               email: email.text.toLowerCase(), password: pass.text);
-      Fluttertoast.showToast(msg: 'Welcome $userName');
+      Fluttertoast.showToast(msg: 'Welcome $userName!');
       setState(() {
         isLoading = false;
       });

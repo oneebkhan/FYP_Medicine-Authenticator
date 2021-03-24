@@ -7,8 +7,8 @@ import 'package:tracker_admin/Widgets/Admin/BarChartWeekly.dart';
 import 'package:tracker_admin/Widgets/RowInfo.dart';
 import 'package:tracker_admin/screens/AddDistributor.dart';
 import 'package:tracker_admin/screens/Clinic/DistributorClinics.dart';
+import 'package:tracker_admin/screens/ContactDevs.dart';
 import 'package:tracker_admin/screens/Pharmacy/DistributorPharmacies.dart';
-import 'package:tracker_admin/screens/Requests.dart';
 import 'package:tracker_admin/screens/ViewMedicine.dart';
 
 class Dashboard_Admin extends StatefulWidget {
@@ -218,7 +218,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (_) => Requests(),
+                              builder: (_) => ContactDevs(),
                             ),
                           );
                         },
@@ -835,7 +835,7 @@ class _AdminStatisticsState extends State<AdminStatistics> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (_) => Requests(),
+                              builder: (_) => ContactDevs(),
                             ),
                           );
                         },

@@ -34,14 +34,14 @@ class _SplashState extends State<Splash> {
     opac = 0;
     anim = false;
 
-    Future.delayed(Duration(seconds: 2), () {
+    Future.delayed(Duration(milliseconds: 500), () {
       setState(() {
         opac = 1.0;
         anim = true;
       });
     });
 
-    Future.delayed(Duration(seconds: 3), () {
+    Future.delayed(Duration(milliseconds: 1500), () {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
