@@ -50,6 +50,20 @@ class _ContactDevsState extends State<ContactDevs> {
     }
   }
 
+  delete(String val) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection("ContactDevelopers")
+          .doc(val)
+          .delete()
+          .then((_) {
+        Fluttertoast.showToast(msg: 'Delete Request Successful!');
+      });
+    } on Exception catch (e) {
+      Fluttertoast.showToast(msg: '$e');
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -90,6 +104,10 @@ class _ContactDevsState extends State<ContactDevs> {
                         itemBuilder: (BuildContext context, int index) {
                           QueryDocumentSnapshot item =
                               snapshot.data.docs[index];
+
+                          if (item['number'].exists == false) {
+                            return Text('No Requests :(');
+                          }
                           //
                           //
                           // the white container holding the request
@@ -172,7 +190,14 @@ class _ContactDevsState extends State<ContactDevs> {
                                             Icons.close,
                                             color: Colors.grey[700],
                                           ),
-                                          onPressed: () {},
+                                          onPressed: () {
+                                            delete('#' +
+                                                '${item['number']}' +
+                                                ' ' +
+                                                '(' +
+                                                '${item['emailOfUser']}' +
+                                                ')');
+                                          },
                                         ),
                                       ],
                                     ),

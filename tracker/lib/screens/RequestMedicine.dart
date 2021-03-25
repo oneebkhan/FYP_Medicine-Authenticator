@@ -14,7 +14,7 @@ class _RequestMedicineState extends State<RequestMedicine> {
   double height;
   double safePadding;
   bool _isLoading = false;
-  int docLen;
+  int docNum = 1;
   TextEditingController nameOfMedicine = TextEditingController();
   TextEditingController barcode = TextEditingController();
   TextEditingController companyName = TextEditingController();
@@ -30,10 +30,19 @@ class _RequestMedicineState extends State<RequestMedicine> {
   Future<double> _getLengthOfRequestsMedicine() async {
     await FirebaseFirestore.instance
         .collection("RequestsMedicine")
-        .get()
-        .then((doc) {
-      setState(() {
-        docLen = doc.docs.length;
+        .snapshots()
+        .listen((doc) {
+      doc.docs.forEach((element) {
+        if (doc.docs.length == 0) {
+          setState(() {
+            docNum = 1;
+          });
+        }
+        if (docNum <= element['number']) {
+          setState(() {
+            docNum = element['number'] + 1;
+          });
+        }
       });
     });
   }
@@ -47,7 +56,7 @@ class _RequestMedicineState extends State<RequestMedicine> {
       var firestore = await FirebaseFirestore.instance;
       firestore
           .collection("RequestsMedicine")
-          .doc('#' + docLen.toString() + ' (${emailOfUser.text})')
+          .doc('#' + docNum.toString() + ' (${emailOfUser.text})')
           .set({
         "nameOfMedicine": nameOfMedicine.text,
         "barcode": barcode.text,
@@ -56,6 +65,7 @@ class _RequestMedicineState extends State<RequestMedicine> {
         "emailOfUser": emailOfUser.text,
         "cellNoOfUser": cellNumberOfUser.text,
         "locationOfUser": locationOfUser.text,
+        "number": docNum,
       }).then((_) {
         print("success!");
       });
@@ -64,10 +74,27 @@ class _RequestMedicineState extends State<RequestMedicine> {
     }
   }
 
+  //
+  //
+  // Validate the Email Address
+  String validateEmail(String value) {
+    if (value.isEmpty) {
+      Fluttertoast.showToast(msg: 'Enter Email');
+      return "enter email";
+    }
+    Pattern pattern =
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+    RegExp regex = new RegExp(pattern);
+    if (!regex.hasMatch(value.trim())) {
+      Fluttertoast.showToast(msg: 'Invalid Email Address');
+      return "the email address is not valid";
+    }
+    return null;
+  }
+
   @override
   void initState() {
     super.initState();
-    docLen = 0;
     _getLengthOfRequestsMedicine();
   }
 
@@ -134,6 +161,8 @@ class _RequestMedicineState extends State<RequestMedicine> {
                                 hint: 'Name of Medicine',
                                 node: node,
                                 controller: nameOfMedicine,
+                                maxLines: 1,
+                                maxLength: 30,
                               ),
                               SizedBox(
                                 height: 10,
@@ -142,6 +171,8 @@ class _RequestMedicineState extends State<RequestMedicine> {
                                 hint: 'Barcode',
                                 node: node,
                                 controller: barcode,
+                                maxLength: 30,
+                                maxLines: 1,
                               ),
                               SizedBox(
                                 height: 10,
@@ -150,6 +181,8 @@ class _RequestMedicineState extends State<RequestMedicine> {
                                 hint: 'Company Name',
                                 node: node,
                                 controller: companyName,
+                                maxLines: 1,
+                                maxLength: 30,
                               ),
                               SizedBox(
                                 height: 10,
@@ -158,6 +191,8 @@ class _RequestMedicineState extends State<RequestMedicine> {
                                 hint: 'User Name',
                                 node: node,
                                 controller: nameOfUser,
+                                maxLength: 20,
+                                maxLines: 1,
                               ),
                               SizedBox(
                                 height: 10,
@@ -166,6 +201,9 @@ class _RequestMedicineState extends State<RequestMedicine> {
                                 hint: 'User Email',
                                 node: node,
                                 controller: emailOfUser,
+                                maxLength: 30,
+                                maxLines: 1,
+                                inputType: TextInputType.emailAddress,
                               ),
                               SizedBox(
                                 height: 10,
@@ -174,6 +212,9 @@ class _RequestMedicineState extends State<RequestMedicine> {
                                 hint: 'User Cell Phone Number',
                                 node: node,
                                 controller: cellNumberOfUser,
+                                maxLength: 15,
+                                maxLines: 1,
+                                inputType: TextInputType.phone,
                               ),
                               SizedBox(
                                 height: 10,
@@ -182,6 +223,8 @@ class _RequestMedicineState extends State<RequestMedicine> {
                                 hint: 'Location of User',
                                 node: node,
                                 controller: locationOfUser,
+                                maxLength: 50,
+                                maxLines: 1,
                               ),
                               SizedBox(
                                 height: 15,
@@ -200,14 +243,15 @@ class _RequestMedicineState extends State<RequestMedicine> {
                     child: FlatButton(
                       padding: EdgeInsets.all(0),
                       onPressed: () {
-                        _onPressed();
-                        setState(() {
-                          _isLoading = true;
-                        });
-                        Future.delayed(Duration(milliseconds: 2000), () {
-                          Navigator.pop(context);
-                          Fluttertoast.showToast(msg: 'Request Sent');
-                        });
+                        if (validateEmail(emailOfUser.text) == null) {
+                          _onPressed();
+                          setState(() {
+                            _isLoading = true;
+                          });
+                          Future.delayed(Duration(milliseconds: 2000), () {
+                            Navigator.pop(context);
+                          });
+                        }
                       },
                       child: Container(
                         width: width / 1.1,
@@ -245,8 +289,10 @@ class ContainerText extends StatelessWidget {
   final String hint;
   final node;
   final double height;
+  final int maxLength;
   final int maxLines;
   final double width;
+  final TextInputType inputType;
 
   const ContainerText({
     Key key,
@@ -254,8 +300,10 @@ class ContainerText extends StatelessWidget {
     this.hint,
     this.node,
     this.height,
-    this.maxLines,
+    this.maxLength,
     this.width,
+    this.inputType,
+    this.maxLines,
   });
 
   @override
@@ -268,12 +316,15 @@ class ContainerText extends StatelessWidget {
       height: height,
       width: width,
       child: TextField(
+        keyboardType: inputType,
         controller: controller,
         textInputAction: TextInputAction.next,
         onEditingComplete: () => node.nextFocus(),
+        maxLength: maxLength,
         maxLines: maxLines,
         decoration: InputDecoration(
           hintText: hint,
+          counterText: '',
           filled: false,
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(15),

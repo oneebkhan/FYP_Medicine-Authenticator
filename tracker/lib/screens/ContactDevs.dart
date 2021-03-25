@@ -15,7 +15,7 @@ class _ContactDevsState extends State<ContactDevs> {
   double height;
   double safePadding;
   bool _isLoading = false;
-  int docLen;
+  int docNum = 1;
   TextEditingController nameOfUser = TextEditingController();
   TextEditingController emailOfUser = TextEditingController();
   TextEditingController subject = TextEditingController();
@@ -25,13 +25,23 @@ class _ContactDevsState extends State<ContactDevs> {
   //
   // Get length of documents to make a unique ID for the firestore doca
   // ignore: missing_return
-  Future<double> _getLengthOfRequestsMedicine() async {
+  // FIX THE DISPOSE BUG HERE !!!!!!!!!!!!!!!!!!!!!!!!
+  Future<double> _getLengthOfContactDevs() async {
     await FirebaseFirestore.instance
-        .collection("RequestsMedicine")
-        .get()
-        .then((doc) {
-      setState(() {
-        docLen = doc.docs.length;
+        .collection("ContactDevelopers")
+        .snapshots()
+        .listen((doc) {
+      doc.docs.forEach((element) {
+        if (doc.docs.length == 0) {
+          setState(() {
+            docNum = 1;
+          });
+        }
+        if (docNum <= element['number']) {
+          setState(() {
+            docNum = element['number'] + 1;
+          });
+        }
       });
     });
   }
@@ -45,12 +55,13 @@ class _ContactDevsState extends State<ContactDevs> {
       var firestore = await FirebaseFirestore.instance;
       firestore
           .collection("ContactDevelopers")
-          .doc('#' + docLen.toString() + ' (${emailOfUser.text})')
+          .doc('#' + docNum.toString() + ' (${emailOfUser.text})')
           .set({
         "nameOfUser": nameOfUser.text,
         "emailOfUser": emailOfUser.text,
         "subject": subject.text,
         "description": description.text,
+        "number": docNum,
       }).then((_) {
         print("success!");
       });
@@ -59,11 +70,33 @@ class _ContactDevsState extends State<ContactDevs> {
     }
   }
 
+  //
+  //
+  // Validate the Email Address
+  String validateEmail(String value) {
+    if (value.isEmpty) {
+      Fluttertoast.showToast(msg: 'Enter Email');
+      return "enter email";
+    }
+    Pattern pattern =
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+    RegExp regex = new RegExp(pattern);
+    if (!regex.hasMatch(value.trim())) {
+      Fluttertoast.showToast(msg: 'Invalid Email Address');
+      return "the email address is not valid";
+    }
+    return null;
+  }
+
   @override
   void initState() {
     super.initState();
-    docLen = 0;
-    _getLengthOfRequestsMedicine();
+    _getLengthOfContactDevs();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
@@ -129,6 +162,8 @@ class _ContactDevsState extends State<ContactDevs> {
                                 hint: 'User Name',
                                 node: node,
                                 controller: nameOfUser,
+                                maxLines: 1,
+                                maxLength: 30,
                               ),
                               SizedBox(
                                 height: 10,
@@ -137,6 +172,9 @@ class _ContactDevsState extends State<ContactDevs> {
                                 hint: 'User Email',
                                 node: node,
                                 controller: emailOfUser,
+                                maxLines: 1,
+                                maxLength: 30,
+                                inputType: TextInputType.emailAddress,
                               ),
                               SizedBox(
                                 height: 10,
@@ -145,6 +183,8 @@ class _ContactDevsState extends State<ContactDevs> {
                                 hint: 'Subject',
                                 node: node,
                                 controller: subject,
+                                maxLines: 2,
+                                maxLength: 50,
                               ),
                               SizedBox(
                                 height: 10,
@@ -155,6 +195,7 @@ class _ContactDevsState extends State<ContactDevs> {
                                 height: width / 2,
                                 maxLines: 8,
                                 controller: description,
+                                maxLength: 250,
                               ),
                               SizedBox(
                                 height: 15,
@@ -173,14 +214,15 @@ class _ContactDevsState extends State<ContactDevs> {
                     child: FlatButton(
                       padding: EdgeInsets.all(0),
                       onPressed: () {
-                        _onPressed();
-                        setState(() {
-                          _isLoading = true;
-                        });
-                        Future.delayed(Duration(milliseconds: 2000), () {
-                          Navigator.pop(context);
-                          Fluttertoast.showToast(msg: 'Request Sent');
-                        });
+                        if (validateEmail(emailOfUser.text) == null) {
+                          _onPressed();
+                          setState(() {
+                            _isLoading = true;
+                          });
+                          Future.delayed(Duration(milliseconds: 2000), () {
+                            Navigator.pop(context);
+                          });
+                        }
                       },
                       child: Container(
                         width: width / 1.1,
