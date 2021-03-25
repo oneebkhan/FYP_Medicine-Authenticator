@@ -105,9 +105,6 @@ class _ContactDevsState extends State<ContactDevs> {
                           QueryDocumentSnapshot item =
                               snapshot.data.docs[index];
 
-                          if (item['number'].exists == false) {
-                            return Text('No Requests :(');
-                          }
                           //
                           //
                           // the white container holding the request
