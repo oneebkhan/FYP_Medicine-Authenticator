@@ -298,6 +298,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             hint: 'Email',
                             node: node,
                             controller: email,
+                            inputType: TextInputType.emailAddress,
+                            maxLines: 1,
+                            maxLength: 30,
                           ),
                           SizedBox(
                             height: height / 40,
@@ -307,6 +310,8 @@ class _LoginScreenState extends State<LoginScreen> {
                             node: node,
                             controller: pass,
                             hide: true,
+                            maxLength: 30,
+                            maxLines: 1,
                           ),
                           SizedBox(
                             height: height / 20,

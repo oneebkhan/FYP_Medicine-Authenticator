@@ -149,40 +149,111 @@ class AddDistributor extends StatelessWidget {
   }
 }
 
-class ContainerText extends StatelessWidget {
+class ContainerText extends StatefulWidget {
   final TextEditingController controller;
   final String hint;
   final node;
   final bool hide;
+  final int maxLength;
+  final int maxLines;
+  final TextInputType inputType;
 
   const ContainerText(
-      {Key key, this.controller, this.hint, this.node, this.hide});
+      {Key key,
+      this.controller,
+      this.hint,
+      this.node,
+      this.hide,
+      this.maxLength,
+      this.maxLines,
+      this.inputType});
+
+  @override
+  _ContainerTextState createState() => _ContainerTextState();
+}
+
+class _ContainerTextState extends State<ContainerText> {
+  bool show;
+
+  passwordVisibility() {
+    if (widget.hide == true) {
+      setState(() {
+        show = false;
+      });
+    } else {
+      setState(() {
+        show = true;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    passwordVisibility();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: TextField(
-        obscureText: hide == null ? false : hide,
-        controller: controller,
-        textInputAction: TextInputAction.next,
-        onEditingComplete: () => node.nextFocus(),
-        decoration: InputDecoration(
-          fillColor: Colors.grey[200],
-          hintText: hint,
-          filled: true,
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(15),
-            borderSide: BorderSide(
-              color: Colors.grey[200],
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(15),
+        color: Colors.grey[200],
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Expanded(
+            flex: 5,
+            child: TextField(
+              keyboardType: widget.inputType,
+              obscureText: show == false ? true : false,
+              controller: widget.controller,
+              textInputAction: TextInputAction.next,
+              maxLength: widget.maxLength,
+              maxLines: widget.maxLines == null ? 1 : widget.maxLines,
+              onEditingComplete: () => widget.node.nextFocus(),
+              decoration: InputDecoration(
+                fillColor: Colors.transparent,
+                counterText: '',
+                hintText: widget.hint,
+                filled: true,
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide: BorderSide(
+                    color: Colors.transparent,
+                  ),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide: BorderSide(
+                    color: Colors.transparent,
+                  ),
+                ),
+              ),
             ),
           ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(15),
-            borderSide: BorderSide(
-              color: Colors.grey[200],
-            ),
-          ),
-        ),
+          widget.hide != null
+              ? Expanded(
+                  flex: 1,
+                  child: IconButton(
+                    icon: Icon(show == false
+                        ? Icons.visibility
+                        : Icons.visibility_off),
+                    onPressed: () {
+                      setState(() {
+                        if (show == false) {
+                          show = true;
+                        } else
+                          show = false;
+                      });
+                    },
+                  ),
+                )
+              : Container(),
+        ],
       ),
     );
   }
