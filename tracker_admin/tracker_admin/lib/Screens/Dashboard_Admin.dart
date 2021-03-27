@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:tracker_admin/Widgets/Admin/BarChartMonthly.dart';
@@ -26,6 +28,26 @@ class _Dashboard_AdminState extends State<Dashboard_Admin> {
   Color floatingButtonColor;
   int selectedIndex;
   var page = PageController(initialPage: 0);
+  int count;
+
+  //
+//
+// FUNCTION TO GET THE REQUESTS STREAM
+  getDevRequests() async {
+    try {
+      FirebaseFirestore.instance
+          .collection('ContactDevelopers')
+          .snapshots()
+          .listen((event) {
+        setState(() {
+          count = event.docs.length;
+        });
+      });
+    } on Exception catch (e) {
+      print(e);
+      Fluttertoast.showToast(msg: '$e');
+    }
+  }
 
   @override
   void initState() {
@@ -33,6 +55,7 @@ class _Dashboard_AdminState extends State<Dashboard_Admin> {
     index = 0;
     selectedIndex = 0;
     floatingButtonColor = Color.fromARGB(255, 130, 150, 250);
+    getDevRequests();
   }
 
   void dispose() {
@@ -137,6 +160,7 @@ class _Dashboard_AdminState extends State<Dashboard_Admin> {
                   child: AdminDashboard(
                     width: width,
                     height: height,
+                    count: count,
                   ),
                 ),
               ),
@@ -146,6 +170,7 @@ class _Dashboard_AdminState extends State<Dashboard_Admin> {
                   child: AdminStatistics(
                     width: width,
                     height: height,
+                    count: count,
                   ),
                 ),
               ),
@@ -164,8 +189,10 @@ class _Dashboard_AdminState extends State<Dashboard_Admin> {
 class AdminDashboard extends StatefulWidget {
   final double width;
   final double height;
+  final int count;
 
-  AdminDashboard({Key key, @required this.width, @required this.height})
+  AdminDashboard(
+      {Key key, @required this.width, @required this.height, this.count})
       : super(key: key);
 
   @override
@@ -241,7 +268,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                       ),
                       child: Center(
                         child: Text(
-                          '3',
+                          widget.count.toString(),
                           style: TextStyle(
                             color: Colors.white,
                           ),
@@ -781,9 +808,14 @@ class _AdminDashboardState extends State<AdminDashboard> {
 class AdminStatistics extends StatefulWidget {
   final double width;
   final double height;
+  final int count;
 
-  AdminStatistics({Key key, @required this.width, @required this.height})
-      : super(key: key);
+  AdminStatistics({
+    Key key,
+    @required this.width,
+    @required this.height,
+    this.count,
+  }) : super(key: key);
 
   @override
   _AdminStatisticsState createState() => _AdminStatisticsState();
@@ -858,7 +890,7 @@ class _AdminStatisticsState extends State<AdminStatistics> {
                       ),
                       child: Center(
                         child: Text(
-                          '3',
+                          widget.count.toString(),
                           style: TextStyle(
                             color: Colors.white,
                           ),
@@ -892,7 +924,7 @@ class _AdminStatisticsState extends State<AdminStatistics> {
                     Padding(
                       padding: const EdgeInsets.only(left: 20),
                       child: Text(
-                        'Medcine Distribution',
+                        'Medicine Distribution',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: widget.width / 16,
