@@ -217,7 +217,7 @@ class _TipsState extends State<Tips> {
                                   ),
                                 ),
                                 SizedBox(
-                                  height: width / 5,
+                                  height: width / 8,
                                 ),
                                 //
                                 //
@@ -263,14 +263,14 @@ class _TipsState extends State<Tips> {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 SizedBox(
-                                  height: height / 3.2,
+                                  height: height / 2.8,
                                   child: Lottie.asset(
                                     'assets/lottie/phone_use.json',
                                     repeat: true,
                                   ),
                                 ),
                                 SizedBox(
-                                  height: width / 5,
+                                  height: width / 9,
                                 ),
                                 //
                                 //
@@ -313,7 +313,7 @@ class _TipsState extends State<Tips> {
                     ),
 
                     SizedBox(
-                      height: height / 7.5,
+                      height: height / 6,
                     ),
                     //
                     //
