@@ -86,6 +86,9 @@ class _TipsState extends State<Tips> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   mainAxisSize: MainAxisSize.max,
                   children: [
+                    SizedBox(
+                      height: height / 30,
+                    ),
                     //
                     //
                     // The top Image adn text that needs to be changed
@@ -101,7 +104,6 @@ class _TipsState extends State<Tips> {
                           Container(
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.end,
                               children: [
                                 SizedBox(
                                   height: height / 3.2,
@@ -154,7 +156,6 @@ class _TipsState extends State<Tips> {
                           Container(
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.end,
                               children: [
                                 SizedBox(
                                   height: height / 2.8,
@@ -207,7 +208,6 @@ class _TipsState extends State<Tips> {
                           Container(
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.end,
                               children: [
                                 SizedBox(
                                   height: height / 3.2,
@@ -259,7 +259,6 @@ class _TipsState extends State<Tips> {
                           // Fourth tips page
                           Container(
                             child: Column(
-                              mainAxisAlignment: MainAxisAlignment.end,
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 SizedBox(
@@ -312,9 +311,6 @@ class _TipsState extends State<Tips> {
                       ),
                     ),
 
-                    SizedBox(
-                      height: height / 6,
-                    ),
                     //
                     //
                     // The bottom ROW BUTTONS

@@ -101,9 +101,9 @@ class _ViewMedicineState extends State<ViewMedicine> {
                     child: Padding(
                       padding: const EdgeInsets.only(
                         bottom: 10,
-                        left: 20,
-                        right: 20,
-                        top: 20,
+                        left: 10,
+                        right: 10,
+                        top: 10,
                       ),
                       child: StreamBuilder<QuerySnapshot>(
                           stream: m,
