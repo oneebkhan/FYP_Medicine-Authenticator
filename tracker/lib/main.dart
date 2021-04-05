@@ -1,7 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:lottie/lottie.dart';
 import 'package:tracker/screens/Dashboard.dart';
+import 'package:flutter_displaymode/flutter_displaymode.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,10 +26,14 @@ class _SplashScreenState extends State<SplashScreen> {
   var width;
   var height;
   double opac;
+  List<DisplayMode> modes = <DisplayMode>[];
+  DisplayMode selected;
+
   @override
   void initState() {
     super.initState();
     opac = 0;
+    fetchModes();
 
     Future.delayed(Duration(milliseconds: 500), () {
       setState(() {
@@ -43,6 +49,32 @@ class _SplashScreenState extends State<SplashScreen> {
         ),
       );
     });
+  }
+
+  //
+  //
+  // set the application to use 60+hz if supported
+  Future<void> fetchModes() async {
+    try {
+      modes = await FlutterDisplayMode.supported;
+      modes.forEach(print);
+      await FlutterDisplayMode.setMode(modes[0]);
+
+      /// On OnePlus 7T:
+      /// #1 1080x2340 @ 90Hz
+      /// #2 1080x2340 @ 60Hz
+    } on PlatformException catch (e) {
+      print(e);
+    }
+    selected =
+        modes.firstWhere((DisplayMode m) => m.selected, orElse: () => null);
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
+  Future<DisplayMode> getCurrentMode() async {
+    return await FlutterDisplayMode.current;
   }
 
   @override

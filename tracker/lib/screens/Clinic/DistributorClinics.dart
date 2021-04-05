@@ -38,6 +38,7 @@ class _DistributorClinicsState extends State<DistributorClinics> {
       setState(() {
         distributorStream = FirebaseFirestore.instance
             .collection('Distributor')
+            .where('clinicsAdded', isNotEqualTo: null)
             .orderBy('name')
             .snapshots();
       });

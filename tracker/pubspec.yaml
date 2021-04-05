@@ -48,6 +48,8 @@ dependencies:
   url_launcher: ^6.0.2
   # headsup loading
   modal_progress_hud: ^0.1.3
+  # Enables 60+hz of phones that support it
+  flutter_displaymode: ^0.1.1
   
   
 

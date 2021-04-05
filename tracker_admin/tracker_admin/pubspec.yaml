@@ -54,6 +54,8 @@ dependencies:
   cloud_firestore: ^1.0.1
   firebase_auth: ^1.0.1
   plugin_platform_interface: ^2.0.0
+  # to get 60+ hz on devices that support it
+  flutter_displaymode: ^0.1.1
   
 
 dev_dependencies:
