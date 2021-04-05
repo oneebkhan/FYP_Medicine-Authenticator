@@ -65,149 +65,153 @@ class _SearchState extends State<Search> {
               color: Colors.grey[700],
             ),
           ),
-          body: SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    height: width / 20,
-                  ),
-                  Text(
-                    'Search',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: width / 14,
+          body: SingleChildScrollView(
+            child: SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: width / 20,
                     ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      ContainerText(
-                        node: node,
-                        hint: 'Medicine Name',
-                        controller: search,
-                        maxLines: 1,
-                        width: width / 1.4,
+                    Text(
+                      'Search',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: width / 14,
                       ),
-                      InkWell(
-                        borderRadius: BorderRadius.circular(15),
-                        child: Ink(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          height: width / 7,
-                          width: width / 7,
-                          child: IconButton(
-                            icon: Icon(Icons.search),
-                            onPressed: () {
-                              FocusScopeNode currentFocus =
-                                  FocusScope.of(context);
-                              if (!currentFocus.hasPrimaryFocus) {
-                                currentFocus.unfocus();
-                              }
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        ContainerText(
+                          node: node,
+                          hint: 'Medicine Name',
+                          controller: search,
+                          maxLines: 1,
+                          width: width / 1.4,
+                        ),
+                        InkWell(
+                          borderRadius: BorderRadius.circular(15),
+                          child: Ink(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            height: width / 7,
+                            width: width / 7,
+                            child: IconButton(
+                              icon: Icon(Icons.search),
+                              onPressed: () {
+                                FocusScopeNode currentFocus =
+                                    FocusScope.of(context);
+                                if (!currentFocus.hasPrimaryFocus) {
+                                  currentFocus.unfocus();
+                                }
 
-                              if (search.text == null || search.text == '') {
-                              } else {
-                                setState(() {
-                                  isLoading = true;
-                                  isSearched = true;
-                                });
-                                queryData(search.text.toUpperCase())
-                                    .whenComplete(() {
+                                if (search.text == null || search.text == '') {
+                                } else {
                                   setState(() {
-                                    isLoading = false;
+                                    isLoading = true;
+                                    isSearched = true;
                                   });
-                                });
-                              }
-                            },
+                                  queryData(search.text.toUpperCase())
+                                      .whenComplete(() {
+                                    setState(() {
+                                      isLoading = false;
+                                    });
+                                  });
+                                }
+                              },
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  //
-                  //
-                  // The container fields
-                  Container(
-                    width: width,
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                        bottom: 10,
-                        left: 20,
-                        right: 20,
-                        top: 20,
-                      ),
-                      child: isSearched == false
-                          ? Padding(
-                              padding: EdgeInsets.only(top: width / 2),
-                              child: Center(
-                                child: Container(
-                                  child: Text(
-                                    'Search for a Medicine\nFor the results to appear here',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: Colors.grey[500],
+                      ],
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    //
+                    //
+                    // The container fields
+                    Container(
+                      width: width,
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                          bottom: 10,
+                          left: 20,
+                          right: 20,
+                          top: 20,
+                        ),
+                        child: isSearched == false
+                            ? Padding(
+                                padding: EdgeInsets.only(top: width / 2),
+                                child: Center(
+                                  child: Container(
+                                    child: Text(
+                                      'Search for a Medicine\nFor the results to appear here',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Colors.grey[500],
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            )
-                          : StreamBuilder<QuerySnapshot>(
-                              stream: snap,
-                              builder: (BuildContext context,
-                                  AsyncSnapshot snapshot) {
-                                if (snapshot.hasData == false) {
-                                  return Center(
-                                    child: CircularProgressIndicator(),
-                                  );
-                                }
-                                return ListView.builder(
-                                    shrinkWrap: true,
-                                    itemCount: snapshot.data.docs
-                                        .length, //snapshotData.docs.length,
-                                    itemBuilder:
-                                        (BuildContext context, int index) {
-                                      QueryDocumentSnapshot item =
-                                          snapshot.data.docs[index];
-                                      if (item['name']
-                                          .toString()
-                                          .toLowerCase()
-                                          .contains(hello.toLowerCase())) {
-                                        return RowInfo(
-                                          imageURL: item['imageURL'][0],
-                                          location: item['dose'],
-                                          width: width,
-                                          title: item['name'],
-                                          func: () {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (_) => MedicineInfo(
-                                                  medBarcode: item['barcode'],
+                              )
+                            : StreamBuilder<QuerySnapshot>(
+                                stream: snap,
+                                builder: (BuildContext context,
+                                    AsyncSnapshot snapshot) {
+                                  if (snapshot.hasData == false) {
+                                    return Center(
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  }
+                                  return ListView.builder(
+                                      shrinkWrap: true,
+                                      itemCount: snapshot.data.docs.length > 6
+                                          ? 6
+                                          : snapshot.data.docs
+                                              .length, //snapshotData.docs.length,
+                                      itemBuilder:
+                                          (BuildContext context, int index) {
+                                        QueryDocumentSnapshot item =
+                                            snapshot.data.docs[index];
+                                        if (item['name']
+                                            .toString()
+                                            .toLowerCase()
+                                            .contains(hello.toLowerCase())) {
+                                          return RowInfo(
+                                            imageURL: item['imageURL'][0],
+                                            location: item['dose'],
+                                            width: width,
+                                            title: item['name'],
+                                            func: () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (_) => MedicineInfo(
+                                                    medBarcode: item['barcode'],
+                                                  ),
                                                 ),
-                                              ),
-                                            );
-                                          },
-                                        );
-                                      } else {
-                                        return Container();
-                                      }
-                                    });
-                              },
-                            ),
+                                              );
+                                            },
+                                          );
+                                        } else {
+                                          return Container();
+                                        }
+                                      });
+                                },
+                              ),
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
