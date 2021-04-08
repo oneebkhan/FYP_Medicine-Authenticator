@@ -123,7 +123,7 @@ class _TipsState extends State<Tips> {
                                     'Tips',
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      fontSize: height / 25,
+                                      fontSize: height / 30,
                                     ),
                                   ),
                                 ),
@@ -175,7 +175,7 @@ class _TipsState extends State<Tips> {
                                     'Sealed Bottle Cap',
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      fontSize: height / 25,
+                                      fontSize: height / 30,
                                     ),
                                   ),
                                 ),
@@ -217,7 +217,7 @@ class _TipsState extends State<Tips> {
                                   ),
                                 ),
                                 SizedBox(
-                                  height: width / 8,
+                                  height: width / 6,
                                 ),
                                 //
                                 //
@@ -227,7 +227,7 @@ class _TipsState extends State<Tips> {
                                     'Consult a Professional',
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      fontSize: height / 25,
+                                      fontSize: height / 30,
                                     ),
                                   ),
                                 ),
@@ -280,7 +280,7 @@ class _TipsState extends State<Tips> {
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      fontSize: height / 25,
+                                      fontSize: height / 30,
                                     ),
                                   ),
                                 ),
