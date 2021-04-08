@@ -38,13 +38,13 @@ class _SplashScreenState extends State<SplashScreen> {
     opac = 0;
     fetchModes();
 
-    Future.delayed(Duration(milliseconds: 500), () {
+    Future.delayed(Duration(milliseconds: 250), () {
       setState(() {
         opac = 1.0;
       });
     });
 
-    Future.delayed(Duration(milliseconds: 1500), () {
+    Future.delayed(Duration(milliseconds: 1000), () {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
