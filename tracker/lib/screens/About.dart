@@ -178,15 +178,9 @@ class _AboutState extends State<About> {
                         ),
                         AvatarRow(
                           size: width,
-                          name: 'Jeff',
-                          bottomName: 'Animations',
-                          imageURL: 'assets/images/junaid.png',
-                        ),
-                        AvatarRow(
-                          size: width,
-                          name: 'Bezos',
-                          bottomName: 'Animations',
-                          imageURL: 'assets/images/junaid.png',
+                          name: 'Lottie',
+                          bottomName: 'Lottie Animations',
+                          imageURL: 'assets/icons/lottie.png',
                         ),
                       ],
                     ),

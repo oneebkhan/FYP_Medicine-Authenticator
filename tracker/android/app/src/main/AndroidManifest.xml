@@ -13,6 +13,7 @@
     <application
         android:name="io.flutter.app.FlutterApplication"
         android:label="tracker"
+        android:resizeableActivity="false"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
