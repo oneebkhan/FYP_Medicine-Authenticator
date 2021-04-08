@@ -41,6 +41,8 @@ class _DashboardState extends State<Dashboard> {
       });
       if (barcode == null) {
         print('nothing return.');
+      } else if (medID == '') {
+        Fluttertoast.showToast(msg: 'No Medicine with this barcode');
       } else {
         Navigator.push(
           context,
@@ -73,6 +75,8 @@ class _DashboardState extends State<Dashboard> {
       });
       if (barcode == null) {
         print('nothing return.');
+      } else if (medID == '') {
+        Fluttertoast.showToast(msg: 'No Medicine with this barcode');
       } else {
         Navigator.push(
           context,

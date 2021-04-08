@@ -25,12 +25,12 @@ class _TipsState extends State<Tips> {
     opac2 = 0;
     index = 0;
 
-    Future.delayed(Duration(milliseconds: 500), () {
+    Future.delayed(Duration(milliseconds: 250), () {
       setState(() {
         opac = 1.0;
       });
     });
-    Future.delayed(Duration(milliseconds: 1000), () {
+    Future.delayed(Duration(milliseconds: 750), () {
       setState(() {
         opac2 = 1.0;
       });

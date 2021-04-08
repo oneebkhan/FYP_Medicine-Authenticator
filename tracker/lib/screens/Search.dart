@@ -183,9 +183,15 @@ class _SearchState extends State<Search> {
                                         QueryDocumentSnapshot item =
                                             snapshot.data.docs[index];
                                         if (item['name']
-                                            .toString()
-                                            .toLowerCase()
-                                            .contains(hello.toLowerCase())) {
+                                                .toString()
+                                                .toLowerCase()
+                                                .contains(
+                                                    hello.toLowerCase()) ||
+                                            item['barcode']
+                                                .toString()
+                                                .toLowerCase()
+                                                .contains(
+                                                    hello.toLowerCase())) {
                                           return RowInfo(
                                             imageURL: item['imageURL'][0],
                                             location: item['dose'],
