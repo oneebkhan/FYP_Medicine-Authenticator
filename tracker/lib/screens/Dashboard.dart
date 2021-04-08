@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:tracker/screens/About.dart';
@@ -17,11 +18,27 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
-  var width;
-  var height;
-  var density;
-  var safePadding;
+  double width;
+  double height;
+  double safePadding;
   var medID;
+  bool con;
+
+  //
+  //
+  //Check internet connection
+  checkInternet() async {
+    var connectivityResult = await Connectivity().checkConnectivity();
+    if (connectivityResult == ConnectivityResult.none) {
+      Fluttertoast.showToast(msg: 'Not Connected to the Internet!');
+      setState(() {
+        con = true;
+      });
+    } else
+      setState(() {
+        con = false;
+      });
+  }
 
 //
 //
@@ -96,6 +113,7 @@ class _DashboardState extends State<Dashboard> {
   @override
   void initState() {
     super.initState();
+    checkInternet();
     medID = '';
   }
 
@@ -103,7 +121,7 @@ class _DashboardState extends State<Dashboard> {
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
-    density = width * height;
+
     safePadding = MediaQuery.of(context).padding.top;
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 246, 246, 248),
@@ -186,7 +204,13 @@ class _DashboardState extends State<Dashboard> {
                                 padding: const EdgeInsets.only(bottom: 15),
                                 child: GestureDetector(
                                   onTap: () {
-                                    _scan();
+                                    if (con == false) {
+                                      _scan();
+                                    } else {
+                                      Fluttertoast.showToast(
+                                          msg:
+                                              'Turn on internet for this feature');
+                                    }
                                   },
                                   child: Container(
                                     child: Padding(
@@ -271,7 +295,13 @@ class _DashboardState extends State<Dashboard> {
                               // The fourth SCAN FROM GALLERY BARCODE button
                               GestureDetector(
                                 onTap: () {
-                                  _scanPhoto();
+                                  if (con == false) {
+                                    _scanPhoto();
+                                  } else {
+                                    Fluttertoast.showToast(
+                                        msg:
+                                            'Turn on internet for this feature');
+                                  }
                                 },
                                 child: Container(
                                   child: Padding(

@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:tracker/Widgets/InfoContainer.dart';
 import 'package:tracker/screens/Pharmacy/ViewPharmacy.dart';
 import 'dart:math' as math;
@@ -10,14 +12,31 @@ class DistributorPharmacies extends StatefulWidget {
 }
 
 class _DistributorPharmaciesState extends State<DistributorPharmacies> {
-  var width;
-  var height;
-  var safePadding;
+  double width;
+  double height;
+  double safePadding;
   double opac;
   // Variable that stores the distributors
   var distributorStream;
   // variable to store urls in the
   List<String> imageURL;
+  bool con;
+
+  //
+  //
+  //Check internet connection
+  checkInternet() async {
+    var connectivityResult = await Connectivity().checkConnectivity();
+    if (connectivityResult == ConnectivityResult.none) {
+      Fluttertoast.showToast(msg: 'Not Connected to the Internet!');
+      setState(() {
+        con = true;
+      });
+    } else
+      setState(() {
+        con = false;
+      });
+  }
 
   //
   //
@@ -52,6 +71,7 @@ class _DistributorPharmaciesState extends State<DistributorPharmacies> {
     super.initState();
     opac = 0;
     imageURL = [];
+    checkInternet();
     getDistributors();
 
     Future.delayed(Duration(milliseconds: 400), () {
@@ -107,50 +127,68 @@ class _DistributorPharmaciesState extends State<DistributorPharmacies> {
                 AnimatedOpacity(
                   opacity: opac,
                   duration: Duration(milliseconds: 500),
-                  child: StreamBuilder<QuerySnapshot>(
-                      stream: distributorStream,
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData == false) {
-                          return Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        }
-                        return ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: snapshot.data.docs.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            QueryDocumentSnapshot item =
-                                snapshot.data.docs[index];
-                            return InfoContainer(
-                              //
-                              //
-                              // function to make the colors change in each container
-                              color: Color(
-                                      (math.Random().nextDouble() * 0xFFFFFF)
+                  child: con == true
+                      ? Center(
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.only(
+                                    top: height / 3, bottom: 20),
+                                child: Text('No Internet Connection...'),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  checkInternet();
+                                },
+                                child: Text('Reload'),
+                              ),
+                            ],
+                          ),
+                        )
+                      : StreamBuilder<QuerySnapshot>(
+                          stream: distributorStream,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData == false) {
+                              return Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            }
+                            return ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: snapshot.data.docs.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                QueryDocumentSnapshot item =
+                                    snapshot.data.docs[index];
+                                return InfoContainer(
+                                  //
+                                  //
+                                  // function to make the colors change in each container
+                                  color: Color((math.Random().nextDouble() *
+                                              0xFFFFFF)
                                           .toInt())
-                                  .withOpacity(1.0),
-                              description:
-                                  '${item['pharmacyAdded'].length} Pharmacies',
-                              func: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (_) => ViewPharmacy(
-                                      pageName: item['name'],
-                                      pharmacies: item['pharmacyAdded'],
-                                    ),
-                                  ),
+                                      .withOpacity(1.0),
+                                  description:
+                                      '${item['pharmacyAdded'].length} Pharmacies',
+                                  func: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (_) => ViewPharmacy(
+                                          pageName: item['name'],
+                                          pharmacies: item['pharmacyAdded'],
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  imageUrls: item['pharmacyImages'],
+                                  title: item['name'],
+                                  width: width,
+                                  height: height,
+                                  countOfImages: item['pharmacyImages'].length,
                                 );
                               },
-                              imageUrls: item['pharmacyImages'],
-                              title: item['name'],
-                              width: width,
-                              height: height,
-                              countOfImages: item['pharmacyImages'].length,
                             );
-                          },
-                        );
-                      }),
+                          }),
                 ),
               ],
             ),

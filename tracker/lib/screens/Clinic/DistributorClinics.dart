@@ -121,72 +121,72 @@ class _DistributorClinicsState extends State<DistributorClinics> {
                 //
                 //
                 // The container fields
-                con == true
-                    ? Center(
-                        child: Column(
-                          children: [
-                            Padding(
-                              padding:
-                                  EdgeInsets.only(top: height / 3, bottom: 20),
-                              child: Text('No Internet Connection...'),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                checkInternet();
-                              },
-                              child: Text('Reload'),
-                            ),
-                          ],
-                        ),
-                      )
-                    : AnimatedOpacity(
-                        opacity: opac,
-                        duration: Duration(milliseconds: 500),
-                        child: StreamBuilder<QuerySnapshot>(
-                            stream: distributorStream,
-                            builder: (context, snapshot) {
-                              if (snapshot.hasData == false) {
-                                return Center(
-                                  child: CircularProgressIndicator(),
-                                );
-                              }
-                              return ListView.builder(
-                                shrinkWrap: true,
-                                itemCount: snapshot.data.docs.length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  QueryDocumentSnapshot item =
-                                      snapshot.data.docs[index];
-                                  return InfoContainer(
-                                    //
-                                    //
-                                    // function to make the colors change in each container
-                                    color: Color((math.Random().nextDouble() *
-                                                0xFFFFFF)
-                                            .toInt())
-                                        .withOpacity(1.0),
-                                    description:
-                                        '${item['clinicsAdded'].length} Clinics',
-                                    func: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (_) => ViewClinic(
-                                            pageName: item['name'],
-                                            clinics: item['clinicsAdded'],
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                    imageUrls: item['clinicImages'],
-                                    title: item['name'],
-                                    width: width,
-                                    height: height,
-                                    countOfImages: item['clinicImages'].length,
-                                  );
+                AnimatedOpacity(
+                  opacity: opac,
+                  duration: Duration(milliseconds: 500),
+                  child: con == true
+                      ? Center(
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.only(
+                                    top: height / 3, bottom: 20),
+                                child: Text('No Internet Connection...'),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  checkInternet();
                                 },
+                                child: Text('Reload'),
+                              ),
+                            ],
+                          ),
+                        )
+                      : StreamBuilder<QuerySnapshot>(
+                          stream: distributorStream,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData == false) {
+                              return Center(
+                                child: CircularProgressIndicator(),
                               );
-                            }),
-                      ),
+                            }
+                            return ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: snapshot.data.docs.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                QueryDocumentSnapshot item =
+                                    snapshot.data.docs[index];
+                                return InfoContainer(
+                                  //
+                                  //
+                                  // function to make the colors change in each container
+                                  color: Color((math.Random().nextDouble() *
+                                              0xFFFFFF)
+                                          .toInt())
+                                      .withOpacity(1.0),
+                                  description:
+                                      '${item['clinicsAdded'].length} Clinics',
+                                  func: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (_) => ViewClinic(
+                                          pageName: item['name'],
+                                          clinics: item['clinicsAdded'],
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  imageUrls: item['clinicImages'],
+                                  title: item['name'],
+                                  width: width,
+                                  height: height,
+                                  countOfImages: item['clinicImages'].length,
+                                );
+                              },
+                            );
+                          }),
+                ),
               ],
             ),
           ),
