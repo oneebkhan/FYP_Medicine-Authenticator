@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -39,6 +40,21 @@ class _Pharmacy_Clinics_InfoState extends State<Pharmacy_Clinics_Info> {
   var page2 = PageController();
   var info;
   List<Widget> numberOfImagesIndex;
+  bool con;
+
+  //
+  //
+  //Check internet connection
+  checkInternet() async {
+    var connectivityResult = await Connectivity().checkConnectivity();
+    if (connectivityResult == ConnectivityResult.none) {
+      Fluttertoast.showToast(msg: 'Not Connected to the Internet!');
+      Navigator.pop(
+        context,
+      );
+    } else
+      return null;
+  }
 
   //
   //
@@ -93,6 +109,7 @@ class _Pharmacy_Clinics_InfoState extends State<Pharmacy_Clinics_Info> {
   @override
   void initState() {
     super.initState();
+
     opac = 0;
     opac2 = 0;
     index = 0;
@@ -104,6 +121,7 @@ class _Pharmacy_Clinics_InfoState extends State<Pharmacy_Clinics_Info> {
       setState(() {
         opac2 = 1.0;
       });
+      checkInternet();
     });
   }
 

@@ -13,6 +13,7 @@ class _AboutState extends State<About> {
   var height;
   var safePadding;
   var anim;
+  var subscription;
 
   double opac;
   @override

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
@@ -48,6 +49,18 @@ class _ContactDevsState extends State<ContactDevs> {
 
   //
   //
+  //Check internet connection
+  checkInternet() async {
+    var connectivityResult = await Connectivity().checkConnectivity();
+    if (connectivityResult == ConnectivityResult.none) {
+      Fluttertoast.showToast(msg: 'Not Connected to the Internet!');
+      return connectivityResult;
+    } else
+      return null;
+  }
+
+  //
+  //
   // pressing the submit button will submit all the fields and update firestore
   Future<void> _onPressed() async {
     try {
@@ -91,6 +104,7 @@ class _ContactDevsState extends State<ContactDevs> {
   @override
   void initState() {
     super.initState();
+    checkInternet();
     _getLengthOfContactDevs();
   }
 
@@ -214,7 +228,8 @@ class _ContactDevsState extends State<ContactDevs> {
                     child: FlatButton(
                       padding: EdgeInsets.all(0),
                       onPressed: () {
-                        if (validateEmail(emailOfUser.text) == null) {
+                        if (validateEmail(emailOfUser.text) == null &&
+                            checkInternet() == null) {
                           _onPressed();
                           setState(() {
                             _isLoading = true;

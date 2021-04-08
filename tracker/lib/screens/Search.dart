@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:tracker/Widgets/RowInfo.dart';
 import 'package:tracker/screens/MedicineInfo.dart';
@@ -16,11 +18,32 @@ class _SearchState extends State<Search> {
   double opac;
   TextEditingController search = TextEditingController();
   var snapshotData;
+  double height;
   bool isSearched;
   bool isLoading;
   var snap;
   String hello = '';
+  bool con;
 
+  //
+  //
+  //Check internet connection
+  checkInternet() async {
+    var connectivityResult = await Connectivity().checkConnectivity();
+    if (connectivityResult == ConnectivityResult.none) {
+      Fluttertoast.showToast(msg: 'Not Connected to the Internet!');
+      setState(() {
+        con = true;
+      });
+    } else
+      setState(() {
+        con = false;
+      });
+  }
+
+  //
+  //
+  // get medicine data
   Future queryData(String queryString) async {
     setState(() {
       snap = FirebaseFirestore.instance.collection('Medicine').snapshots();
@@ -34,6 +57,7 @@ class _SearchState extends State<Search> {
     isSearched = false;
     isLoading = false;
     snapshotData = null;
+    checkInternet();
     search.addListener(() {
       setState(() {
         hello = search.text;
@@ -44,6 +68,7 @@ class _SearchState extends State<Search> {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
+    height = MediaQuery.of(context).size.height;
     final node = FocusScope.of(context);
 
     return ModalProgressHUD(
@@ -86,53 +111,72 @@ class _SearchState extends State<Search> {
                     SizedBox(
                       height: 20,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        ContainerText(
-                          node: node,
-                          hint: 'Medicine Name',
-                          controller: search,
-                          maxLines: 1,
-                          width: width / 1.4,
-                        ),
-                        InkWell(
-                          borderRadius: BorderRadius.circular(15),
-                          child: Ink(
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(15),
+                    con == true
+                        ? Center(
+                            child: Column(
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                      top: height / 3, bottom: 20),
+                                  child: Text('No Internet Connection...'),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    checkInternet();
+                                  },
+                                  child: Text('Reload'),
+                                ),
+                              ],
                             ),
-                            height: width / 7,
-                            width: width / 7,
-                            child: IconButton(
-                              icon: Icon(Icons.search),
-                              onPressed: () {
-                                FocusScopeNode currentFocus =
-                                    FocusScope.of(context);
-                                if (!currentFocus.hasPrimaryFocus) {
-                                  currentFocus.unfocus();
-                                }
-
-                                if (search.text == null || search.text == '') {
-                                } else {
-                                  setState(() {
-                                    isLoading = true;
-                                    isSearched = true;
-                                  });
-                                  queryData(search.text.toUpperCase())
-                                      .whenComplete(() {
-                                    setState(() {
-                                      isLoading = false;
-                                    });
-                                  });
-                                }
-                              },
-                            ),
+                          )
+                        : Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              ContainerText(
+                                node: node,
+                                hint: 'Medicine Name',
+                                controller: search,
+                                maxLines: 1,
+                                width: width / 1.4,
+                              ),
+                              InkWell(
+                                borderRadius: BorderRadius.circular(15),
+                                child: Ink(
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                  height: width / 7,
+                                  width: width / 7,
+                                  child: IconButton(
+                                    icon: Icon(Icons.search),
+                                    onPressed: () {
+                                      checkInternet();
+                                      FocusScopeNode currentFocus =
+                                          FocusScope.of(context);
+                                      if (!currentFocus.hasPrimaryFocus) {
+                                        currentFocus.unfocus();
+                                      }
+                                      if (search.text == null ||
+                                          search.text == '') {
+                                      } else {
+                                        setState(() {
+                                          isLoading = true;
+                                          isSearched = true;
+                                        });
+                                        queryData(search.text.toUpperCase())
+                                            .whenComplete(() {
+                                          setState(() {
+                                            isLoading = false;
+                                          });
+                                        });
+                                      }
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                      ],
-                    ),
                     SizedBox(
                       height: 20,
                     ),
