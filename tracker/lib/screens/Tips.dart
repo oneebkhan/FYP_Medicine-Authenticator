@@ -109,6 +109,7 @@ class _TipsState extends State<Tips> {
                                   height: height / 3.2,
                                   child: Lottie.asset(
                                     'assets/lottie/phone.json',
+                                    frameRate: FrameRate(144),
                                     repeat: true,
                                   ),
                                 ),
@@ -161,6 +162,7 @@ class _TipsState extends State<Tips> {
                                   height: height / 2.8,
                                   child: Lottie.asset(
                                     'assets/lottie/medicine_bottle.json',
+                                    frameRate: FrameRate(144),
                                     repeat: true,
                                   ),
                                 ),
@@ -213,6 +215,7 @@ class _TipsState extends State<Tips> {
                                   height: height / 3.2,
                                   child: Lottie.asset(
                                     'assets/lottie/proper_doctor.json',
+                                    frameRate: FrameRate(144),
                                     repeat: true,
                                   ),
                                 ),
@@ -265,6 +268,7 @@ class _TipsState extends State<Tips> {
                                   height: height / 2.8,
                                   child: Lottie.asset(
                                     'assets/lottie/phone_use.json',
+                                    frameRate: FrameRate(144),
                                     repeat: true,
                                   ),
                                 ),

@@ -78,6 +78,7 @@ class _AboutState extends State<About> {
                         height: width / 3,
                         child: Lottie.asset(
                           'assets/lottie/medicine.json',
+                          frameRate: FrameRate(144),
                           animate: anim,
                           repeat: false,
                         ),

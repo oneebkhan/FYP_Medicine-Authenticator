@@ -99,6 +99,7 @@ class _SplashScreenState extends State<SplashScreen> {
               height: height / 3,
               child: Lottie.asset(
                 'assets/lottie/medicine.json',
+                frameRate: FrameRate(144),
               ),
             ),
             SizedBox(
