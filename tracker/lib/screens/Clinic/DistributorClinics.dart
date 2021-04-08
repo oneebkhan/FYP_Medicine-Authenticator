@@ -12,9 +12,8 @@ class DistributorClinics extends StatefulWidget {
 }
 
 class _DistributorClinicsState extends State<DistributorClinics> {
-  var width;
-  var height;
-  var safePadding;
+  double width;
+  double height;
   double opac;
   // Variable that stores the distributors
   var distributorStream;
@@ -86,7 +85,6 @@ class _DistributorClinicsState extends State<DistributorClinics> {
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
-    safePadding = MediaQuery.of(context).padding.top;
 
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 246, 246, 248),
