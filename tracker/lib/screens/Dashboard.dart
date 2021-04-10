@@ -40,13 +40,23 @@ class _DashboardState extends State<Dashboard> {
       });
   }
 
+  //
+  //
+  // emties the med ID after the medicine info page is opened
+  nullTheMed() {
+    setState(() {
+      medID = '';
+    });
+  }
+
 //
 //
 // the function to scan the barcode
   Future _scan() async {
     try {
       await Permission.camera.request();
-      String barcode = await scanner.scan();
+      var barcode = await scanner.scan();
+      nullTheMed();
       var result = await FirebaseFirestore.instance
           .collection("Medicine")
           .where("barcode", isEqualTo: barcode)
@@ -79,8 +89,8 @@ class _DashboardState extends State<Dashboard> {
   Future _scanPhoto() async {
     try {
       await Permission.storage.request();
-      String barcode = await scanner.scanPhoto();
-
+      var barcode = await scanner.scanPhoto();
+      nullTheMed();
       var result = await FirebaseFirestore.instance
           .collection("Medicine")
           .where("barcode", isEqualTo: barcode)
@@ -204,6 +214,7 @@ class _DashboardState extends State<Dashboard> {
                                 padding: const EdgeInsets.only(bottom: 15),
                                 child: GestureDetector(
                                   onTap: () {
+                                    checkInternet();
                                     if (con == false) {
                                       _scan();
                                     } else {
@@ -295,6 +306,7 @@ class _DashboardState extends State<Dashboard> {
                               // The fourth SCAN FROM GALLERY BARCODE button
                               GestureDetector(
                                 onTap: () {
+                                  checkInternet();
                                   if (con == false) {
                                     _scanPhoto();
                                   } else {
