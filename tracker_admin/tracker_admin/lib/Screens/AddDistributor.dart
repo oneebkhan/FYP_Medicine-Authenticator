@@ -70,6 +70,10 @@ class _AddDistributorState extends State<AddDistributor> {
         "addedByAdmin": currentDistributorEmail,
         "phoneNumber": phoneNumber.text,
         "dateAdded": Timestamp.now(),
+        "clinicImages": [],
+        "clinicsAdded": [],
+        "pharmacyAdded": [],
+        "pharmacyImages": [],
       }).then((_) {
         Fluttertoast.showToast(msg: 'Distributor created Succesfully!');
         setState(() {
