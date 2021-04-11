@@ -44,9 +44,12 @@ class BarChartWeeklyState extends State<BarChartWeekly> {
           height: 10,
         ),
         Expanded(
-          child: BarChart(
-            isPlaying ? randomData() : mainBarData(),
-            swapAnimationDuration: animDuration,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: BarChart(
+              isPlaying ? randomData() : mainBarData(),
+              swapAnimationDuration: animDuration,
+            ),
           ),
         ),
       ],
@@ -58,7 +61,7 @@ class BarChartWeeklyState extends State<BarChartWeekly> {
     double y, {
     bool isTouched = false,
     Color barColor = const Color.fromARGB(255, 109, 141, 225),
-    double width = 5,
+    double width = 7,
     List<int> showTooltips = const [],
   }) {
     return BarChartGroupData(
@@ -79,7 +82,7 @@ class BarChartWeeklyState extends State<BarChartWeekly> {
     );
   }
 
-  List<BarChartGroupData> showingGroups() => List.generate(7, (i) {
+  List<BarChartGroupData> showingGroups() => List.generate(4, (i) {
         switch (i) {
           case 0:
             return makeGroupData(0, 5, isTouched: i == touchedIndex);
@@ -89,12 +92,6 @@ class BarChartWeeklyState extends State<BarChartWeekly> {
             return makeGroupData(2, 5, isTouched: i == touchedIndex);
           case 3:
             return makeGroupData(3, 7.5, isTouched: i == touchedIndex);
-          case 4:
-            return makeGroupData(4, 9, isTouched: i == touchedIndex);
-          case 5:
-            return makeGroupData(5, 11.5, isTouched: i == touchedIndex);
-          case 6:
-            return makeGroupData(6, 6.5, isTouched: i == touchedIndex);
           default:
             return null;
         }
@@ -109,25 +106,16 @@ class BarChartWeeklyState extends State<BarChartWeekly> {
               String weekDay;
               switch (group.x.toInt()) {
                 case 0:
-                  weekDay = 'Monday';
+                  weekDay = 'Week 1';
                   break;
                 case 1:
-                  weekDay = 'Tuesday';
+                  weekDay = 'Week 2';
                   break;
                 case 2:
-                  weekDay = 'Wednesday';
+                  weekDay = 'Week 3';
                   break;
                 case 3:
-                  weekDay = 'Thursday';
-                  break;
-                case 4:
-                  weekDay = 'Friday';
-                  break;
-                case 5:
-                  weekDay = 'Saturday';
-                  break;
-                case 6:
-                  weekDay = 'Sunday';
+                  weekDay = 'Week 4';
                   break;
               }
               return BarTooltipItem(weekDay + '\n' + (rod.y - 1).toString(),
@@ -155,19 +143,13 @@ class BarChartWeeklyState extends State<BarChartWeekly> {
           getTitles: (double value) {
             switch (value.toInt()) {
               case 0:
-                return 'M';
+                return '1';
               case 1:
-                return 'T';
+                return '2';
               case 2:
-                return 'W';
+                return '3';
               case 3:
-                return 'T';
-              case 4:
-                return 'F';
-              case 5:
-                return 'S';
-              case 6:
-                return 'S';
+                return '4';
               default:
                 return '';
             }

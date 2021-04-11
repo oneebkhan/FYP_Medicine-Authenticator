@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
-import 'package:tracker_admin/Widgets/Admin/BarChartMonthly.dart';
 import 'package:tracker_admin/Widgets/Admin/BarChartWeekly.dart';
+import 'package:tracker_admin/Widgets/Admin/BarChartDaily.dart';
 import 'package:tracker_admin/Widgets/RowInfo.dart';
 import 'package:tracker_admin/screens/AddDistributor.dart';
 import 'package:tracker_admin/screens/Clinic/DistributorClinics.dart';
@@ -993,7 +993,7 @@ class _AdminStatisticsState extends State<AdminStatistics> {
                                   bottom: 10,
                                   top: 15,
                                 ),
-                                child: BarChartMonthly()),
+                                child: BarChartWeekly()),
                           ),
                           SizedBox(
                             width: 20,
@@ -1023,50 +1023,13 @@ class _AdminStatisticsState extends State<AdminStatistics> {
                               borderRadius: BorderRadius.circular(15),
                             ),
                             child: Padding(
-                              padding: const EdgeInsets.only(
-                                left: 15,
-                                right: 15,
-                                bottom: 10,
-                                top: 15,
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Daily',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: widget.width / 23,
-                                  ),
-                                  Center(
-                                    child: Container(
-                                      height: widget.width / 4,
-                                      width: widget.width / 4,
-                                      decoration: BoxDecoration(
-                                        color:
-                                            Color.fromARGB(255, 189, 210, 255),
-                                        shape: BoxShape.circle,
-                                      ),
-                                      child: Center(
-                                        child: Text(
-                                          '10',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 40,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
+                                padding: const EdgeInsets.only(
+                                  left: 15,
+                                  right: 15,
+                                  bottom: 10,
+                                  top: 15,
+                                ),
+                                child: BarChartDaily()),
                           ),
                           SizedBox(
                             width: 20,
