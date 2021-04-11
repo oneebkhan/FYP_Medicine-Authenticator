@@ -27,8 +27,13 @@ class _Dashboard_AdminState extends State<Dashboard_Admin> {
   Color col = Color.fromARGB(255, 149, 191, 255);
   Color floatingButtonColor;
   int selectedIndex;
-  var page = PageController(initialPage: 0);
   int count;
+  int medCount;
+  int pharmCount;
+  int clinicCount;
+  int distributorCount;
+  double opac;
+  double opac2;
 
   //
   //
@@ -49,13 +54,95 @@ class _Dashboard_AdminState extends State<Dashboard_Admin> {
     }
   }
 
+  //
+  //
+  // FUNCTION TO GET THE DISTRIBUTOR COUNT
+  getDistributors() async {
+    try {
+      FirebaseFirestore.instance
+          .collection('Distributor')
+          .snapshots()
+          .listen((event) {
+        setState(() {
+          distributorCount = event.docs.length;
+        });
+      });
+    } on Exception catch (e) {
+      print(e);
+      Fluttertoast.showToast(msg: '$e');
+    }
+  }
+
+  //
+  //
+  // FUNCTION TO GET THE PHARMACY COUNT
+  getPharmacy() async {
+    try {
+      FirebaseFirestore.instance
+          .collection('Pharmacy')
+          .snapshots()
+          .listen((event) {
+        setState(() {
+          pharmCount = event.docs.length;
+        });
+      });
+    } on Exception catch (e) {
+      print(e);
+      Fluttertoast.showToast(msg: '$e');
+    }
+  }
+
+  //
+  //
+  // FUNCTION TO GET THE CLINIC COUNT
+  getClinic() async {
+    try {
+      FirebaseFirestore.instance
+          .collection('Clinic')
+          .snapshots()
+          .listen((event) {
+        setState(() {
+          clinicCount = event.docs.length;
+        });
+      });
+    } on Exception catch (e) {
+      print(e);
+      Fluttertoast.showToast(msg: '$e');
+    }
+  }
+
+  //
+  //
+  // FUNCTION TO GET THE MEDICINE COUNT
+  getMedicine() async {
+    try {
+      FirebaseFirestore.instance
+          .collection('Medicine')
+          .snapshots()
+          .listen((event) {
+        setState(() {
+          medCount = event.docs.length;
+        });
+      });
+    } on Exception catch (e) {
+      print(e);
+      Fluttertoast.showToast(msg: '$e');
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     index = 0;
     selectedIndex = 0;
+    opac = 1;
+    opac2 = 0;
     floatingButtonColor = Color.fromARGB(255, 130, 150, 250);
     getDevRequests();
+    getClinic();
+    getDistributors();
+    getMedicine();
+    getPharmacy();
   }
 
   void dispose() {
@@ -126,20 +213,14 @@ class _Dashboard_AdminState extends State<Dashboard_Admin> {
                 onTabChange: (index) {
                   setState(() {
                     selectedIndex = index;
+                    if (index == 0) {
+                      opac = 1;
+                      opac2 = 0;
+                    } else {
+                      opac = 0;
+                      opac2 = 1;
+                    }
                   });
-                  if (index == 0) {
-                    page.animateToPage(
-                      0,
-                      duration: Duration(milliseconds: 500),
-                      curve: Curves.ease,
-                    );
-                  } else {
-                    page.animateToPage(
-                      1,
-                      duration: Duration(milliseconds: 500),
-                      curve: Curves.ease,
-                    );
-                  }
                 },
               ),
             ),
@@ -149,28 +230,38 @@ class _Dashboard_AdminState extends State<Dashboard_Admin> {
         body: Container(
           height: height,
           width: width,
-          child: PageView(
-            physics: NeverScrollableScrollPhysics(),
-            scrollDirection: Axis.horizontal,
-            controller: page,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: SingleChildScrollView(
-                  child: AdminDashboard(
-                    width: width,
-                    height: height,
-                    count: count,
+          child: IndexedStack(
+            index: selectedIndex,
+            children: <Widget>[
+              AnimatedOpacity(
+                opacity: opac,
+                duration: Duration(milliseconds: 500),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: SingleChildScrollView(
+                    child: AdminDashboard(
+                      width: width,
+                      height: height,
+                      count: count,
+                      clinicCount: clinicCount,
+                      distributorCount: distributorCount,
+                      medCount: medCount,
+                      pharmCount: pharmCount,
+                    ),
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: SingleChildScrollView(
-                  child: AdminStatistics(
-                    width: width,
-                    height: height,
-                    count: count,
+              AnimatedOpacity(
+                opacity: opac2,
+                duration: Duration(milliseconds: 500),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: SingleChildScrollView(
+                    child: AdminStatistics(
+                      width: width,
+                      height: height,
+                      count: count,
+                    ),
                   ),
                 ),
               ),
@@ -190,10 +281,21 @@ class AdminDashboard extends StatefulWidget {
   final double width;
   final double height;
   final int count;
+  final int distributorCount;
+  final int pharmCount;
+  final int clinicCount;
+  final int medCount;
 
-  AdminDashboard(
-      {Key key, @required this.width, @required this.height, this.count})
-      : super(key: key);
+  AdminDashboard({
+    Key key,
+    @required this.width,
+    @required this.height,
+    this.count,
+    this.distributorCount,
+    this.pharmCount,
+    this.clinicCount,
+    this.medCount,
+  }) : super(key: key);
 
   @override
   _AdminDashboardState createState() => _AdminDashboardState();
@@ -310,6 +412,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                     SizedBox(
                       height: 5,
                     ),
+
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -330,40 +433,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                           ),
                           child: Center(
                             child: Text(
-                              '5',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: widget.width / 30,
-                              ),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Total Distributors:',
-                          style: TextStyle(
-                            fontSize: widget.width / 30,
-                            color: Colors.grey[700],
-                            fontWeight: FontWeight.w300,
-                          ),
-                        ),
-                        Container(
-                          width: widget.width / 15,
-                          height: widget.width / 20,
-                          decoration: BoxDecoration(
-                            color: col,
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: Center(
-                            child: Text(
-                              '5',
+                              widget.distributorCount.toString(),
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: widget.width / 30,
@@ -510,7 +580,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                           ),
                           child: Center(
                             child: Text(
-                              '5',
+                              widget.pharmCount.toString(),
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: widget.width / 30,
@@ -543,7 +613,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                           ),
                           child: Center(
                             child: Text(
-                              '5',
+                              widget.clinicCount.toString(),
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: widget.width / 30,
@@ -662,39 +732,6 @@ class _AdminDashboardState extends State<AdminDashboard> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Authenticated Medicine:',
-                          style: TextStyle(
-                            fontSize: widget.width / 30,
-                            color: Colors.grey[700],
-                            fontWeight: FontWeight.w300,
-                          ),
-                        ),
-                        Container(
-                          width: widget.width / 15,
-                          height: widget.width / 20,
-                          decoration: BoxDecoration(
-                            color: col,
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: Center(
-                            child: Text(
-                              '5',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: widget.width / 30,
-                              ),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
                           'Total Medicine:',
                           style: TextStyle(
                             fontSize: widget.width / 30,
@@ -711,7 +748,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                           ),
                           child: Center(
                             child: Text(
-                              '5',
+                              widget.medCount.toString(),
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: widget.width / 30,

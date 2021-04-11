@@ -38,14 +38,14 @@ class _SplashState extends State<Splash> {
     anim = false;
     fetchModes();
 
-    Future.delayed(Duration(milliseconds: 500), () {
+    Future.delayed(Duration(milliseconds: 250), () {
       setState(() {
         opac = 1.0;
         anim = true;
       });
     });
 
-    Future.delayed(Duration(milliseconds: 1500), () {
+    Future.delayed(Duration(milliseconds: 1000), () {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
@@ -100,12 +100,14 @@ class _SplashState extends State<Splash> {
               height: height / 3.5,
               child: Lottie.asset(
                 'assets/lottie/medicine.json',
+                frameRate: FrameRate(144),
               ),
             ),
             SizedBox(
               height: height / 9,
               child: Lottie.asset(
                 'assets/lottie/admin.json',
+                frameRate: FrameRate(144),
                 animate: anim,
               ),
             ),
