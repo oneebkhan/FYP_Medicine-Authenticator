@@ -19,64 +19,69 @@ class RowInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        func();
-      },
-      child: Container(
-        width: width,
-        child: Padding(
-          padding: const EdgeInsets.only(
-            bottom: 15,
-          ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              CachedNetworkImage(
-                imageUrl:
-                    // the 4th image URL
-                    imageURL,
-                imageBuilder: (context, imageProvider) => Container(
-                  width: width / 8,
-                  height: width / 8,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    image: DecorationImage(
-                        image: imageProvider, fit: BoxFit.cover),
-                  ),
-                ),
-                placeholder: (context, url) => CircularProgressIndicator(),
-                errorWidget: (context, url, error) => Icon(Icons.error),
-              ),
-              SizedBox(
-                width: 15,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    title,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: width / 19,
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(10),
+        onTap: () {
+          func();
+        },
+        child: Ink(
+          width: width,
+          color: Colors.transparent,
+          child: Padding(
+            padding: const EdgeInsets.all(8),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                CachedNetworkImage(
+                  imageUrl:
+                      // the 4th image URL
+                      imageURL,
+                  imageBuilder: (context, imageProvider) => Container(
+                    width: width / 8,
+                    height: width / 8,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: DecorationImage(
+                          image: imageProvider, fit: BoxFit.cover),
                     ),
                   ),
-                  location == null
-                      ? Container()
-                      : Text(
-                          location.length > 31
-                              ? location.substring(0, 30) + '...'
-                              : location,
-                          style: TextStyle(
-                            fontSize: width / 28,
-                            fontWeight: FontWeight.w300,
+                  placeholder: (context, url) => CircularProgressIndicator(),
+                  errorWidget: (context, url, error) => Icon(Icons.error),
+                ),
+                SizedBox(
+                  width: 15,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      title.length > 24
+                          ? title.substring(0, 23) + '...'
+                          : title,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: width / 19,
+                      ),
+                    ),
+                    location == null
+                        ? Container()
+                        : Text(
+                            location.length > 31
+                                ? location.substring(0, 30) + '...'
+                                : location,
+                            style: TextStyle(
+                              fontSize: width / 28,
+                              fontWeight: FontWeight.w300,
+                            ),
                           ),
-                        ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

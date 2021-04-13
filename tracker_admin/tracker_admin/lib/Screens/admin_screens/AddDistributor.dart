@@ -64,7 +64,7 @@ class _AddDistributorState extends State<AddDistributor> {
       var firestore = await FirebaseFirestore.instance;
       firestore.collection("Distributor").doc(email.text).set({
         "name": name.text,
-        "userEmail": email.text,
+        "email": email.text,
         "companyName": companyName.text,
         "location": location.text,
         "addedByAdmin": currentDistributorEmail,
