@@ -182,7 +182,7 @@ class _ViewDistributorsState extends State<ViewDistributors> {
                               return RowInfo(
                                 imageURL: item['image'] == ''
                                     ? 'https://www.spicefactors.com/wp-content/uploads/default-user-image.png'
-                                    : item['image'][0],
+                                    : item['image'],
                                 location: item['email'],
                                 width: width,
                                 title:
@@ -192,7 +192,7 @@ class _ViewDistributorsState extends State<ViewDistributors> {
                                     context,
                                     MaterialPageRoute(
                                       builder: (_) => Distributor(
-                                        dist: item['email'],
+                                        dist: item['email'].toString(),
                                       ),
                                     ),
                                   );

@@ -33,41 +33,12 @@ class _DistributorState extends State<Distributor> {
   int index2;
 
   var page = PageController();
-  var page2 = PageController();
   var info;
-  List<Widget> numberOfImagesIndex;
-
-  //
-  //
-  // makes a list of widgets for the first page view
-  // ignore: missing_return
-  Future getImages() {
-    for (int i = 0; i < info['image'].length; i++) {
-      setState(() {
-        numberOfImagesIndex.add(
-          Container(
-            height: height,
-            width: width,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                colorFilter: new ColorFilter.mode(
-                    Colors.black.withOpacity(0.4), BlendMode.dstATop),
-                fit: BoxFit.cover,
-                image: CachedNetworkImageProvider(
-                  info['image'][i].toString(),
-                ),
-              ),
-            ),
-          ),
-        );
-      });
-    }
-  }
 
   //
   //
   // gets the firebase data of that particular medicine
-  getPharmacyInfo() async {
+  getDistributorInfo() async {
     try {
       // ignore: unused_local_variable
       StreamSubscription<DocumentSnapshot> stream = await FirebaseFirestore
@@ -78,7 +49,6 @@ class _DistributorState extends State<Distributor> {
           .listen((event) {
         setState(() {
           info = event.data();
-          getImages();
         });
       });
     } on Exception catch (e) {
@@ -94,10 +64,9 @@ class _DistributorState extends State<Distributor> {
     opac2 = 0;
     index = 0;
     index2 = 0;
-    numberOfImagesIndex = [];
-    getPharmacyInfo();
+    getDistributorInfo();
 
-    Future.delayed(Duration(milliseconds: 1000), () {
+    Future.delayed(Duration(milliseconds: 500), () {
       setState(() {
         opac2 = 1.0;
       });
@@ -156,7 +125,6 @@ class _DistributorState extends State<Distributor> {
     height = MediaQuery.of(context).size.height;
     safePadding = MediaQuery.of(context).padding.top;
     page = PageController(initialPage: 0);
-    page2 = PageController(initialPage: 0);
     return info == null
         ? Container(
             color: Colors.black,
@@ -204,7 +172,7 @@ class _DistributorState extends State<Distributor> {
                     Icons.edit,
                     color: Colors.white,
                   ),
-                  label: 'Edit Info',
+                  label: 'Edit Distributor',
                   backgroundColor: Colors.blue[500],
                   labelBackgroundColor: Colors.grey[800],
                   labelStyle: TextStyle(color: Colors.white),
@@ -259,18 +227,30 @@ class _DistributorState extends State<Distributor> {
                     //
                     //
                     // The image behind the info
-                    PageView(
-                        controller: page2,
-                        onPageChanged: (i) {
-                          setState(() {
-                            index = i;
-                          });
-                        },
-                        children: numberOfImagesIndex == null
-                            ? CircularProgressIndicator(
-                                backgroundColor: Colors.blue,
-                              )
-                            : numberOfImagesIndex),
+                    info['image'] == null
+                        ? Center(
+                            child: Container(
+                                width: 50,
+                                height: 50,
+                                child: CircularProgressIndicator()),
+                          )
+                        : Container(
+                            height: height,
+                            width: width,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                colorFilter: new ColorFilter.mode(
+                                    Colors.black.withOpacity(0.4),
+                                    BlendMode.dstATop),
+                                fit: BoxFit.cover,
+                                image: CachedNetworkImageProvider(
+                                  info['image'] == ''
+                                      ? 'https://www.spicefactors.com/wp-content/uploads/default-user-image.png'
+                                      : info['image'].toString(),
+                                ),
+                              ),
+                            ),
+                          ),
                     //
                     //
                     // The top page info
@@ -298,44 +278,6 @@ class _DistributorState extends State<Distributor> {
                               ],
                             ),
                             SizedBox(
-                              height: 5,
-                            ),
-                            //
-                            //
-                            // indicator of the number of pictures
-                            // info['imageURL'][0] == null
-                            //     ? Container()
-                            //     :
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: SizedBox(
-                                height: 10,
-                                child: ListView.builder(
-                                  scrollDirection: Axis.horizontal,
-                                  physics: NeverScrollableScrollPhysics(),
-                                  shrinkWrap: true,
-                                  padding: EdgeInsets.all(0),
-                                  itemCount: info['image'].length,
-                                  itemBuilder: (BuildContext context, int ind) {
-                                    return Padding(
-                                      padding: const EdgeInsets.only(right: 5),
-                                      child: Container(
-                                        margin: EdgeInsets.all(0),
-                                        width: 10,
-                                        height: 10,
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: index == ind
-                                              ? Colors.blue[200]
-                                              : Colors.grey[700],
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ),
-                            ),
-                            SizedBox(
                               height: 20,
                             ),
                             Align(
@@ -344,7 +286,7 @@ class _DistributorState extends State<Distributor> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'Location: ',
+                                    'Company: ',
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontSize: width / 17,
@@ -352,7 +294,7 @@ class _DistributorState extends State<Distributor> {
                                     ),
                                   ),
                                   Text(
-                                    info['location'],
+                                    info['companyName'],
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontSize: width / 22,
@@ -370,7 +312,7 @@ class _DistributorState extends State<Distributor> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'Phone Number:',
+                                    'Sales: ',
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontSize: width / 17,
@@ -378,7 +320,33 @@ class _DistributorState extends State<Distributor> {
                                     ),
                                   ),
                                   Text(
-                                    info['phoneNumber'],
+                                    info['sales'].length.toString(),
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: width / 22,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Email: ',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: width / 17,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Text(
+                                    info['email'],
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontSize: width / 22,
@@ -430,7 +398,7 @@ class _DistributorState extends State<Distributor> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      'Pharmacy Location',
+                                      'Added By: ',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         color: Colors.white,
@@ -441,8 +409,9 @@ class _DistributorState extends State<Distributor> {
                                       height: 5,
                                     ),
                                     Text(
-                                      'The pharmacy is located in ' +
-                                          info['location'],
+                                      info['addedByAdmin'] +
+                                          ' on ' +
+                                          info['dateAdded'].toString(),
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontSize: width / 30,
@@ -467,7 +436,7 @@ class _DistributorState extends State<Distributor> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      'Company Name',
+                                      'Phone Number: ',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         color: Colors.white,
@@ -478,7 +447,7 @@ class _DistributorState extends State<Distributor> {
                                       height: 5,
                                     ),
                                     Text(
-                                      info['companyName'],
+                                      info['phoneNumber'],
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontSize: width / 30,
@@ -506,7 +475,7 @@ class _DistributorState extends State<Distributor> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        'Notable Employees',
+                                        'Location: ',
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           color: Colors.white,
@@ -516,30 +485,13 @@ class _DistributorState extends State<Distributor> {
                                       SizedBox(
                                         height: 5,
                                       ),
-                                      info['employees'].length == 0
-                                          ? Text(
-                                              'N/A',
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: width / 30,
-                                              ),
-                                            )
-                                          : ListView.builder(
-                                              shrinkWrap: true,
-                                              itemCount:
-                                                  info['employees'].length,
-                                              itemBuilder:
-                                                  (BuildContext context,
-                                                      int i) {
-                                                return Text(
-                                                  info['employees'][i],
-                                                  style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: width / 30,
-                                                  ),
-                                                );
-                                              },
-                                            ),
+                                      Text(
+                                        info['location'],
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: width / 30,
+                                        ),
+                                      ),
                                     ],
                                   ),
                                 ),
@@ -549,79 +501,105 @@ class _DistributorState extends State<Distributor> {
                             //
                             //
                             // To be removed if there is no barcode search
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 10),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Container(
-                                    height: 110,
-                                    width: width / 2.3,
-                                    decoration: BoxDecoration(
-                                      color: Color.fromARGB(255, 50, 50, 50),
-                                      borderRadius: BorderRadius.circular(15),
+                            Container(
+                              width: width,
+                              decoration: BoxDecoration(
+                                color: Color.fromARGB(255, 50, 50, 50),
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(20.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Pharmacies Added: ',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                        fontSize: width / 16,
+                                      ),
                                     ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(20.0),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            'Timings',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.white,
-                                              fontSize: width / 16,
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 5,
-                                          ),
-                                          Text(
-                                            info['timings'],
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    info['pharmacyAdded'].length == 0
+                                        ? Text(
+                                            'N/A',
                                             style: TextStyle(
                                               color: Colors.white,
                                               fontSize: width / 30,
                                             ),
+                                          )
+                                        : ListView.builder(
+                                            shrinkWrap: true,
+                                            itemCount:
+                                                info['pharmacyAdded'].length,
+                                            itemBuilder:
+                                                (BuildContext context, int i) {
+                                              return Text(
+                                                info['pharmacyAdded'][i],
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: width / 30,
+                                                ),
+                                              );
+                                            },
                                           ),
-                                        ],
+                                  ],
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Container(
+                              width: width,
+                              decoration: BoxDecoration(
+                                color: Color.fromARGB(255, 50, 50, 50),
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(20.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Clinics Added: ',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                        fontSize: width / 16,
                                       ),
                                     ),
-                                  ),
-                                  Container(
-                                    width: width / 2.3,
-                                    height: 110,
-                                    decoration: BoxDecoration(
-                                      color: Color.fromARGB(255, 254, 192, 70),
-                                      borderRadius: BorderRadius.circular(15),
+                                    SizedBox(
+                                      height: 5,
                                     ),
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Icon(
-                                          Icons.star,
-                                          color: Colors.white,
-                                          size: width / 8,
-                                        ),
-                                        SizedBox(
-                                          width: 10,
-                                        ),
-                                        Text(
-                                          info['rating'].toString() + '/5',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: width / 18,
+                                    info['clinicsAdded'].length == 0
+                                        ? Text(
+                                            'N/A',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: width / 30,
+                                            ),
+                                          )
+                                        : ListView.builder(
+                                            shrinkWrap: true,
+                                            itemCount:
+                                                info['clinicsAdded'].length,
+                                            itemBuilder:
+                                                (BuildContext context, int i) {
+                                              return Text(
+                                                info['clinicsAdded'][i],
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: width / 30,
+                                                ),
+                                              );
+                                            },
                                           ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
 
