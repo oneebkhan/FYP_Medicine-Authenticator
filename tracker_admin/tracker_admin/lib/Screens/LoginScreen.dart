@@ -228,148 +228,151 @@ class _LoginScreenState extends State<LoginScreen> {
     height = MediaQuery.of(context).size.height;
     final node = FocusScope.of(context);
 
-    return ModalProgressHUD(
-      inAsyncCall: isLoading,
-      child: GestureDetector(
-        onTap: () {
-          FocusScopeNode currentFocus = FocusScope.of(context);
+    return GestureDetector(
+      onTap: () {
+        FocusScopeNode currentFocus = FocusScope.of(context);
 
-          if (!currentFocus.hasPrimaryFocus) {
-            currentFocus.unfocus();
-          }
-        },
-        child: Scaffold(
-          extendBodyBehindAppBar: true,
-          appBar: AppBar(
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            iconTheme: IconThemeData(
-              color: Colors.grey[700],
-            ),
+        if (!currentFocus.hasPrimaryFocus) {
+          currentFocus.unfocus();
+        }
+      },
+      child: Scaffold(
+        extendBodyBehindAppBar: true,
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          iconTheme: IconThemeData(
+            color: Colors.grey[700],
           ),
-          body: Stack(
-            children: [
-              Container(
-                height: height,
-                width: width,
-                decoration: BoxDecoration(color: backColor),
-              ),
-              Container(
-                height: height,
-                width: width,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    fit: BoxFit.fitWidth,
-                    image: AssetImage('assets/images/back.png'),
-                  ),
+        ),
+        body: Stack(
+          children: [
+            Container(
+              height: height,
+              width: width,
+              decoration: BoxDecoration(color: backColor),
+            ),
+            Container(
+              height: height,
+              width: width,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  fit: BoxFit.fitWidth,
+                  image: AssetImage('assets/images/back.png'),
                 ),
               ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: SingleChildScrollView(
-                  child: Container(
-                    width: width,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(35),
-                        topRight: Radius.circular(35),
-                      ),
-                      color: Colors.white,
+            ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: SingleChildScrollView(
+                child: Container(
+                  width: width,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(35),
+                      topRight: Radius.circular(35),
                     ),
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: width / 15,
-                        vertical: height / 25,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Text(
-                            'Login',
-                            style: TextStyle(
-                              fontSize: height / 15,
-                            ),
+                    color: Colors.white,
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: width / 15,
+                      vertical: height / 25,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(
+                          'Login',
+                          style: TextStyle(
+                            fontSize: height / 15,
                           ),
-                          SizedBox(
-                            height: height / 15,
-                          ),
-                          ContainerText(
-                            hint: 'Email',
-                            node: node,
-                            controller: email,
-                            inputType: TextInputType.emailAddress,
-                            maxLines: 1,
-                            maxLength: 30,
-                          ),
-                          SizedBox(
-                            height: height / 40,
-                          ),
-                          ContainerText(
-                            hint: 'Password',
-                            node: node,
-                            controller: pass,
-                            hide: true,
-                            maxLength: 30,
-                            maxLines: 1,
-                          ),
-                          SizedBox(
-                            height: height / 20,
-                          ),
-                          Center(
-                            child: FlatButton(
-                              onPressed: () {
-                                if (validateEmail(email.text) == null &&
-                                    validatePassword(pass.text) == null) {
-                                  if (widget.i == 1) {
-                                    setState(() {
-                                      nav = Dashboard_Distributor();
-                                    });
-                                    getDistributors(email.text);
-                                  } else if (widget.i == 0) {
-                                    setState(() {
-                                      nav = Dashboard_Admin();
-                                    });
-                                    getAdmins(email.text);
-                                  } else if (widget.i == 2) {
-                                    setState(() {
-                                      nav = Dashboard_Pharmacist();
-                                    });
-                                    getPharmacists(email.text);
-                                  }
+                        ),
+                        SizedBox(
+                          height: height / 15,
+                        ),
+                        ContainerText(
+                          hint: 'Email',
+                          node: node,
+                          controller: email,
+                          inputType: TextInputType.emailAddress,
+                          maxLines: 1,
+                          maxLength: 30,
+                        ),
+                        SizedBox(
+                          height: height / 40,
+                        ),
+                        ContainerText(
+                          hint: 'Password',
+                          node: node,
+                          controller: pass,
+                          hide: true,
+                          maxLength: 30,
+                          maxLines: 1,
+                        ),
+                        SizedBox(
+                          height: height / 20,
+                        ),
+                        Center(
+                          child: FlatButton(
+                            onPressed: () {
+                              if (validateEmail(email.text) == null &&
+                                  validatePassword(pass.text) == null) {
+                                if (widget.i == 1) {
+                                  setState(() {
+                                    nav = Dashboard_Distributor();
+                                  });
+                                  getDistributors(email.text);
+                                } else if (widget.i == 0) {
+                                  setState(() {
+                                    nav = Dashboard_Admin();
+                                  });
+                                  getAdmins(email.text);
+                                } else if (widget.i == 2) {
+                                  setState(() {
+                                    nav = Dashboard_Pharmacist();
+                                  });
+                                  getPharmacists(email.text);
                                 }
-                              },
-                              padding: EdgeInsets.all(0),
-                              child: Container(
-                                width: width,
-                                height: height / 15,
-                                decoration: BoxDecoration(
-                                  color: floatingButtonColor,
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    'Submit',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: height / 45,
-                                    ),
-                                  ),
-                                ),
+                              }
+                            },
+                            padding: EdgeInsets.all(0),
+                            child: Container(
+                              width: width,
+                              height: height / 15,
+                              decoration: BoxDecoration(
+                                color: floatingButtonColor,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Center(
+                                child: isLoading == true
+                                    ? CircularProgressIndicator(
+                                        valueColor:
+                                            AlwaysStoppedAnimation<Color>(
+                                                Colors.white),
+                                      )
+                                    : Text(
+                                        'Login',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: height / 45,
+                                        ),
+                                      ),
                               ),
                             ),
                           ),
-                          SizedBox(
-                            height: height / 40,
-                          ),
-                        ],
-                      ),
+                        ),
+                        SizedBox(
+                          height: height / 40,
+                        ),
+                      ],
                     ),
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

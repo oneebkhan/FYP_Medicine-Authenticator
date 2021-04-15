@@ -74,6 +74,14 @@ class _AddDistributorState extends State<AddDistributor> {
         "clinicsAdded": [],
         "pharmacyAdded": [],
         "pharmacyImages": [],
+        "image": '',
+        "sales": {
+          "Timestamp": [
+            "Timestamp",
+            "PharmacistID",
+            "the medicine that was sold/authenticated"
+          ],
+        },
       }).then((_) {
         Fluttertoast.showToast(msg: 'Distributor created Succesfully!');
         setState(() {

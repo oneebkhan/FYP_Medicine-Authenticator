@@ -22,7 +22,7 @@ class _ViewDistributorsState extends State<ViewDistributors> {
       setState(() {
         distributorStream = FirebaseFirestore.instance
             .collection('Distributor')
-            .orderBy('name', descending: true)
+            .orderBy('name', descending: false)
             .snapshots();
       });
     } on Exception catch (e) {
@@ -105,7 +105,7 @@ class _ViewDistributorsState extends State<ViewDistributors> {
                             selection[1] = false;
                             distributorStream = FirebaseFirestore.instance
                                 .collection('Distributor')
-                                .orderBy('companyName', descending: true)
+                                .orderBy('companyName', descending: false)
                                 .snapshots();
                           });
                           Fluttertoast.showToast(msg: 'Sorted by Company Name');
@@ -115,7 +115,7 @@ class _ViewDistributorsState extends State<ViewDistributors> {
                             selection[0] = false;
                             distributorStream = FirebaseFirestore.instance
                                 .collection('Distributor')
-                                .orderBy('name', descending: true)
+                                .orderBy('name', descending: false)
                                 .snapshots();
                           });
                           Fluttertoast.showToast(
