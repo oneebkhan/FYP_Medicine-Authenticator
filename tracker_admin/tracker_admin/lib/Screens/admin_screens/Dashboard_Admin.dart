@@ -307,6 +307,7 @@ class AdminDashboard extends StatefulWidget {
 class _AdminDashboardState extends State<AdminDashboard> {
   Color col = Color.fromARGB(255, 149, 191, 255);
   bool con = true;
+  var subscription;
 
   //
   //
@@ -329,6 +330,17 @@ class _AdminDashboardState extends State<AdminDashboard> {
   void initState() {
     super.initState();
     checkInternet();
+    subscription = Connectivity()
+        .onConnectivityChanged
+        .listen((ConnectivityResult result) {
+      checkInternet();
+    });
+  }
+
+  @override
+  void dispose() {
+    subscription.cancel();
+    super.dispose();
   }
 
   @override
