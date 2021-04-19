@@ -125,6 +125,9 @@ class _DashboardState extends State<Dashboard> {
     super.initState();
     checkInternet();
     medID = '';
+    Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
+      checkInternet();
+    });
   }
 
   @override

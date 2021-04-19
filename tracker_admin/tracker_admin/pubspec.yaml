@@ -56,6 +56,10 @@ dependencies:
   plugin_platform_interface: ^2.0.0
   # to get 60+ hz on devices that support it
   flutter_displaymode: ^0.1.1
+  # for date time formatting
+  intl: ^0.17.0
+  # to check the internet connection
+  connectivity: ^3.0.3
   
 
 dev_dependencies:

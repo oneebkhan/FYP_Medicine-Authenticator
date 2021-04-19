@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/animation.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
@@ -7,6 +7,8 @@ import 'package:line_icons/line_icons.dart';
 import 'package:tracker_admin/Widgets/Admin/BarChartWeekly.dart';
 import 'package:tracker_admin/Widgets/Admin/BarChartDaily.dart';
 import 'package:tracker_admin/Widgets/RowInfo.dart';
+import 'package:tracker_admin/screens/Search.dart';
+import 'package:tracker_admin/screens/admin_screens/SearchDistributors.dart';
 import 'package:tracker_admin/screens/admin_screens/ViewDistributors.dart';
 import 'package:tracker_admin/screens/admin_screens/AddDistributor.dart';
 import 'package:tracker_admin/screens/Clinic/DistributorClinics.dart';
@@ -304,6 +306,30 @@ class AdminDashboard extends StatefulWidget {
 
 class _AdminDashboardState extends State<AdminDashboard> {
   Color col = Color.fromARGB(255, 149, 191, 255);
+  bool con = true;
+
+  //
+  //
+  //check  the internet connectivity
+  checkInternet() async {
+    var connectivityResult = await Connectivity().checkConnectivity();
+    print(connectivityResult.toString());
+    if (connectivityResult == ConnectivityResult.none) {
+      Fluttertoast.showToast(msg: 'Not Connected to the Internet!');
+      setState(() {
+        con = true;
+      });
+    } else
+      setState(() {
+        con = false;
+      });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    checkInternet();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -319,8 +345,32 @@ class _AdminDashboardState extends State<AdminDashboard> {
           //
           // The top title and the notification row
           Row(
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              con == true
+                  ? Material(
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(15),
+                        onTap: () {
+                          checkInternet();
+                        },
+                        child: Ink(
+                          height: widget.width / 15,
+                          width: widget.width / 12,
+                          decoration: BoxDecoration(
+                              color: Colors.grey[400],
+                              borderRadius: BorderRadius.circular(15)),
+                          child: Icon(
+                            Icons.wifi_off,
+                            color: Colors.white,
+                            size: widget.width / 24,
+                          ),
+                        ),
+                      ),
+                    )
+                  : Container(
+                      width: widget.width / 12,
+                    ),
               Text(
                 'DASHBOARD',
                 style: TextStyle(
@@ -328,9 +378,6 @@ class _AdminDashboardState extends State<AdminDashboard> {
                   fontSize: widget.width / 17,
                   color: Colors.grey[600],
                 ),
-              ),
-              SizedBox(
-                width: widget.width / 7,
               ),
               Stack(
                 children: [
@@ -445,7 +492,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                       ],
                     ),
                     SizedBox(
-                      height: 20,
+                      height: 10,
                     ),
                     //
                     //
@@ -516,21 +563,31 @@ class _AdminDashboardState extends State<AdminDashboard> {
                             ),
                           ),
                         ),
-                        Container(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 5, horizontal: 5),
-                            child: Image(
-                              width: widget.width / 4.9,
-                              height: widget.width / 4.6,
-                              image: AssetImage(
-                                'assets/icons/admin_dashboard_distributors/search.png',
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => SearchDistributors(),
+                              ),
+                            );
+                          },
+                          child: Container(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 5, horizontal: 5),
+                              child: Image(
+                                width: widget.width / 4.9,
+                                height: widget.width / 4.6,
+                                image: AssetImage(
+                                  'assets/icons/admin_dashboard_distributors/search.png',
+                                ),
                               ),
                             ),
-                          ),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: col,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: col,
+                            ),
                           ),
                         ),
                       ],
@@ -632,7 +689,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                       ],
                     ),
                     SizedBox(
-                      height: 20,
+                      height: 10,
                     ),
                     //
                     //
@@ -767,7 +824,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                       ],
                     ),
                     SizedBox(
-                      height: 20,
+                      height: 10,
                     ),
                     //
                     //
@@ -813,7 +870,14 @@ class _AdminDashboardState extends State<AdminDashboard> {
                         //
                         // The second TIPS Button
                         GestureDetector(
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => Search(),
+                              ),
+                            );
+                          },
                           child: Container(
                             child: Padding(
                               padding: const EdgeInsets.symmetric(

@@ -299,16 +299,21 @@ class ContainerText extends StatefulWidget {
   final int maxLength;
   final int maxLines;
   final TextInputType inputType;
+  final double width;
+  final double height;
 
-  const ContainerText(
-      {Key key,
-      this.controller,
-      this.hint,
-      this.node,
-      this.hide,
-      this.maxLength,
-      this.maxLines,
-      this.inputType});
+  const ContainerText({
+    Key key,
+    this.controller,
+    this.hint,
+    this.node,
+    this.hide,
+    this.maxLength,
+    this.maxLines,
+    this.inputType,
+    this.width,
+    this.height,
+  });
 
   @override
   _ContainerTextState createState() => _ContainerTextState();
@@ -341,6 +346,8 @@ class _ContainerTextState extends State<ContainerText> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: widget.height,
+      width: widget.width,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
         color: Colors.grey[200],

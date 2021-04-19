@@ -1,10 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:tracker_admin/screens/admin_screens/AddDistributor.dart';
 import 'package:tracker_admin/screens/admin_screens/Dashboard_Admin.dart';
-import 'package:tracker_admin/screens/Dashboard_Distributor.dart';
+import 'package:tracker_admin/screens/distributor_screens/Dashboard_Distributor.dart';
 import 'package:tracker_admin/screens/Dashboard_Pharmacist.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -31,6 +32,23 @@ class _LoginScreenState extends State<LoginScreen> {
   String userName;
   bool isLoading;
   var nav;
+  bool con = true;
+  //
+  //
+  //check the internet connection
+  checkInternet() async {
+    var connectivityResult = await Connectivity().checkConnectivity();
+    print(connectivityResult.toString());
+    if (connectivityResult == ConnectivityResult.none) {
+      Fluttertoast.showToast(msg: 'Not Connected to the Internet!');
+      setState(() {
+        con = true;
+      });
+    } else
+      setState(() {
+        con = false;
+      });
+  }
 
   //
   //
@@ -201,6 +219,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     super.initState();
+    checkInternet();
     opac = 0;
     isLoading = false;
 
@@ -317,23 +336,26 @@ class _LoginScreenState extends State<LoginScreen> {
                         Center(
                           child: FlatButton(
                             onPressed: () {
-                              if (validateEmail(email.text) == null &&
-                                  validatePassword(pass.text) == null) {
-                                if (widget.i == 1) {
-                                  setState(() {
-                                    nav = Dashboard_Distributor();
-                                  });
-                                  getDistributors(email.text);
-                                } else if (widget.i == 0) {
-                                  setState(() {
-                                    nav = Dashboard_Admin();
-                                  });
-                                  getAdmins(email.text);
-                                } else if (widget.i == 2) {
-                                  setState(() {
-                                    nav = Dashboard_Pharmacist();
-                                  });
-                                  getPharmacists(email.text);
+                              checkInternet();
+                              if (con == false) {
+                                if (validateEmail(email.text) == null &&
+                                    validatePassword(pass.text) == null) {
+                                  if (widget.i == 1) {
+                                    setState(() {
+                                      nav = Dashboard_Distributor();
+                                    });
+                                    getDistributors(email.text);
+                                  } else if (widget.i == 0) {
+                                    setState(() {
+                                      nav = Dashboard_Admin();
+                                    });
+                                    getAdmins(email.text);
+                                  } else if (widget.i == 2) {
+                                    setState(() {
+                                      nav = Dashboard_Pharmacist();
+                                    });
+                                    getPharmacists(email.text);
+                                  }
                                 }
                               }
                             },

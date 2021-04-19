@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 // ignore: camel_case_types
@@ -106,19 +107,6 @@ class _DistributorState extends State<Distributor> {
     }
   }
 
-  //
-  //
-  // launch google maps
-  static Future<void> openMap(String query) async {
-    String googleUrl =
-        'https://www.google.com/maps/search/?api=1&query=${query}';
-    if (await canLaunch(googleUrl)) {
-      await launch(googleUrl);
-    } else {
-      throw 'Could not open the map.';
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
@@ -143,7 +131,7 @@ class _DistributorState extends State<Distributor> {
               children: [
                 SpeedDialChild(
                   child: Icon(
-                    Icons.location_on,
+                    Icons.delete,
                     color: Colors.white,
                   ),
                   label: 'Delete Distributor',
@@ -151,7 +139,7 @@ class _DistributorState extends State<Distributor> {
                   labelBackgroundColor: Colors.grey[800],
                   labelStyle: TextStyle(color: Colors.white),
                   onTap: () {
-                    //openMap(info['location']);
+                    //delete distributor
                   },
                 ),
                 SpeedDialChild(
@@ -159,12 +147,25 @@ class _DistributorState extends State<Distributor> {
                     Icons.phone,
                     color: Colors.white,
                   ),
-                  label: 'Contact Distributor',
+                  label: 'Call Distributor',
                   labelBackgroundColor: Colors.grey[800],
                   labelStyle: TextStyle(color: Colors.white),
                   backgroundColor: Colors.blue[500],
                   onTap: () {
-                    //customLaunch('tel:' + info['phoneNumber']);
+                    customLaunch('tel:' + info['phoneNumber']);
+                  },
+                ),
+                SpeedDialChild(
+                  child: Icon(
+                    Icons.email,
+                    color: Colors.white,
+                  ),
+                  label: 'Email Distributor',
+                  labelBackgroundColor: Colors.grey[800],
+                  labelStyle: TextStyle(color: Colors.white),
+                  backgroundColor: Colors.blue[500],
+                  onTap: () {
+                    customLaunch('mailto:${info['email']}');
                   },
                 ),
                 SpeedDialChild(
@@ -176,7 +177,9 @@ class _DistributorState extends State<Distributor> {
                   backgroundColor: Colors.blue[500],
                   labelBackgroundColor: Colors.grey[800],
                   labelStyle: TextStyle(color: Colors.white),
-                  onTap: () {},
+                  onTap: () {
+                    //edit the distributor
+                  },
                 ),
                 SpeedDialChild(
                   child: Icon(
@@ -410,8 +413,12 @@ class _DistributorState extends State<Distributor> {
                                     ),
                                     Text(
                                       info['addedByAdmin'] +
-                                          ' on ' +
-                                          info['dateAdded'].toString(),
+                                          ' - ' +
+                                          DateFormat.yMMMd()
+                                              .add_jm()
+                                              .format(
+                                                  info['dateAdded'].toDate())
+                                              .toString(),
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontSize: width / 30,
