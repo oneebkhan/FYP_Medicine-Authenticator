@@ -23,6 +23,7 @@ class _DashboardState extends State<Dashboard> {
   double safePadding;
   var medID;
   bool con;
+  var subscription;
 
   //
   //
@@ -125,9 +126,17 @@ class _DashboardState extends State<Dashboard> {
     super.initState();
     checkInternet();
     medID = '';
-    Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
+    subscription = Connectivity()
+        .onConnectivityChanged
+        .listen((ConnectivityResult result) {
       checkInternet();
     });
+  }
+
+  @override
+  void dispose() {
+    subscription.cancel();
+    super.dispose();
   }
 
   @override
