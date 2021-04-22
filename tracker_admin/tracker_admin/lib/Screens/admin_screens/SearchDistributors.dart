@@ -67,6 +67,12 @@ class _SearchDistributorsState extends State<SearchDistributors> {
   }
 
   @override
+  void dispose() {
+    search.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
@@ -112,13 +118,65 @@ class _SearchDistributorsState extends State<SearchDistributors> {
                     SizedBox(
                       height: 20,
                     ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        ContainerText(
+                          node: node,
+                          hint: 'Distributor',
+                          controller: search,
+                          maxLines: 1,
+                          width: width / 1.4,
+                        ),
+                        InkWell(
+                          borderRadius: BorderRadius.circular(15),
+                          child: Ink(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            height: width / 7,
+                            width: width / 7,
+                            child: IconButton(
+                              icon: Icon(Icons.search),
+                              onPressed: () {
+                                checkInternet();
+                                FocusScopeNode currentFocus =
+                                    FocusScope.of(context);
+                                if (!currentFocus.hasPrimaryFocus) {
+                                  currentFocus.unfocus();
+                                }
+                                if (search.text == null || search.text == '') {
+                                } else {
+                                  setState(() {
+                                    isLoading = true;
+                                    isSearched = true;
+                                  });
+                                  queryData(search.text.toUpperCase())
+                                      .whenComplete(() {
+                                    setState(() {
+                                      isLoading = false;
+                                    });
+                                  });
+                                }
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    //
+                    //
+                    // The container fields
                     con == true
                         ? Center(
                             child: Column(
                               children: [
                                 Padding(
-                                  padding: EdgeInsets.only(
-                                      top: height / 3, bottom: 20),
+                                  padding: EdgeInsets.only(top: height / 4.5),
                                   child: Text('No Internet Connection...'),
                                 ),
                                 TextButton(
@@ -130,142 +188,91 @@ class _SearchDistributorsState extends State<SearchDistributors> {
                               ],
                             ),
                           )
-                        : Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              ContainerText(
-                                node: node,
-                                hint: 'Distributor',
-                                controller: search,
-                                maxLines: 1,
-                                width: width / 1.4,
+                        : Container(
+                            width: width,
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                bottom: 10,
+                                left: 20,
+                                right: 20,
+                                top: 20,
                               ),
-                              InkWell(
-                                borderRadius: BorderRadius.circular(15),
-                                child: Ink(
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  height: width / 7,
-                                  width: width / 7,
-                                  child: IconButton(
-                                    icon: Icon(Icons.search),
-                                    onPressed: () {
-                                      checkInternet();
-                                      FocusScopeNode currentFocus =
-                                          FocusScope.of(context);
-                                      if (!currentFocus.hasPrimaryFocus) {
-                                        currentFocus.unfocus();
-                                      }
-                                      if (search.text == null ||
-                                          search.text == '') {
-                                      } else {
-                                        setState(() {
-                                          isLoading = true;
-                                          isSearched = true;
-                                        });
-                                        queryData(search.text.toUpperCase())
-                                            .whenComplete(() {
-                                          setState(() {
-                                            isLoading = false;
-                                          });
-                                        });
-                                      }
-                                    },
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    //
-                    //
-                    // The container fields
-                    Container(
-                      width: width,
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                          bottom: 10,
-                          left: 20,
-                          right: 20,
-                          top: 20,
-                        ),
-                        child: isSearched == false
-                            ? Padding(
-                                padding: EdgeInsets.only(top: width / 2),
-                                child: Center(
-                                  child: Container(
-                                    child: Text(
-                                      'Search for a Distributor\nFor the results to appear here',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        color: Colors.grey[500],
+                              child: isSearched == false
+                                  ? Padding(
+                                      padding: EdgeInsets.only(top: width / 2),
+                                      child: Center(
+                                        child: Container(
+                                          child: Text(
+                                            'Search for a Distributor\nFor the results to appear here',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              color: Colors.grey[500],
+                                            ),
+                                          ),
+                                        ),
                                       ),
-                                    ),
-                                  ),
-                                ),
-                              )
-                            : StreamBuilder<QuerySnapshot>(
-                                stream: snap,
-                                builder: (BuildContext context,
-                                    AsyncSnapshot snapshot) {
-                                  if (snapshot.hasData == false) {
-                                    return Center(
-                                      child: CircularProgressIndicator(),
-                                    );
-                                  }
-                                  return ListView.builder(
-                                      shrinkWrap: true,
-                                      itemCount: snapshot.data.docs.length > 6
-                                          ? 6
-                                          : snapshot.data.docs
-                                              .length, //snapshotData.docs.length,
-                                      itemBuilder:
-                                          (BuildContext context, int index) {
-                                        QueryDocumentSnapshot item =
-                                            snapshot.data.docs[index];
-                                        if (item['name']
-                                                .toString()
-                                                .toLowerCase()
-                                                .contains(
-                                                    hello.toLowerCase()) ||
-                                            item['email']
-                                                .toString()
-                                                .toLowerCase()
-                                                .contains(
-                                                    hello.toLowerCase()) ||
-                                            item['companyName']
-                                                .toString()
-                                                .toLowerCase()
-                                                .contains(
-                                                    hello.toLowerCase())) {
-                                          return RowInfo(
-                                            imageURL: item['image'],
-                                            location: item['email'],
-                                            width: width,
-                                            title: item['name'],
-                                            func: () {
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (_) => Distributor(
-                                                    dist: item['email'],
-                                                  ),
-                                                ),
-                                              );
-                                            },
+                                    )
+                                  : StreamBuilder<QuerySnapshot>(
+                                      stream: snap,
+                                      builder: (BuildContext context,
+                                          AsyncSnapshot snapshot) {
+                                        if (snapshot.hasData == false) {
+                                          return Center(
+                                            child: CircularProgressIndicator(),
                                           );
-                                        } else {
-                                          return Container();
                                         }
-                                      });
-                                },
-                              ),
-                      ),
-                    ),
+                                        return ListView.builder(
+                                            shrinkWrap: true,
+                                            itemCount: snapshot
+                                                        .data.docs.length >
+                                                    6
+                                                ? 6
+                                                : snapshot.data.docs
+                                                    .length, //snapshotData.docs.length,
+                                            itemBuilder: (BuildContext context,
+                                                int index) {
+                                              QueryDocumentSnapshot item =
+                                                  snapshot.data.docs[index];
+                                              if (item['name']
+                                                      .toString()
+                                                      .toLowerCase()
+                                                      .contains(hello
+                                                          .toLowerCase()) ||
+                                                  item['email']
+                                                      .toString()
+                                                      .toLowerCase()
+                                                      .contains(hello
+                                                          .toLowerCase()) ||
+                                                  item['companyName']
+                                                      .toString()
+                                                      .toLowerCase()
+                                                      .contains(hello
+                                                          .toLowerCase())) {
+                                                return RowInfo(
+                                                  imageURL: item['image'],
+                                                  location: item['email'],
+                                                  width: width,
+                                                  title: item['name'],
+                                                  func: () {
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (_) =>
+                                                            Distributor(
+                                                          dist: item['email'],
+                                                        ),
+                                                      ),
+                                                    );
+                                                  },
+                                                );
+                                              } else {
+                                                return Container();
+                                              }
+                                            });
+                                      },
+                                    ),
+                            ),
+                          ),
                   ],
                 ),
               ),

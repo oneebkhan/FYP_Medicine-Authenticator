@@ -1,17 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:connectivity/connectivity.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 
 // ignore: must_be_immutable
-class AddDistributor extends StatefulWidget {
+class EditDistributor extends StatefulWidget {
   @override
-  _AddDistributorState createState() => _AddDistributorState();
+  _EditDistributorState createState() => _EditDistributorState();
 }
 
-class _AddDistributorState extends State<AddDistributor> {
+class _EditDistributorState extends State<EditDistributor> {
   double width;
   double height;
   double safePadding;
@@ -23,25 +22,6 @@ class _AddDistributorState extends State<AddDistributor> {
   TextEditingController phoneNumber = TextEditingController();
   String currentDistributorEmail;
   bool _isLoading = false;
-  bool con = true;
-  var subscription;
-
-  //
-  //
-  //check  the internet connectivity
-  checkInternet() async {
-    var connectivityResult = await Connectivity().checkConnectivity();
-    print(connectivityResult.toString());
-    if (connectivityResult == ConnectivityResult.none) {
-      Fluttertoast.showToast(msg: 'Not Connected to the Internet!');
-      setState(() {
-        con = true;
-      });
-    } else
-      setState(() {
-        con = false;
-      });
-  }
 
   //
   //
@@ -103,7 +83,6 @@ class _AddDistributorState extends State<AddDistributor> {
             "the medicine that was sold/authenticated"
           ],
         },
-        "EditedBy": {"Timestamp": "AdminID"},
       }).then((_) {
         Fluttertoast.showToast(msg: 'Distributor created Succesfully!');
         setState(() {
@@ -119,47 +98,11 @@ class _AddDistributorState extends State<AddDistributor> {
     }
   }
 
-  //
-  //
-  // Validate the Email Address
-  String validateEmail(String value) {
-    if (value.isEmpty) {
-      Fluttertoast.showToast(msg: 'Enter Email');
-      return "enter email";
-    }
-    Pattern pattern =
-        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-    RegExp regex = new RegExp(pattern);
-    if (!regex.hasMatch(value.trim())) {
-      Fluttertoast.showToast(msg: 'Invalid Email Address');
-      return "the email address is not valid";
-    }
-    return null;
-  }
-
   @override
   void initState() {
     super.initState();
-    checkInternet();
-    subscription = Connectivity()
-        .onConnectivityChanged
-        .listen((ConnectivityResult result) {
-      checkInternet();
-    });
     // this stores the current distributor email
     currentDistributorEmail = FirebaseAuth.instance.currentUser.email;
-  }
-
-  @override
-  void dispose() {
-    subscription.cancel();
-    name.dispose();
-    email.dispose();
-    password.dispose();
-    companyName.dispose();
-    location.dispose();
-    phoneNumber.dispose();
-    super.dispose();
   }
 
   @override
@@ -290,16 +233,14 @@ class _AddDistributorState extends State<AddDistributor> {
                   child: FlatButton(
                     padding: EdgeInsets.all(0),
                     onPressed: () {
-                      if (con == true) {
-                        Fluttertoast.showToast(msg: 'No internet connection!');
-                      } else if (name.text.isEmpty ||
+                      if (name.text.isEmpty ||
                           email.text.isEmpty ||
                           password.text.isEmpty ||
                           phoneNumber.text.isEmpty ||
                           companyName.text.isEmpty ||
                           location.text.isEmpty) {
                         Fluttertoast.showToast(msg: 'Fill all the fields!');
-                      } else if (validateEmail(email.text) == null) {
+                      } else {
                         registerDistributor();
                       }
                     },

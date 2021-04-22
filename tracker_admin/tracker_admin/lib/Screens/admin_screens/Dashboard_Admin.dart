@@ -3,14 +3,17 @@ import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:intl/intl.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:tracker_admin/Widgets/Admin/BarChartWeekly.dart';
 import 'package:tracker_admin/Widgets/Admin/BarChartDaily.dart';
 import 'package:tracker_admin/Widgets/RowInfo.dart';
 import 'package:tracker_admin/screens/Search.dart';
+import 'package:tracker_admin/screens/admin_screens/Distributor.dart';
 import 'package:tracker_admin/screens/admin_screens/SearchDistributors.dart';
 import 'package:tracker_admin/screens/admin_screens/ViewDistributors.dart';
 import 'package:tracker_admin/screens/admin_screens/AddDistributor.dart';
+import 'package:tracker_admin/screens/admin_screens/History.dart';
 import 'package:tracker_admin/screens/Clinic/DistributorClinics.dart';
 import 'package:tracker_admin/screens/ContactDevs.dart';
 import 'package:tracker_admin/screens/Pharmacy/DistributorPharmacies.dart';
@@ -944,6 +947,73 @@ class AdminStatistics extends StatefulWidget {
 
 class _AdminStatisticsState extends State<AdminStatistics> {
   Color col = Color.fromARGB(255, 149, 191, 255);
+  var distributorStream;
+  bool con = true;
+  var subscription;
+  var historyStream;
+
+  //
+  //
+  //check  the internet connectivity
+  checkInternet() async {
+    var connectivityResult = await Connectivity().checkConnectivity();
+    print(connectivityResult.toString());
+    if (connectivityResult == ConnectivityResult.none) {
+      Fluttertoast.showToast(msg: 'Not Connected to the Internet!');
+      setState(() {
+        con = true;
+      });
+    } else
+      setState(() {
+        con = false;
+      });
+  }
+
+  getDistributors() async {
+    try {
+      setState(() {
+        distributorStream = FirebaseFirestore.instance
+            .collection('Distributor')
+            .orderBy('salesNumber', descending: false)
+            .limit(5)
+            .snapshots();
+      });
+    } on Exception catch (e) {
+      print(e);
+    }
+  }
+
+  getHistory() async {
+    try {
+      setState(() {
+        historyStream = FirebaseFirestore.instance
+            .collection('History')
+            .orderBy('timestamp', descending: false)
+            .limit(5)
+            .snapshots();
+      });
+    } on Exception catch (e) {
+      print(e);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getDistributors();
+    checkInternet();
+    subscription = Connectivity()
+        .onConnectivityChanged
+        .listen((ConnectivityResult result) {
+      checkInternet();
+    });
+  }
+
+  @override
+  void dispose() {
+    subscription.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -1034,7 +1104,7 @@ class _AdminStatisticsState extends State<AdminStatistics> {
               width: widget.width,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
-                color: Colors.white,
+                color: con == true ? Colors.grey[200] : Colors.white,
               ),
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 20),
@@ -1057,73 +1127,189 @@ class _AdminStatisticsState extends State<AdminStatistics> {
                     ),
                     Container(
                       height: widget.height < 800 ? 200 : widget.height / 4,
-                      child: ListView(
-                        scrollDirection: Axis.horizontal,
-                        shrinkWrap: true,
-                        children: [
-                          SizedBox(
-                            width: 20,
-                          ),
-                          Container(
-                            width: widget.width / 2.5,
-                            decoration: BoxDecoration(
-                              color: col,
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            child: Padding(
-                                padding: const EdgeInsets.only(
-                                  left: 15,
-                                  right: 15,
-                                  bottom: 10,
-                                  top: 15,
+                      child: con == true
+                          ? Center(
+                              child: Text('No Internet'),
+                            )
+                          : ListView(
+                              scrollDirection: Axis.horizontal,
+                              shrinkWrap: true,
+                              children: [
+                                SizedBox(
+                                  width: 20,
                                 ),
-                                child: BarChartWeekly()),
-                          ),
-                          SizedBox(
-                            width: 20,
-                          ),
-                          Container(
-                            width: widget.width / 2.5,
-                            decoration: BoxDecoration(
-                              color: col,
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            child: Padding(
-                                padding: const EdgeInsets.only(
-                                  left: 15,
-                                  right: 15,
-                                  bottom: 10,
-                                  top: 15,
+                                Container(
+                                  width: widget.width / 2.5,
+                                  decoration: BoxDecoration(
+                                    color: col,
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                  child: Padding(
+                                      padding: const EdgeInsets.only(
+                                        left: 15,
+                                        right: 15,
+                                        bottom: 10,
+                                        top: 15,
+                                      ),
+                                      child: BarChartWeekly()),
                                 ),
-                                child: BarChartWeekly()),
-                          ),
-                          SizedBox(
-                            width: 20,
-                          ),
-                          Container(
-                            width: widget.width / 2.5,
-                            decoration: BoxDecoration(
-                              color: col,
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            child: Padding(
-                                padding: const EdgeInsets.only(
-                                  left: 15,
-                                  right: 15,
-                                  bottom: 10,
-                                  top: 15,
+                                SizedBox(
+                                  width: 20,
                                 ),
-                                child: BarChartDaily()),
-                          ),
-                          SizedBox(
-                            width: 20,
-                          ),
-                        ],
-                      ),
+                                Container(
+                                  width: widget.width / 2.5,
+                                  decoration: BoxDecoration(
+                                    color: col,
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                  child: Padding(
+                                      padding: const EdgeInsets.only(
+                                        left: 15,
+                                        right: 15,
+                                        bottom: 10,
+                                        top: 15,
+                                      ),
+                                      child: BarChartWeekly()),
+                                ),
+                                SizedBox(
+                                  width: 20,
+                                ),
+                                Container(
+                                  width: widget.width / 2.5,
+                                  decoration: BoxDecoration(
+                                    color: col,
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                  child: Padding(
+                                      padding: const EdgeInsets.only(
+                                        left: 15,
+                                        right: 15,
+                                        bottom: 10,
+                                        top: 15,
+                                      ),
+                                      child: BarChartDaily()),
+                                ),
+                                SizedBox(
+                                  width: 20,
+                                ),
+                              ],
+                            ),
                     ),
                     SizedBox(
                       height: 10,
                     ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 30,
+          ),
+          //
+          //
+          // The History pane
+          Center(
+            child: Container(
+              width: widget.width,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                color: con == true ? Colors.grey[200] : Colors.white,
+              ),
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'History',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: widget.width / 16,
+                          ),
+                        ),
+                        Container(
+                          width: 65,
+                          height: 30,
+                          decoration: BoxDecoration(
+                            color: Color.fromARGB(255, 149, 191, 255),
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: TextButton(
+                            style: ButtonStyle(
+                              padding:
+                                  MaterialStateProperty.all<EdgeInsetsGeometry>(
+                                EdgeInsets.all(0),
+                              ),
+                              textStyle: MaterialStateProperty.all<TextStyle>(
+                                TextStyle(color: Colors.white),
+                              ),
+                            ),
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => History(),
+                                ),
+                              );
+                            },
+                            child: Text(
+                              'View All',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: widget.height / 40,
+                    ),
+                    con == true
+                        ? Center(
+                            child: Text('No inrternet connection!'),
+                          )
+                        : StreamBuilder<QuerySnapshot>(
+                            stream: FirebaseFirestore.instance
+                                .collection('History')
+                                .snapshots(),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData == false) {
+                                return Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              }
+                              return ListView.builder(
+                                shrinkWrap: true,
+                                itemCount: snapshot.data.docs.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  QueryDocumentSnapshot item =
+                                      snapshot.data.docs[index];
+                                  return RowInfo(
+                                    imageURL: item['image'] == ''
+                                        ? 'https://www.spicefactors.com/wp-content/uploads/default-user-image.png'
+                                        : item['image'],
+                                    location: DateFormat.yMMMd()
+                                        .add_jm()
+                                        .format(item['timestamp'].toDate()),
+                                    width: widget.width,
+                                    title: item['name'],
+                                    func: () {
+                                      // Navigator.push(
+                                      //   context,
+                                      //   MaterialPageRoute(
+                                      //     builder: (_) => History(),
+                                      //   ),
+                                      // );
+                                    },
+                                  );
+                                },
+                              );
+                            }),
                   ],
                 ),
               ),
@@ -1139,7 +1325,9 @@ class _AdminStatisticsState extends State<AdminStatistics> {
             child: Container(
               width: widget.width,
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15), color: Colors.white),
+                borderRadius: BorderRadius.circular(15),
+                color: con == true ? Colors.grey[200] : Colors.white,
+              ),
               child: Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
@@ -1157,13 +1345,47 @@ class _AdminStatisticsState extends State<AdminStatistics> {
                     SizedBox(
                       height: widget.height / 30,
                     ),
-                    RowInfo(
-                      width: widget.width,
-                      title: 'Marhabba',
-                      location: 'Laal Kurti District',
-                      imageURL: 'https://picsum.photos/250?image=9',
-                      func: null,
-                    )
+                    con == true
+                        ? Center(
+                            child: Text('No inrternet connection!'),
+                          )
+                        : StreamBuilder<QuerySnapshot>(
+                            stream: distributorStream,
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData == false) {
+                                return Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              }
+                              return ListView.builder(
+                                shrinkWrap: true,
+                                itemCount: snapshot.data.docs.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  QueryDocumentSnapshot item =
+                                      snapshot.data.docs[index];
+                                  return RowInfo(
+                                    imageURL: item['image'] == ''
+                                        ? 'https://www.spicefactors.com/wp-content/uploads/default-user-image.png'
+                                        : item['image'],
+                                    location: item['email'],
+                                    width: widget.width,
+                                    title: item['name'] +
+                                        ' - ' +
+                                        item['companyName'],
+                                    func: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (_) => Distributor(
+                                            dist: item['email'].toString(),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  );
+                                },
+                              );
+                            }),
                   ],
                 ),
               ),

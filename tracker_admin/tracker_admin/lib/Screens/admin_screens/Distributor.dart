@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:tracker_admin/screens/admin_screens/EditDistributor.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 // ignore: camel_case_types
@@ -178,7 +179,12 @@ class _DistributorState extends State<Distributor> {
                   labelBackgroundColor: Colors.grey[800],
                   labelStyle: TextStyle(color: Colors.white),
                   onTap: () {
-                    //edit the distributor
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => EditDistributor(),
+                      ),
+                    );
                   },
                 ),
                 SpeedDialChild(

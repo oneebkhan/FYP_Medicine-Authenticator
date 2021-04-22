@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:tracker_admin/Widgets/RowInfo.dart';
@@ -11,8 +12,29 @@ class ViewDistributors extends StatefulWidget {
 
 class _ViewDistributorsState extends State<ViewDistributors> {
   double opac;
+  double width;
+  double height;
   var distributorStream;
   List<bool> selection;
+  bool con = true;
+  var subscription;
+
+  //
+  //
+  //check  the internet connectivity
+  checkInternet() async {
+    var connectivityResult = await Connectivity().checkConnectivity();
+    print(connectivityResult.toString());
+    if (connectivityResult == ConnectivityResult.none) {
+      Fluttertoast.showToast(msg: 'Not Connected to the Internet!');
+      setState(() {
+        con = true;
+      });
+    } else
+      setState(() {
+        con = false;
+      });
+  }
 
   //
   //
@@ -33,6 +55,12 @@ class _ViewDistributorsState extends State<ViewDistributors> {
   @override
   void initState() {
     super.initState();
+    checkInternet();
+    subscription = Connectivity()
+        .onConnectivityChanged
+        .listen((ConnectivityResult result) {
+      checkInternet();
+    });
     opac = 0;
     getDistributors();
     selection = [false, true];
@@ -44,8 +72,15 @@ class _ViewDistributorsState extends State<ViewDistributors> {
   }
 
   @override
+  void dispose() {
+    subscription.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
+    width = MediaQuery.of(context).size.width;
+    height = MediaQuery.of(context).size.height;
 
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 246, 246, 248),
@@ -147,63 +182,72 @@ class _ViewDistributorsState extends State<ViewDistributors> {
               //
               //
               // The container fields
-              AnimatedOpacity(
-                opacity: opac,
-                duration: Duration(milliseconds: 500),
-                child: Container(
-                  width: width,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(15),
-                    ),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                      bottom: 10,
-                      left: 20,
-                      right: 20,
-                      top: 10,
-                    ),
-                    child: StreamBuilder<QuerySnapshot>(
-                        stream: distributorStream,
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData == false) {
-                            return Center(
-                              child: CircularProgressIndicator(),
-                            );
-                          }
-                          return ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: snapshot.data.docs.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              QueryDocumentSnapshot item =
-                                  snapshot.data.docs[index];
-                              return RowInfo(
-                                imageURL: item['image'] == ''
-                                    ? 'https://www.spicefactors.com/wp-content/uploads/default-user-image.png'
-                                    : item['image'],
-                                location: item['email'],
-                                width: width,
-                                title:
-                                    item['name'] + ' - ' + item['companyName'],
-                                func: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (_) => Distributor(
-                                        dist: item['email'].toString(),
-                                      ),
-                                    ),
+              con == true
+                  ? Padding(
+                      padding: EdgeInsets.only(top: height / 3.5),
+                      child: Center(
+                        child: Text("No internet Connection!"),
+                      ),
+                    )
+                  : AnimatedOpacity(
+                      opacity: opac,
+                      duration: Duration(milliseconds: 500),
+                      child: Container(
+                        width: width,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(15),
+                          ),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                            bottom: 10,
+                            left: 20,
+                            right: 20,
+                            top: 10,
+                          ),
+                          child: StreamBuilder<QuerySnapshot>(
+                              stream: distributorStream,
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData == false) {
+                                  return Center(
+                                    child: CircularProgressIndicator(),
                                   );
-                                },
-                              );
-                            },
-                          );
-                        }),
-                  ),
-                ),
-              ),
+                                }
+                                return ListView.builder(
+                                  shrinkWrap: true,
+                                  itemCount: snapshot.data.docs.length,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    QueryDocumentSnapshot item =
+                                        snapshot.data.docs[index];
+                                    return RowInfo(
+                                      imageURL: item['image'] == ''
+                                          ? 'https://www.spicefactors.com/wp-content/uploads/default-user-image.png'
+                                          : item['image'],
+                                      location: item['email'],
+                                      width: width,
+                                      title: item['name'] +
+                                          ' - ' +
+                                          item['companyName'],
+                                      func: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (_) => Distributor(
+                                              dist: item['email'].toString(),
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  },
+                                );
+                              }),
+                        ),
+                      ),
+                    ),
             ],
           ),
         ),

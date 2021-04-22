@@ -61,6 +61,7 @@ dependencies:
   # to check the internet connection
   connectivity: ^3.0.3
   
+  
 
 dev_dependencies:
   flutter_test:
