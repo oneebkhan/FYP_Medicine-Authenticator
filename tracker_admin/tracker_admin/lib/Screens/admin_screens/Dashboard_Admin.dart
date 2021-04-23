@@ -7,7 +7,9 @@ import 'package:intl/intl.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:tracker_admin/Widgets/Admin/BarChartWeekly.dart';
 import 'package:tracker_admin/Widgets/Admin/BarChartDaily.dart';
+import 'package:tracker_admin/Widgets/PopupCard.dart';
 import 'package:tracker_admin/Widgets/RowInfo.dart';
+import 'package:tracker_admin/configs/HeroDialogRoute.dart';
 import 'package:tracker_admin/screens/Search.dart';
 import 'package:tracker_admin/screens/admin_screens/Distributor.dart';
 import 'package:tracker_admin/screens/admin_screens/SearchDistributors.dart';
@@ -1289,23 +1291,36 @@ class _AdminStatisticsState extends State<AdminStatistics> {
                                 itemBuilder: (BuildContext context, int index) {
                                   QueryDocumentSnapshot item =
                                       snapshot.data.docs[index];
-                                  return RowInfo(
-                                    imageURL: item['image'] == ''
-                                        ? 'https://www.spicefactors.com/wp-content/uploads/default-user-image.png'
-                                        : item['image'],
-                                    location: DateFormat.yMMMd()
-                                        .add_jm()
-                                        .format(item['timestamp'].toDate()),
-                                    width: widget.width,
-                                    title: item['name'],
-                                    func: () {
-                                      // Navigator.push(
-                                      //   context,
-                                      //   MaterialPageRoute(
-                                      //     builder: (_) => History(),
-                                      //   ),
-                                      // );
-                                    },
+                                  return Hero(
+                                    tag: 'popupContainer',
+                                    child: Material(
+                                      child: RowInfo(
+                                        imageURL: item['image'] == ''
+                                            ? 'https://www.spicefactors.com/wp-content/uploads/default-user-image.png'
+                                            : item['image'],
+                                        location: DateFormat.yMMMd()
+                                            .add_jm()
+                                            .format(item['timestamp'].toDate()),
+                                        width: widget.width,
+                                        title: item['name'],
+                                        func: () {
+                                          Navigator.of(context).push(
+                                              HeroDialogRoute(
+                                                  builder: (context) {
+                                            return PopupCard(
+                                              by: item['by'].toString(),
+                                              dateTime: DateFormat.yMMMd()
+                                                  .add_jm()
+                                                  .format(item['timestamp']
+                                                      .toDate())
+                                                  .toString(),
+                                              image: item['image'],
+                                              name: item['name'],
+                                            );
+                                          }));
+                                        },
+                                      ),
+                                    ),
                                   );
                                 },
                               );

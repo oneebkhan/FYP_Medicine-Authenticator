@@ -117,7 +117,7 @@ class _HistoryState extends State<History> {
                                   snapshot.data.docs[index];
                               return RowInfo(
                                 imageURL: item['image'] == ''
-                                    ? "https://www.spicefactors.com/wp-content/uploads/default-user-image.png"
+                                    ? 'http://www.spicefactors.com/wp-content/uploads/default-user-image.png'
                                     : item['image'],
                                 location: item['by'],
                                 width: width,
