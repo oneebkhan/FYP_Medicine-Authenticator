@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:tracker_admin/Widgets/PopupCard.dart';
 import 'package:tracker_admin/Widgets/RowInfo.dart';
+import 'package:tracker_admin/configs/HeroDialogRoute.dart';
 import 'package:tracker_admin/screens/Pharmacy_Clinics_Info.dart';
 
 class History extends StatefulWidget {
@@ -115,23 +118,35 @@ class _HistoryState extends State<History> {
                             itemBuilder: (BuildContext context, int index) {
                               QueryDocumentSnapshot item =
                                   snapshot.data.docs[index];
-                              return RowInfo(
-                                imageURL: item['image'] == ''
-                                    ? 'http://www.spicefactors.com/wp-content/uploads/default-user-image.png'
-                                    : item['image'],
-                                location: item['by'],
-                                width: width,
-                                title: item['name'],
-                                func: () {
-                                  // Navigator.push(
-                                  //   context,
-                                  //   MaterialPageRoute(
-                                  //     builder: (_) => Pharmacy_Clinics_Info(
-
-                                  //     ),
-                                  //   ),
-                                  // );
-                                },
+                              return Hero(
+                                tag: 'popupContainer',
+                                child: Material(
+                                  borderRadius: BorderRadius.circular(15.0),
+                                  color: Colors.white,
+                                  child: RowInfo(
+                                    imageURL: item['image'] == ''
+                                        ? 'http://www.spicefactors.com/wp-content/uploads/default-user-image.png'
+                                        : item['image'],
+                                    location: item['by'],
+                                    width: width,
+                                    title: item['name'],
+                                    func: () {
+                                      Navigator.of(context).push(
+                                          HeroDialogRoute(builder: (context) {
+                                        return PopupCard(
+                                          by: item['by'].toString(),
+                                          dateTime: DateFormat.yMMMd()
+                                              .add_jm()
+                                              .format(
+                                                  item['timestamp'].toDate())
+                                              .toString(),
+                                          image: item['image'],
+                                          name: item['name'],
+                                        );
+                                      }));
+                                    },
+                                  ),
+                                ),
                               );
                             },
                           );

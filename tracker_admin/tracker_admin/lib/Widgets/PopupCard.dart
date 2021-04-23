@@ -30,89 +30,90 @@ class PopupCard extends StatelessWidget {
             color: Colors.white,
             elevation: 2,
             shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(32)),
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
             child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      '$name',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: width / 16,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: width,
+                    height: height / 12,
+                    decoration: BoxDecoration(
+                      color: Color.fromARGB(255, 149, 191, 255),
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(7),
+                        bottomRight: Radius.circular(7),
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20),
                       ),
                     ),
-                    SizedBox(
-                      height: height / 40,
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          'Done by:',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: width / 25,
-                          ),
+                    child: Center(
+                      child: Text(
+                        '$name',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: width / 16,
+                          color: Colors.white,
                         ),
-                        SizedBox(
-                          width: width / 20,
-                        ),
-                        CachedNetworkImage(
-                          imageUrl: image,
-                          imageBuilder: (context, imageProvider) => Container(
-                            width: width / 12,
-                            height: width / 12,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              image: DecorationImage(
-                                  image: imageProvider, fit: BoxFit.cover),
-                            ),
-                          ),
-                          placeholder: (context, url) =>
-                              CircularProgressIndicator(),
-                          errorWidget: (context, url, error) =>
-                              Icon(Icons.error),
-                        ),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Text('$by')
-                      ],
-                    ),
-                    SizedBox(
-                      height: height / 40,
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          'Last Changed:',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: width / 25,
-                          ),
-                        ),
-                        SizedBox(
-                          width: width / 20,
-                        ),
-                        Text('$dateTime')
-                      ],
-                    ),
-                    SizedBox(
-                      height: height / 40,
-                    ),
-                    Center(
-                      child: TextButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: const Text('Close'),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                  SizedBox(
+                    height: height / 50,
+                  ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CachedNetworkImage(
+                        imageUrl: image,
+                        imageBuilder: (context, imageProvider) => Container(
+                          width: width / 12,
+                          height: width / 12,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                                image: imageProvider, fit: BoxFit.cover),
+                          ),
+                        ),
+                        placeholder: (context, url) =>
+                            CircularProgressIndicator(),
+                        errorWidget: (context, url, error) => Icon(Icons.error),
+                      ),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Text(
+                        '$by',
+                        style: TextStyle(
+                          fontSize: width / 23,
+                        ),
+                      )
+                    ],
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    'Last Changed - $dateTime',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w300,
+                      fontSize: width / 30,
+                    ),
+                  ),
+                  SizedBox(
+                    height: height / 70,
+                  ),
+                  Center(
+                    child: TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text('Close'),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),

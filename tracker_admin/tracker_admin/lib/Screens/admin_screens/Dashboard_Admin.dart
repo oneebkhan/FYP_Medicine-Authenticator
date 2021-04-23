@@ -1294,6 +1294,8 @@ class _AdminStatisticsState extends State<AdminStatistics> {
                                   return Hero(
                                     tag: 'popupContainer',
                                     child: Material(
+                                      borderRadius: BorderRadius.circular(15.0),
+                                      color: Colors.white,
                                       child: RowInfo(
                                         imageURL: item['image'] == ''
                                             ? 'https://www.spicefactors.com/wp-content/uploads/default-user-image.png'
