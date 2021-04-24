@@ -6,7 +6,7 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:tracker_admin/screens/admin_screens/AddDistributor.dart';
 import 'package:tracker_admin/screens/admin_screens/Dashboard_Admin.dart';
 import 'package:tracker_admin/screens/distributor_screens/Dashboard_Distributor.dart';
-import 'package:tracker_admin/screens/Dashboard_Pharmacist.dart';
+import 'package:tracker_admin/screens/Pharmacy/Dashboard_Pharmacist.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginScreen extends StatefulWidget {

@@ -6,7 +6,7 @@ import 'package:tracker_admin/Widgets/Admin/BarChartDaily.dart';
 import 'package:tracker_admin/Widgets/Distributor/BarChartMonthly_Distributor.dart';
 import 'package:tracker_admin/Widgets/Distributor/BarChartWeekly_Distributor.dart';
 import 'package:tracker_admin/Widgets/RowInfo.dart';
-import 'package:tracker_admin/screens/Requests.dart';
+import 'package:tracker_admin/screens/distributor_screens/Requests.dart';
 import 'package:tracker_admin/screens/ViewMedicine.dart';
 
 class Dashboard_Pharmacist extends StatefulWidget {

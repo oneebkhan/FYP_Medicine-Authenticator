@@ -89,7 +89,21 @@ class _ContactDevsState extends State<ContactDevs> {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                SizedBox(
+                  height: width / 25,
+                ),
+                Text(
+                  'Developer Requests',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w400,
+                    fontSize: width / 12,
+                  ),
+                ),
+                SizedBox(
+                  height: width / 12,
+                ),
                 StreamBuilder<QuerySnapshot>(
                     stream: devRequestsStream,
                     builder: (context, snapshot) {

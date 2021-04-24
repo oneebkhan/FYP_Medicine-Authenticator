@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:tracker_admin/Widgets/Distributor/BarChartMonthly_Distributor.dart';
@@ -6,7 +8,7 @@ import 'package:tracker_admin/Widgets/Distributor/BarChartWeekly_Distributor.dar
 import 'package:tracker_admin/Widgets/RowInfo.dart';
 import 'package:tracker_admin/screens/Clinic/ViewClinic.dart';
 import 'package:tracker_admin/screens/Pharmacy/ViewPharmacy.dart';
-import 'package:tracker_admin/screens/Requests.dart';
+import 'package:tracker_admin/screens/distributor_screens/Requests.dart';
 import 'package:tracker_admin/screens/ViewMedicine.dart';
 
 class Dashboard_Distributor extends StatefulWidget {
@@ -25,11 +27,114 @@ class _Dashboard_DistributorState extends State<Dashboard_Distributor> {
   Color col = Color.fromARGB(255, 148, 210, 146);
   Color floatingButtonColor = Color.fromARGB(255, 110, 200, 110);
   int selectedIndex;
-  var page = PageController(initialPage: 0);
+  double opac;
+  double opac2;
+  int count;
+  int pharmacistCount;
+  int medCount;
+  int pharmCount;
+  int clinicCount;
+
+  //
+  //
+  // FUNCTION TO GET THE REQUESTS STREAM
+  getDevRequests() async {
+    try {
+      FirebaseFirestore.instance
+          .collection('RequestsMedicine')
+          .snapshots()
+          .listen((event) {
+        setState(() {
+          count = event.docs.length;
+        });
+      });
+    } on Exception catch (e) {
+      print(e);
+      Fluttertoast.showToast(msg: '$e');
+    }
+  }
+
+  //
+  //
+  // FUNCTION TO GET THE PHARMACIST COUNT
+  getDistributors() async {
+    try {
+      FirebaseFirestore.instance
+          .collection('Pharmacist')
+          .snapshots()
+          .listen((event) {
+        setState(() {
+          pharmacistCount = event.docs.length;
+        });
+      });
+    } on Exception catch (e) {
+      print(e);
+      Fluttertoast.showToast(msg: '$e');
+    }
+  }
+
+  //
+  //
+  // FUNCTION TO GET THE PHARMACY COUNT
+  getPharmacy() async {
+    try {
+      FirebaseFirestore.instance
+          .collection('Pharmacy')
+          .snapshots()
+          .listen((event) {
+        setState(() {
+          pharmCount = event.docs.length;
+        });
+      });
+    } on Exception catch (e) {
+      print(e);
+      Fluttertoast.showToast(msg: '$e');
+    }
+  }
+
+  //
+  //
+  // FUNCTION TO GET THE CLINIC COUNT
+  getClinic() async {
+    try {
+      FirebaseFirestore.instance
+          .collection('Clinic')
+          .snapshots()
+          .listen((event) {
+        setState(() {
+          clinicCount = event.docs.length;
+        });
+      });
+    } on Exception catch (e) {
+      print(e);
+      Fluttertoast.showToast(msg: '$e');
+    }
+  }
+
+  //
+  //
+  // FUNCTION TO GET THE MEDICINE COUNT
+  getMedicine() async {
+    try {
+      FirebaseFirestore.instance
+          .collection('Medicine')
+          .snapshots()
+          .listen((event) {
+        setState(() {
+          medCount = event.docs.length;
+        });
+      });
+    } on Exception catch (e) {
+      print(e);
+      Fluttertoast.showToast(msg: '$e');
+    }
+  }
 
   @override
   void initState() {
     super.initState();
+    opac = 1;
+    opac2 = 0;
     index = 0;
     selectedIndex = 0;
   }
@@ -102,20 +207,14 @@ class _Dashboard_DistributorState extends State<Dashboard_Distributor> {
                 onTabChange: (index) {
                   setState(() {
                     selectedIndex = index;
+                    if (index == 0) {
+                      opac = 1;
+                      opac2 = 0;
+                    } else {
+                      opac = 0;
+                      opac2 = 1;
+                    }
                   });
-                  if (index == 0) {
-                    page.animateToPage(
-                      0,
-                      duration: Duration(milliseconds: 500),
-                      curve: Curves.ease,
-                    );
-                  } else {
-                    page.animateToPage(
-                      1,
-                      duration: Duration(milliseconds: 500),
-                      curve: Curves.ease,
-                    );
-                  }
                 },
               ),
             ),
@@ -125,26 +224,32 @@ class _Dashboard_DistributorState extends State<Dashboard_Distributor> {
         body: Container(
           height: height,
           width: width,
-          child: PageView(
-            physics: NeverScrollableScrollPhysics(),
-            scrollDirection: Axis.horizontal,
-            controller: page,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: SingleChildScrollView(
-                  child: AdminDashboard(
-                    width: width,
-                    height: height,
+          child: IndexedStack(
+            index: selectedIndex,
+            children: <Widget>[
+              AnimatedOpacity(
+                opacity: opac,
+                duration: Duration(milliseconds: 500),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: SingleChildScrollView(
+                    child: AdminDashboard(
+                      width: width,
+                      height: height,
+                    ),
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: SingleChildScrollView(
-                  child: AdminStatistics(
-                    width: width,
-                    height: height,
+              AnimatedOpacity(
+                opacity: opac2,
+                duration: Duration(milliseconds: 500),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: SingleChildScrollView(
+                    child: AdminStatistics(
+                      width: width,
+                      height: height,
+                    ),
                   ),
                 ),
               ),
@@ -163,9 +268,14 @@ class _Dashboard_DistributorState extends State<Dashboard_Distributor> {
 class AdminDashboard extends StatefulWidget {
   final double width;
   final double height;
+  final int count;
 
-  AdminDashboard({Key key, @required this.width, @required this.height})
-      : super(key: key);
+  AdminDashboard({
+    Key key,
+    @required this.width,
+    @required this.height,
+    this.count,
+  }) : super(key: key);
 
   @override
   _AdminDashboardState createState() => _AdminDashboardState();
@@ -257,7 +367,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
           ),
           //
           //
-          // The first Distributor Container
+          // The first Medicine Container
           Center(
             child: Container(
               width: widget.width,
@@ -313,40 +423,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                       ],
                     ),
                     SizedBox(
-                      height: 5,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Total Medicine:',
-                          style: TextStyle(
-                            fontSize: widget.width / 30,
-                            color: Colors.grey[700],
-                            fontWeight: FontWeight.w300,
-                          ),
-                        ),
-                        Container(
-                          width: widget.width / 15,
-                          height: widget.width / 20,
-                          decoration: BoxDecoration(
-                            color: col,
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: Center(
-                            child: Text(
-                              '5',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: widget.width / 30,
-                              ),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      height: 20,
+                      height: 10,
                     ),
                     //
                     //
@@ -646,11 +723,158 @@ class _AdminDashboardState extends State<AdminDashboard> {
             ),
           ),
           SizedBox(
-            height: 30,
+            height: 35,
           ),
-
+          //
+          //
+          // The first Medicine Container
+          Center(
+            child: Container(
+              width: widget.width,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                color: Colors.white,
+              ),
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Pharmacist',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: widget.width / 16,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Number of Pharmacists:',
+                          style: TextStyle(
+                            fontSize: widget.width / 30,
+                            color: Colors.grey[700],
+                            fontWeight: FontWeight.w300,
+                          ),
+                        ),
+                        Container(
+                          width: widget.width / 15,
+                          height: widget.width / 20,
+                          decoration: BoxDecoration(
+                            color: col,
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: Center(
+                            child: Text(
+                              '5',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: widget.width / 30,
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    //
+                    //
+                    // The buttons
+                    Wrap(
+                      spacing: 15,
+                      children: [
+                        //
+                        //
+                        // The first ADD DISTRIBUTOR button
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 15),
+                          child: GestureDetector(
+                            onTap: () {},
+                            child: Container(
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 5, horizontal: 5),
+                                child: Image(
+                                  width: widget.width / 4.9,
+                                  height: widget.width / 4.6,
+                                  image: AssetImage(
+                                    'assets/icons/Distributor_dashboard_medicine/addMedicine.png',
+                                  ),
+                                ),
+                              ),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: col,
+                              ),
+                            ),
+                          ),
+                        ),
+                        //
+                        //
+                        // The second SEARCH MEDICINE Button
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => ViewMedicine(
+                                  pageName: 'View Medicine',
+                                ),
+                              ),
+                            );
+                          },
+                          child: Container(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 5, horizontal: 5),
+                              child: Image(
+                                width: widget.width / 4.9,
+                                height: widget.width / 4.6,
+                                image: AssetImage(
+                                  'assets/icons/Distributor_dashboard_medicine/viewMedicine.png',
+                                ),
+                              ),
+                            ),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: col,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 5, horizontal: 5),
+                            child: Image(
+                              width: widget.width / 4.9,
+                              height: widget.width / 4.6,
+                              image: AssetImage(
+                                'assets/icons/Distributor_dashboard_medicine/searchMedicine.png',
+                              ),
+                            ),
+                          ),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: col,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
           SizedBox(
-            height: 20,
+            height: 35,
           ),
         ],
       ),
@@ -664,9 +888,14 @@ class _AdminDashboardState extends State<AdminDashboard> {
 class AdminStatistics extends StatefulWidget {
   final double width;
   final double height;
+  final int count;
 
-  AdminStatistics({Key key, @required this.width, @required this.height})
-      : super(key: key);
+  AdminStatistics({
+    Key key,
+    @required this.width,
+    @required this.height,
+    this.count,
+  }) : super(key: key);
 
   @override
   _AdminStatisticsState createState() => _AdminStatisticsState();

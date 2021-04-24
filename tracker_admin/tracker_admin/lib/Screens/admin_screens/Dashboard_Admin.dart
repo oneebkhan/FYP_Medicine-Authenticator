@@ -17,7 +17,7 @@ import 'package:tracker_admin/screens/admin_screens/ViewDistributors.dart';
 import 'package:tracker_admin/screens/admin_screens/AddDistributor.dart';
 import 'package:tracker_admin/screens/admin_screens/History.dart';
 import 'package:tracker_admin/screens/Clinic/DistributorClinics.dart';
-import 'package:tracker_admin/screens/ContactDevs.dart';
+import 'package:tracker_admin/screens/admin_screens/ContactDevs.dart';
 import 'package:tracker_admin/screens/Pharmacy/DistributorPharmacies.dart';
 import 'package:tracker_admin/screens/ViewMedicine.dart';
 
@@ -364,30 +364,9 @@ class _AdminDashboardState extends State<AdminDashboard> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              con == true
-                  ? Material(
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(15),
-                        onTap: () {
-                          checkInternet();
-                        },
-                        child: Ink(
-                          height: widget.width / 15,
-                          width: widget.width / 12,
-                          decoration: BoxDecoration(
-                              color: Colors.grey[400],
-                              borderRadius: BorderRadius.circular(15)),
-                          child: Icon(
-                            Icons.wifi_off,
-                            color: Colors.white,
-                            size: widget.width / 24,
-                          ),
-                        ),
-                      ),
-                    )
-                  : Container(
-                      width: widget.width / 12,
-                    ),
+              Container(
+                width: widget.width / 12,
+              ),
               Text(
                 'DASHBOARD',
                 style: TextStyle(
