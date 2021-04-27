@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:tracker_admin/Widgets/Admin/BarChartWeekly.dart';
 import 'package:tracker_admin/Widgets/Admin/BarChartDaily.dart';
+import 'package:tracker_admin/Widgets/Admin/BarchartMonthly.dart';
 import 'package:tracker_admin/Widgets/PopupCard.dart';
 import 'package:tracker_admin/Widgets/RowInfo.dart';
 import 'package:tracker_admin/configs/HeroDialogRoute.dart';
@@ -402,26 +403,28 @@ class _AdminDashboardState extends State<AdminDashboard> {
                       ),
                     ),
                   ),
-                  Positioned(
-                    right: 0,
-                    top: 0,
-                    child: Container(
-                      height: widget.width / 18,
-                      width: widget.width / 18,
-                      decoration: BoxDecoration(
-                        color: Colors.red[400],
-                        shape: BoxShape.circle,
-                      ),
-                      child: Center(
-                        child: Text(
-                          widget.count.toString(),
-                          style: TextStyle(
-                            color: Colors.white,
+                  widget.count == 0
+                      ? Container()
+                      : Positioned(
+                          right: 0,
+                          top: 0,
+                          child: Container(
+                            height: widget.width / 18,
+                            width: widget.width / 18,
+                            decoration: BoxDecoration(
+                              color: Colors.red[400],
+                              shape: BoxShape.circle,
+                            ),
+                            child: Center(
+                              child: Text(
+                                widget.count.toString(),
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                    ),
-                  ),
                 ],
               ),
             ],
@@ -1050,26 +1053,28 @@ class _AdminStatisticsState extends State<AdminStatistics> {
                       ),
                     ),
                   ),
-                  Positioned(
-                    right: 0,
-                    top: 0,
-                    child: Container(
-                      height: widget.width / 18,
-                      width: widget.width / 18,
-                      decoration: BoxDecoration(
-                        color: Colors.red[400],
-                        shape: BoxShape.circle,
-                      ),
-                      child: Center(
-                        child: Text(
-                          widget.count.toString(),
-                          style: TextStyle(
-                            color: Colors.white,
+                  widget.count == 0
+                      ? Container()
+                      : Positioned(
+                          right: 0,
+                          top: 0,
+                          child: Container(
+                            height: widget.width / 18,
+                            width: widget.width / 18,
+                            decoration: BoxDecoration(
+                              color: Colors.red[400],
+                              shape: BoxShape.circle,
+                            ),
+                            child: Center(
+                              child: Text(
+                                widget.count.toString(),
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                    ),
-                  ),
                 ],
               ),
             ],
@@ -1120,7 +1125,7 @@ class _AdminStatisticsState extends State<AdminStatistics> {
                                   width: 20,
                                 ),
                                 Container(
-                                  width: widget.width / 2.5,
+                                  width: widget.width / 1.7,
                                   decoration: BoxDecoration(
                                     color: col,
                                     borderRadius: BorderRadius.circular(15),
@@ -1132,7 +1137,9 @@ class _AdminStatisticsState extends State<AdminStatistics> {
                                         bottom: 10,
                                         top: 15,
                                       ),
-                                      child: BarChartWeekly()),
+                                      child: BarChartMonthly(
+                                        width: widget.width,
+                                      )),
                                 ),
                                 SizedBox(
                                   width: 20,
@@ -1150,7 +1157,8 @@ class _AdminStatisticsState extends State<AdminStatistics> {
                                         bottom: 10,
                                         top: 15,
                                       ),
-                                      child: BarChartWeekly()),
+                                      child:
+                                          BarChartWeekly(width: widget.width)),
                                 ),
                                 SizedBox(
                                   width: 20,
@@ -1168,7 +1176,8 @@ class _AdminStatisticsState extends State<AdminStatistics> {
                                         bottom: 10,
                                         top: 15,
                                       ),
-                                      child: BarChartDaily()),
+                                      child:
+                                          BarChartDaily(width: widget.width)),
                                 ),
                                 SizedBox(
                                   width: 20,
@@ -1252,12 +1261,14 @@ class _AdminStatisticsState extends State<AdminStatistics> {
                     ),
                     con == true
                         ? Center(
-                            child: Text('No inrternet connection!'),
+                            child: Container(
+                              width: widget.width / 6,
+                              height: widget.width / 6,
+                              child: CircularProgressIndicator(),
+                            ),
                           )
                         : StreamBuilder<QuerySnapshot>(
-                            stream: FirebaseFirestore.instance
-                                .collection('History')
-                                .snapshots(),
+                            stream: historyStream,
                             builder: (context, snapshot) {
                               if (snapshot.hasData == false) {
                                 return Center(
@@ -1266,6 +1277,7 @@ class _AdminStatisticsState extends State<AdminStatistics> {
                               }
                               return ListView.builder(
                                 shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
                                 itemCount: snapshot.data.docs.length,
                                 itemBuilder: (BuildContext context, int index) {
                                   QueryDocumentSnapshot item =
@@ -1331,19 +1343,59 @@ class _AdminStatisticsState extends State<AdminStatistics> {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      'Top Distributors',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: widget.width / 16,
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Top Distributors',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: widget.width / 16,
+                          ),
+                        ),
+                        Container(
+                          width: 65,
+                          height: 30,
+                          decoration: BoxDecoration(
+                            color: Color.fromARGB(255, 149, 191, 255),
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: TextButton(
+                            style: ButtonStyle(
+                              padding:
+                                  MaterialStateProperty.all<EdgeInsetsGeometry>(
+                                EdgeInsets.all(0),
+                              ),
+                              textStyle: MaterialStateProperty.all<TextStyle>(
+                                TextStyle(color: Colors.white),
+                              ),
+                            ),
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => ViewDistributors(),
+                                ),
+                              );
+                            },
+                            child: Text(
+                              'View All',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                     SizedBox(
                       height: widget.height / 30,
                     ),
                     con == true
                         ? Center(
-                            child: Text('No inrternet connection!'),
+                            child: Container(
+                              width: widget.width / 6,
+                              height: widget.width / 6,
+                              child: CircularProgressIndicator(),
+                            ),
                           )
                         : StreamBuilder<QuerySnapshot>(
                             stream: distributorStream,
@@ -1355,6 +1407,7 @@ class _AdminStatisticsState extends State<AdminStatistics> {
                               }
                               return ListView.builder(
                                 shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
                                 itemCount: snapshot.data.docs.length,
                                 itemBuilder: (BuildContext context, int index) {
                                   QueryDocumentSnapshot item =

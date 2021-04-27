@@ -13,6 +13,10 @@ class BarChartWeekly extends StatefulWidget {
     Colors.pink,
     Colors.redAccent,
   ];
+  final double width;
+  final Function func;
+
+  BarChartWeekly({this.width, this.func});
 
   @override
   State<StatefulWidget> createState() => BarChartWeeklyState();
@@ -32,13 +36,44 @@ class BarChartWeeklyState extends State<BarChartWeekly> {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Weekly',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Weekly',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Material(
+              color: Colors.transparent,
+              elevation: 3,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(100.0))),
+              child: InkWell(
+                splashColor: Colors.white.withOpacity(0.5),
+                onTap: () {
+                  widget.func();
+                },
+                customBorder: CircleBorder(),
+                child: Ink(
+                  width: widget.width / 10,
+                  height: widget.width / 10,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Color.fromARGB(255, 160, 197, 255),
+                  ),
+                  child: Icon(
+                    Icons.arrow_forward_ios_outlined,
+                    color: Colors.white,
+                    size: widget.width / 20,
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
         SizedBox(
           height: 10,
@@ -61,7 +96,7 @@ class BarChartWeeklyState extends State<BarChartWeekly> {
     double y, {
     bool isTouched = false,
     Color barColor = const Color.fromARGB(255, 109, 141, 225),
-    double width = 7,
+    double width = 8,
     List<int> showTooltips = const [],
   }) {
     return BarChartGroupData(
@@ -181,19 +216,13 @@ class BarChartWeeklyState extends State<BarChartWeekly> {
           getTitles: (double value) {
             switch (value.toInt()) {
               case 0:
-                return 'M';
+                return '1';
               case 1:
-                return 'T';
+                return '2';
               case 2:
-                return 'W';
+                return '3';
               case 3:
-                return 'T';
-              case 4:
-                return 'F';
-              case 5:
-                return 'S';
-              case 6:
-                return 'S';
+                return '4';
               default:
                 return '';
             }
@@ -226,14 +255,6 @@ class BarChartWeeklyState extends State<BarChartWeekly> {
                     Random().nextInt(widget.availableColors.length)]);
           case 4:
             return makeGroupData(4, Random().nextInt(15).toDouble() + 6,
-                barColor: widget.availableColors[
-                    Random().nextInt(widget.availableColors.length)]);
-          case 5:
-            return makeGroupData(5, Random().nextInt(15).toDouble() + 6,
-                barColor: widget.availableColors[
-                    Random().nextInt(widget.availableColors.length)]);
-          case 6:
-            return makeGroupData(6, Random().nextInt(15).toDouble() + 6,
                 barColor: widget.availableColors[
                     Random().nextInt(widget.availableColors.length)]);
           default:

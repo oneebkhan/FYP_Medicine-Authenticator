@@ -4,7 +4,7 @@ import 'dart:math';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
-class BarChartWeekly_Distributor extends StatefulWidget {
+class BarChartMonthly extends StatefulWidget {
   final List<Color> availableColors = [
     Colors.purpleAccent,
     Colors.yellow,
@@ -16,15 +16,14 @@ class BarChartWeekly_Distributor extends StatefulWidget {
   final double width;
   final Function func;
 
-  BarChartWeekly_Distributor({this.width, this.func});
+  BarChartMonthly({this.width, this.func});
 
   @override
-  State<StatefulWidget> createState() => BarChartWeekly_DistributorState();
+  State<StatefulWidget> createState() => BarChartMonthlyState();
 }
 
-class BarChartWeekly_DistributorState
-    extends State<BarChartWeekly_Distributor> {
-  final Color barBackgroundColor = const Color.fromARGB(255, 148, 210, 146);
+class BarChartMonthlyState extends State<BarChartMonthly> {
+  final Color barBackgroundColor = const Color.fromARGB(255, 149, 191, 255);
   final Duration animDuration = const Duration(milliseconds: 250);
 
   int touchedIndex;
@@ -41,7 +40,7 @@ class BarChartWeekly_DistributorState
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'Weekly',
+              'Monthly',
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 20,
@@ -64,7 +63,7 @@ class BarChartWeekly_DistributorState
                   height: widget.width / 10,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Color.fromARGB(255, 112, 159, 110),
+                    color: Color.fromARGB(255, 160, 197, 255),
                   ),
                   child: Icon(
                     Icons.arrow_forward_ios_outlined,
@@ -80,12 +79,9 @@ class BarChartWeekly_DistributorState
           height: 10,
         ),
         Expanded(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: BarChart(
-              isPlaying ? randomData() : mainBarData(),
-              swapAnimationDuration: animDuration,
-            ),
+          child: BarChart(
+            isPlaying ? randomData() : mainBarData(),
+            swapAnimationDuration: animDuration,
           ),
         ),
       ],
@@ -96,8 +92,8 @@ class BarChartWeekly_DistributorState
     int x,
     double y, {
     bool isTouched = false,
-    Color barColor = const Color.fromARGB(255, 112, 159, 110),
-    double width = 8,
+    Color barColor = const Color.fromARGB(255, 109, 141, 225),
+    double width = 5,
     List<int> showTooltips = const [],
   }) {
     return BarChartGroupData(
@@ -118,7 +114,7 @@ class BarChartWeekly_DistributorState
     );
   }
 
-  List<BarChartGroupData> showingGroups() => List.generate(4, (i) {
+  List<BarChartGroupData> showingGroups() => List.generate(12, (i) {
         switch (i) {
           case 0:
             return makeGroupData(0, 5, isTouched: i == touchedIndex);
@@ -128,6 +124,22 @@ class BarChartWeekly_DistributorState
             return makeGroupData(2, 5, isTouched: i == touchedIndex);
           case 3:
             return makeGroupData(3, 7.5, isTouched: i == touchedIndex);
+          case 4:
+            return makeGroupData(4, 9, isTouched: i == touchedIndex);
+          case 5:
+            return makeGroupData(5, 11.5, isTouched: i == touchedIndex);
+          case 6:
+            return makeGroupData(6, 6.5, isTouched: i == touchedIndex);
+          case 7:
+            return makeGroupData(7, 6.5, isTouched: i == touchedIndex);
+          case 8:
+            return makeGroupData(8, 6.5, isTouched: i == touchedIndex);
+          case 9:
+            return makeGroupData(9, 6.5, isTouched: i == touchedIndex);
+          case 10:
+            return makeGroupData(10, 6.5, isTouched: i == touchedIndex);
+          case 11:
+            return makeGroupData(11, 6.5, isTouched: i == touchedIndex);
           default:
             return null;
         }
@@ -142,16 +154,40 @@ class BarChartWeekly_DistributorState
               String weekDay;
               switch (group.x.toInt()) {
                 case 0:
-                  weekDay = 'Week 1';
+                  weekDay = 'January';
                   break;
                 case 1:
-                  weekDay = 'Week 2';
+                  weekDay = 'Febuary';
                   break;
                 case 2:
-                  weekDay = 'Week 3';
+                  weekDay = 'March';
                   break;
                 case 3:
-                  weekDay = 'Week 4';
+                  weekDay = 'April';
+                  break;
+                case 4:
+                  weekDay = 'May';
+                  break;
+                case 5:
+                  weekDay = 'June';
+                  break;
+                case 6:
+                  weekDay = 'July';
+                  break;
+                case 7:
+                  weekDay = 'August';
+                  break;
+                case 8:
+                  weekDay = 'September';
+                  break;
+                case 9:
+                  weekDay = 'October';
+                  break;
+                case 10:
+                  weekDay = 'November';
+                  break;
+                case 11:
+                  weekDay = 'December';
                   break;
               }
               return BarTooltipItem(weekDay + '\n' + (rod.y - 1).toString(),
@@ -179,13 +215,29 @@ class BarChartWeekly_DistributorState
           getTitles: (double value) {
             switch (value.toInt()) {
               case 0:
-                return '1';
+                return 'J';
               case 1:
-                return '2';
+                return 'F';
               case 2:
-                return '3';
+                return 'M';
               case 3:
-                return '4';
+                return 'A';
+              case 4:
+                return 'M';
+              case 5:
+                return 'J';
+              case 6:
+                return 'J';
+              case 7:
+                return 'A';
+              case 8:
+                return 'S';
+              case 9:
+                return 'O';
+              case 10:
+                return 'N';
+              case 11:
+                return 'D';
               default:
                 return '';
             }
@@ -217,13 +269,30 @@ class BarChartWeekly_DistributorState
           getTitles: (double value) {
             switch (value.toInt()) {
               case 0:
-                return '1';
+                return 'Jan';
               case 1:
-                return '2';
+                return 'Feb';
               case 2:
-                return '3';
+                return 'Mar';
               case 3:
-                return '4';
+                return 'Apr';
+              case 4:
+                return 'May';
+              case 5:
+                return 'Jun';
+              case 6:
+                return 'Jul';
+              case 7:
+                return 'Aug';
+              case 8:
+                return 'Sep';
+              case 9:
+                return 'Oct';
+              case 10:
+                return 'Nov';
+              case 11:
+                return 'Dec';
+
               default:
                 return '';
             }
@@ -256,6 +325,34 @@ class BarChartWeekly_DistributorState
                     Random().nextInt(widget.availableColors.length)]);
           case 4:
             return makeGroupData(4, Random().nextInt(15).toDouble() + 6,
+                barColor: widget.availableColors[
+                    Random().nextInt(widget.availableColors.length)]);
+          case 5:
+            return makeGroupData(5, Random().nextInt(15).toDouble() + 6,
+                barColor: widget.availableColors[
+                    Random().nextInt(widget.availableColors.length)]);
+          case 6:
+            return makeGroupData(6, Random().nextInt(15).toDouble() + 6,
+                barColor: widget.availableColors[
+                    Random().nextInt(widget.availableColors.length)]);
+          case 7:
+            return makeGroupData(6, Random().nextInt(15).toDouble() + 6,
+                barColor: widget.availableColors[
+                    Random().nextInt(widget.availableColors.length)]);
+          case 8:
+            return makeGroupData(6, Random().nextInt(15).toDouble() + 6,
+                barColor: widget.availableColors[
+                    Random().nextInt(widget.availableColors.length)]);
+          case 9:
+            return makeGroupData(6, Random().nextInt(15).toDouble() + 6,
+                barColor: widget.availableColors[
+                    Random().nextInt(widget.availableColors.length)]);
+          case 10:
+            return makeGroupData(6, Random().nextInt(15).toDouble() + 6,
+                barColor: widget.availableColors[
+                    Random().nextInt(widget.availableColors.length)]);
+          case 11:
+            return makeGroupData(6, Random().nextInt(15).toDouble() + 6,
                 barColor: widget.availableColors[
                     Random().nextInt(widget.availableColors.length)]);
           default:

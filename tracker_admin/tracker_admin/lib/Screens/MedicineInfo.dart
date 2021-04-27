@@ -7,10 +7,12 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 class MedicineInfo extends StatefulWidget {
   final String medBarcode;
+  final String medName;
 
   MedicineInfo({
     Key key,
     this.medBarcode,
+    this.medName,
   }) : super(key: key);
 
   @override
@@ -31,6 +33,7 @@ class _MedicineInfoState extends State<MedicineInfo> {
   var page = PageController();
   var page2 = PageController();
   var med;
+  var stream;
   List<Widget> numberOfImagesIndex;
 
   //
@@ -65,17 +68,30 @@ class _MedicineInfoState extends State<MedicineInfo> {
   // gets the firebase data of that particular medicine
   getMedicineInfo() async {
     try {
-      StreamSubscription<DocumentSnapshot> stream = await FirebaseFirestore
-          .instance
-          .collection('Medicine')
-          .doc(widget.medBarcode)
-          .snapshots()
-          .listen((event) {
-        setState(() {
-          med = event.data();
-          getImages();
+      if (widget.medBarcode == null) {
+        // ignore: cancel_subscriptions
+        stream = await FirebaseFirestore.instance
+            .collection('Medicine')
+            .where('name', isEqualTo: widget.medName)
+            .snapshots()
+            .listen((event) {
+          setState(() {
+            med = event.docs.cast();
+            getImages();
+          });
         });
-      });
+      } else {
+        stream = await FirebaseFirestore.instance
+            .collection('Medicine')
+            .doc(widget.medBarcode)
+            .snapshots()
+            .listen((event) {
+          setState(() {
+            med = event.data();
+            getImages();
+          });
+        });
+      }
     } on Exception catch (e) {
       print(e);
       Fluttertoast.showToast(msg: '$e');
@@ -117,6 +133,12 @@ class _MedicineInfoState extends State<MedicineInfo> {
       duration: Duration(milliseconds: 500),
       curve: Curves.ease,
     );
+  }
+
+  @override
+  void dispose() {
+    stream.cancel();
+    super.dispose();
   }
 
   @override

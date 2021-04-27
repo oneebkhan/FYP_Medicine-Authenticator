@@ -13,6 +13,10 @@ class BarChartDaily extends StatefulWidget {
     Colors.pink,
     Colors.redAccent,
   ];
+  final Function func;
+  final double width;
+
+  BarChartDaily({this.width, this.func});
 
   @override
   State<StatefulWidget> createState() => BarChartDailyState();
@@ -32,13 +36,44 @@ class BarChartDailyState extends State<BarChartDaily> {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Daily',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Daily',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Material(
+              color: Colors.transparent,
+              elevation: 3,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(100.0))),
+              child: InkWell(
+                splashColor: Colors.white.withOpacity(0.5),
+                onTap: () {
+                  widget.func();
+                },
+                customBorder: CircleBorder(),
+                child: Ink(
+                  width: widget.width / 10,
+                  height: widget.width / 10,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Color.fromARGB(255, 160, 197, 255),
+                  ),
+                  child: Icon(
+                    Icons.arrow_forward_ios_outlined,
+                    color: Colors.white,
+                    size: widget.width / 20,
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
         SizedBox(
           height: 10,

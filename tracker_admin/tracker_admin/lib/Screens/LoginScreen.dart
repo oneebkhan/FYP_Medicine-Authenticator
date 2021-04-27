@@ -33,6 +33,8 @@ class _LoginScreenState extends State<LoginScreen> {
   bool isLoading;
   var nav;
   bool con = true;
+  String distCompName;
+
   //
   //
   //check the internet connection
@@ -136,6 +138,7 @@ class _LoginScreenState extends State<LoginScreen> {
           setState(() {
             userName = value.data()['name'].toString();
             user = value.data()['email'].toString().toLowerCase();
+            distCompName = value.data()['companyName'].toString();
           });
           login();
         } else {
@@ -342,7 +345,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                     validatePassword(pass.text) == null) {
                                   if (widget.i == 1) {
                                     setState(() {
-                                      nav = Dashboard_Distributor();
+                                      nav = Dashboard_Distributor(
+                                          distCompName: distCompName);
                                     });
                                     getDistributors(email.text);
                                   } else if (widget.i == 0) {
