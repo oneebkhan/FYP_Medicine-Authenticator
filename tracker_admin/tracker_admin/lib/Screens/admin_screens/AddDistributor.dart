@@ -1,9 +1,14 @@
+import 'dart:io';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 // ignore: must_be_immutable
 class AddDistributor extends StatefulWidget {
@@ -25,6 +30,93 @@ class _AddDistributorState extends State<AddDistributor> {
   bool _isLoading = false;
   bool con = true;
   var subscription;
+  String imageURL;
+  File image;
+  String uploadedFileURL;
+
+  //
+  //
+  // The function to pick the images from the gallery
+  chooseGalleryImage() async {
+    final pickedFile =
+        await ImagePicker().getImage(source: ImageSource.gallery);
+    if (pickedFile.path == null) {
+      retrieveLostData();
+    } else if (pickedFile != null) {
+      setState(() {
+        image = File(pickedFile?.path);
+      });
+    }
+  }
+
+  //
+  //
+  // The function to pick the images from the camera
+  chooseCameraImage() async {
+    final pickedFile = await ImagePicker().getImage(source: ImageSource.camera);
+    if (pickedFile.path == null) {
+      retrieveLostData();
+    } else if (pickedFile != null) {
+      setState(() {
+        image = File(pickedFile?.path);
+      });
+    }
+  }
+
+  //
+  //
+  // The function for error correction
+  Future<void> retrieveLostData() async {
+    final LostData response = await ImagePicker().getLostData();
+    if (response.isEmpty) {
+      return Fluttertoast.showToast(msg: 'No file picked');
+    }
+    if (response.file != null) {
+      setState(() {
+        image = File(response.file.path);
+      });
+    } else {
+      print(response.file);
+      Fluttertoast.showToast(msg: 'No file picked');
+    }
+  }
+
+  //
+  //
+  // Upload the images to firestore
+  Future uploadFile() async {
+    FirebaseStorage _storage = FirebaseStorage.instance;
+    if (await Permission.storage.request().isGranted) {
+      setState(() {
+        _isLoading = true;
+      });
+      try {
+        //saving the image to the cloud
+        var snapshot = await _storage
+            .ref(
+                'Distributors/${email.text}/${Timestamp.now().millisecondsSinceEpoch}.png')
+            .putFile(image);
+        //getting the image url
+        var downloadURL = await snapshot.ref.getDownloadURL();
+        setState(() {
+          uploadedFileURL = downloadURL;
+        });
+        registerDistributor();
+
+        //addEventFirebase();
+        //navigate();
+
+        // updates the user image url field
+      } on FirebaseException catch (e) {
+        print(e.code);
+      }
+      // erorrs
+    } else {
+      Fluttertoast.showToast(
+        msg: 'Error Uploading image.\nPermission denied',
+      );
+    }
+  }
 
   //
   //
@@ -56,6 +148,7 @@ class _AddDistributorState extends State<AddDistributor> {
         email: email.text,
         password: password.text,
       );
+
       addDistributorInfo();
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
@@ -94,7 +187,7 @@ class _AddDistributorState extends State<AddDistributor> {
         "clinicsAdded": [],
         "pharmacyAdded": [],
         "pharmacyImages": [],
-        "image": '',
+        "image": uploadedFileURL,
         "salesNumber": 0,
         "sales": {
           "Timestamp": [
@@ -220,11 +313,141 @@ class _AddDistributorState extends State<AddDistributor> {
                             SizedBox(
                               height: 20,
                             ),
-                            ContainerText(
-                              hint: 'User Name',
-                              node: node,
-                              controller: name,
-                              maxLength: 20,
+                            Row(
+                              children: [
+                                image == null
+                                    ? Material(
+                                        color: Colors.transparent,
+                                        child: InkWell(
+                                          customBorder: CircleBorder(),
+                                          onTap: () {
+                                            showDialog(
+                                              context: context,
+                                              builder: (_) => AlertDialog(
+                                                title:
+                                                    Text('Camera or Gallery'),
+                                                content: Text(
+                                                    'Choose either the camera or the gallery to get the image'),
+                                                actions: [
+                                                  TextButton(
+                                                    child: Text('Camera'),
+                                                    onPressed: () {
+                                                      chooseCameraImage();
+                                                      Navigator.pop(context);
+                                                    },
+                                                  ),
+                                                  TextButton(
+                                                    child: Text('Gallery'),
+                                                    onPressed: () {
+                                                      chooseGalleryImage();
+                                                      Navigator.pop(context);
+                                                    },
+                                                  ),
+                                                ],
+                                              ),
+                                            );
+                                            //chooseImage();
+                                          },
+                                          child: Stack(
+                                            children: [
+                                              CachedNetworkImage(
+                                                imageUrl:
+                                                    // the 4th image URL
+                                                    'https://www.spicefactors.com/wp-content/uploads/default-user-image.png',
+                                                imageBuilder:
+                                                    (context, imageProvider) =>
+                                                        Container(
+                                                  width: width / 8,
+                                                  height: width / 8,
+                                                  decoration: BoxDecoration(
+                                                    shape: BoxShape.circle,
+                                                    image: DecorationImage(
+                                                      image: imageProvider,
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                                  ),
+                                                ),
+                                                placeholder: (context, url) =>
+                                                    CircularProgressIndicator(),
+                                                errorWidget:
+                                                    (context, url, error) =>
+                                                        Icon(Icons.error),
+                                              ),
+                                              Container(
+                                                width: width / 7.5,
+                                                height: width / 7.8,
+                                                child: Align(
+                                                  alignment:
+                                                      Alignment.bottomRight,
+                                                  child: Icon(
+                                                    Icons.add,
+                                                    color: Colors.grey,
+                                                  ),
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      )
+                                    : Material(
+                                        color: Colors.transparent,
+                                        child: InkWell(
+                                          onTap: () {
+                                            showDialog(
+                                              context: context,
+                                              builder: (_) => AlertDialog(
+                                                title:
+                                                    Text('Camera or Gallery'),
+                                                content: Text(
+                                                    'Choose either the camera or the gallery to get the image'),
+                                                actions: [
+                                                  TextButton(
+                                                    child: Text('Camera'),
+                                                    onPressed: () {
+                                                      chooseCameraImage();
+                                                      Navigator.pop(context);
+                                                    },
+                                                  ),
+                                                  TextButton(
+                                                    child: Text('Gallery'),
+                                                    onPressed: () {
+                                                      chooseGalleryImage();
+                                                      Navigator.pop(context);
+                                                    },
+                                                  ),
+                                                ],
+                                              ),
+                                            );
+                                          },
+                                          customBorder: CircleBorder(),
+                                          child: Container(
+                                            width: width / 8,
+                                            height: width / 8,
+                                            decoration: BoxDecoration(
+                                              color: Colors.black,
+                                              shape: BoxShape.circle,
+                                              image: DecorationImage(
+                                                image: FileImage(
+                                                  image,
+                                                ),
+                                                fit: BoxFit.cover,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                SizedBox(
+                                  width: width / 40,
+                                ),
+                                Expanded(
+                                  child: ContainerText(
+                                    hint: 'User Name',
+                                    node: node,
+                                    controller: name,
+                                    maxLength: 20,
+                                  ),
+                                ),
+                              ],
                             ),
                             SizedBox(
                               height: 10,
@@ -299,8 +522,10 @@ class _AddDistributorState extends State<AddDistributor> {
                           companyName.text.isEmpty ||
                           location.text.isEmpty) {
                         Fluttertoast.showToast(msg: 'Fill all the fields!');
+                      } else if (image == null) {
+                        Fluttertoast.showToast(msg: 'Select a profile image!');
                       } else if (validateEmail(email.text) == null) {
-                        registerDistributor();
+                        uploadFile();
                       }
                     },
                     child: Container(

@@ -955,7 +955,7 @@ class _AdminStatisticsState extends State<AdminStatistics> {
       setState(() {
         distributorStream = FirebaseFirestore.instance
             .collection('Distributor')
-            .orderBy('salesNumber', descending: false)
+            .orderBy('salesNumber', descending: true)
             .limit(5)
             .snapshots();
       });

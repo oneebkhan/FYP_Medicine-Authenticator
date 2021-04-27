@@ -36,8 +36,6 @@ dependencies:
   cached_network_image: ^2.5.0
   # QR and barcode scanner
   qrscan: ^0.2.22
-  # picks the image using the gallery and the camera
-  image_picker: ^0.7.2+1
   # provides the file path on both IOS and android
   # path_provider: ^2.0.1
   google_nav_bar: ^4.0.2
@@ -53,6 +51,7 @@ dependencies:
   firebase_core: ^1.0.1
   cloud_firestore: ^1.0.1
   firebase_auth: ^1.0.1
+  firebase_storage: ^8.0.5
   plugin_platform_interface: ^2.0.0
   # to get 60+ hz on devices that support it
   flutter_displaymode: ^0.1.1
@@ -60,6 +59,8 @@ dependencies:
   intl: ^0.17.0
   # to check the internet connection
   connectivity: ^3.0.3
+  image_picker: ^0.7.4
+  permission_handler: ^7.0.0
   
   
 
@@ -88,6 +89,7 @@ flutter:
     - assets/icons/admin_dashboard_distributors/
     - assets/icons/Distributor_dashboard_medicine/
     - assets/icons/Distributor_dashboard_pharmacy/
+    - assets/icons/Distributor_dashboard_pharmacist/
     - assets/lottie/
   #   - images/a_dot_ham.jpeg
 

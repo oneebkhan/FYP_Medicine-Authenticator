@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
@@ -8,6 +9,7 @@ import 'package:tracker_admin/Widgets/Distributor/BarChartWeekly_Distributor.dar
 import 'package:tracker_admin/Widgets/RowInfo.dart';
 import 'package:tracker_admin/screens/Clinic/ViewClinic.dart';
 import 'package:tracker_admin/screens/Pharmacy/ViewPharmacy.dart';
+import 'package:tracker_admin/screens/Search.dart';
 import 'package:tracker_admin/screens/distributor_screens/Requests.dart';
 import 'package:tracker_admin/screens/ViewMedicine.dart';
 
@@ -38,7 +40,7 @@ class _Dashboard_DistributorState extends State<Dashboard_Distributor> {
   //
   //
   // FUNCTION TO GET THE REQUESTS STREAM
-  getDevRequests() async {
+  getMedRequests() async {
     try {
       FirebaseFirestore.instance
           .collection('RequestsMedicine')
@@ -57,7 +59,7 @@ class _Dashboard_DistributorState extends State<Dashboard_Distributor> {
   //
   //
   // FUNCTION TO GET THE PHARMACIST COUNT
-  getDistributors() async {
+  getPharmacists() async {
     try {
       FirebaseFirestore.instance
           .collection('Pharmacist')
@@ -137,6 +139,11 @@ class _Dashboard_DistributorState extends State<Dashboard_Distributor> {
     opac2 = 0;
     index = 0;
     selectedIndex = 0;
+    getMedicine();
+    getClinic();
+    getPharmacy();
+    getPharmacists();
+    getMedRequests();
   }
 
   void dispose() {
@@ -236,6 +243,11 @@ class _Dashboard_DistributorState extends State<Dashboard_Distributor> {
                     child: AdminDashboard(
                       width: width,
                       height: height,
+                      clinicCount: clinicCount,
+                      count: count,
+                      medCount: medCount,
+                      pharmCount: pharmCount,
+                      pharmacistCount: pharmacistCount,
                     ),
                   ),
                 ),
@@ -269,12 +281,20 @@ class AdminDashboard extends StatefulWidget {
   final double width;
   final double height;
   final int count;
+  final int pharmacistCount;
+  final int pharmCount;
+  final int clinicCount;
+  final int medCount;
 
   AdminDashboard({
     Key key,
     @required this.width,
     @required this.height,
     this.count,
+    this.pharmacistCount,
+    this.pharmCount,
+    this.clinicCount,
+    this.medCount,
   }) : super(key: key);
 
   @override
@@ -283,6 +303,42 @@ class AdminDashboard extends StatefulWidget {
 
 class _AdminDashboardState extends State<AdminDashboard> {
   Color col = Color.fromARGB(255, 148, 210, 146);
+  bool con = true;
+  var subscription;
+
+  //
+  //
+  //check  the internet connectivity
+  checkInternet() async {
+    var connectivityResult = await Connectivity().checkConnectivity();
+    print(connectivityResult.toString());
+    if (connectivityResult == ConnectivityResult.none) {
+      Fluttertoast.showToast(msg: 'Not Connected to the Internet!');
+      setState(() {
+        con = true;
+      });
+    } else
+      setState(() {
+        con = false;
+      });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    checkInternet();
+    subscription = Connectivity()
+        .onConnectivityChanged
+        .listen((ConnectivityResult result) {
+      checkInternet();
+    });
+  }
+
+  @override
+  void dispose() {
+    subscription.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -350,7 +406,9 @@ class _AdminDashboardState extends State<AdminDashboard> {
                       ),
                       child: Center(
                         child: Text(
-                          '3',
+                          widget.count.toString() == 'null'
+                              ? '!'
+                              : widget.count.toString(),
                           style: TextStyle(
                             color: Colors.white,
                           ),
@@ -412,7 +470,9 @@ class _AdminDashboardState extends State<AdminDashboard> {
                           ),
                           child: Center(
                             child: Text(
-                              '5',
+                              widget.medCount.toString() == 'null'
+                                  ? '!'
+                                  : widget.medCount.toString(),
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: widget.width / 30,
@@ -489,21 +549,31 @@ class _AdminDashboardState extends State<AdminDashboard> {
                             ),
                           ),
                         ),
-                        Container(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 5, horizontal: 5),
-                            child: Image(
-                              width: widget.width / 4.9,
-                              height: widget.width / 4.6,
-                              image: AssetImage(
-                                'assets/icons/Distributor_dashboard_medicine/searchMedicine.png',
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => Search(),
+                              ),
+                            );
+                          },
+                          child: Container(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 5, horizontal: 5),
+                              child: Image(
+                                width: widget.width / 4.9,
+                                height: widget.width / 4.6,
+                                image: AssetImage(
+                                  'assets/icons/Distributor_dashboard_medicine/searchMedicine.png',
+                                ),
                               ),
                             ),
-                          ),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: col,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: col,
+                            ),
                           ),
                         ),
                       ],
@@ -561,7 +631,9 @@ class _AdminDashboardState extends State<AdminDashboard> {
                           ),
                           child: Center(
                             child: Text(
-                              '5',
+                              widget.pharmCount.toString() == 'null'
+                                  ? '!'
+                                  : widget.pharmCount.toString(),
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: widget.width / 30,
@@ -594,7 +666,9 @@ class _AdminDashboardState extends State<AdminDashboard> {
                           ),
                           child: Center(
                             child: Text(
-                              '5',
+                              widget.clinicCount.toString() == 'null'
+                                  ? '!'
+                                  : widget.clinicCount.toString(),
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: widget.width / 30,
@@ -772,7 +846,9 @@ class _AdminDashboardState extends State<AdminDashboard> {
                           ),
                           child: Center(
                             child: Text(
-                              '5',
+                              widget.pharmacistCount.toString() == 'null'
+                                  ? '!'
+                                  : widget.pharmacistCount.toString(),
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: widget.width / 30,
@@ -806,7 +882,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                   width: widget.width / 4.9,
                                   height: widget.width / 4.6,
                                   image: AssetImage(
-                                    'assets/icons/Distributor_dashboard_medicine/addMedicine.png',
+                                    'assets/icons/Distributor_dashboard_pharmacist/addPharmacist.png',
                                   ),
                                 ),
                               ),
@@ -839,7 +915,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                 width: widget.width / 4.9,
                                 height: widget.width / 4.6,
                                 image: AssetImage(
-                                  'assets/icons/Distributor_dashboard_medicine/viewMedicine.png',
+                                  'assets/icons/Distributor_dashboard_pharmacist/viewPharmacist.png',
                                 ),
                               ),
                             ),
@@ -857,7 +933,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                               width: widget.width / 4.9,
                               height: widget.width / 4.6,
                               image: AssetImage(
-                                'assets/icons/Distributor_dashboard_medicine/searchMedicine.png',
+                                'assets/icons/Distributor_dashboard_pharmacist/searchPharmacist.png',
                               ),
                             ),
                           ),
