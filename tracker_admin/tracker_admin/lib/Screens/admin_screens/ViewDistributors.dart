@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity/connectivity.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:tracker_admin/Widgets/RowInfo.dart';
@@ -83,6 +84,11 @@ class _ViewDistributorsState extends State<ViewDistributors> {
     height = MediaQuery.of(context).size.height;
 
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          print(FirebaseAuth.instance.currentUser.email);
+        },
+      ),
       backgroundColor: Color.fromARGB(255, 246, 246, 248),
       appBar: AppBar(
         backgroundColor: Colors.transparent,

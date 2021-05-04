@@ -3,21 +3,21 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:tracker_admin/screens/admin_screens/AddDistributor.dart';
 
 // ignore: must_be_immutable
-class AddDistributor extends StatefulWidget {
+class AddMedicine extends StatefulWidget {
   @override
-  _AddDistributorState createState() => _AddDistributorState();
+  _AddMedicineState createState() => _AddMedicineState();
 }
 
-class _AddDistributorState extends State<AddDistributor> {
+class _AddMedicineState extends State<AddMedicine> {
   double width;
   double height;
   double safePadding;
@@ -102,8 +102,6 @@ class _AddDistributorState extends State<AddDistributor> {
         setState(() {
           uploadedFileURL = downloadURL;
         });
-        registerDistributor();
-
         //addEventFirebase();
         //navigate();
 
@@ -138,51 +136,14 @@ class _AddDistributorState extends State<AddDistributor> {
 
   //
   //
-  // this functions adds a distributor to Firebase Auth
-  registerDistributor() async {
-    setState(() {
-      _isLoading = true;
-    });
-    FirebaseApp app = await Firebase.initializeApp(
-        name: 'Secondary', options: Firebase.app().options);
-    try {
-      UserCredential userCredential = await FirebaseAuth.instanceFor(app: app)
-          .createUserWithEmailAndPassword(
-        email: email.text,
-        password: password.text,
-      );
-
-      addDistributorInfo();
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'weak-password') {
-        Fluttertoast.showToast(msg: 'The password provided is too weak.');
-      } else if (e.code == 'email-already-in-use') {
-        Fluttertoast.showToast(
-            msg: 'The account already exists for that email.');
-      }
-      setState(() {
-        _isLoading = false;
-      });
-    } catch (e) {
-      Fluttertoast.showToast(msg: e);
-      setState(() {
-        _isLoading = false;
-      });
-    }
-    await app.delete();
-  }
-
-  //
-  //
   // this function adds distributor information to Firebase Firestore
-  addDistributorInfo() async {
+  addMedicineInfo() async {
     try {
       // ignore: await_only_futures
       var firestore = await FirebaseFirestore.instance;
       firestore.collection("Distributor").doc(email.text).set({
         "name": name.text,
         "email": email.text,
-        "password": password.text,
         "companyName": companyName.text,
         "location": location.text,
         "addedByAdmin": currentDistributorEmail,
@@ -217,33 +178,9 @@ class _AddDistributorState extends State<AddDistributor> {
     }
   }
 
-  //
-  //
-  // Validate the Email Address
-  String validateEmail(String value) {
-    if (value.isEmpty) {
-      Fluttertoast.showToast(msg: 'Enter Email');
-      return "enter email";
-    }
-    Pattern pattern =
-        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-    RegExp regex = new RegExp(pattern);
-    if (!regex.hasMatch(value.trim())) {
-      Fluttertoast.showToast(msg: 'Invalid Email Address');
-      return "the email address is not valid";
-    }
-    return null;
-  }
-
   @override
   void initState() {
     super.initState();
-    // name;
-    // email;
-    // password;
-    // companyName;
-    // location;
-    // phoneNumber;
     checkInternet();
     subscription = Connectivity()
         .onConnectivityChanged
@@ -315,7 +252,7 @@ class _AddDistributorState extends State<AddDistributor> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Add Distributor',
+                              'Add Medicine',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: width / 16,
@@ -534,8 +471,9 @@ class _AddDistributorState extends State<AddDistributor> {
                           location.text.isEmpty) {
                         Fluttertoast.showToast(msg: 'Fill all the fields!');
                       } else if (image == null) {
-                        Fluttertoast.showToast(msg: 'Select a profile image!');
-                      } else if (validateEmail(email.text) == null) {
+                        Fluttertoast.showToast(
+                            msg: 'Select atleast one image!');
+                      } else {
                         uploadFile();
                       }
                     },
@@ -564,128 +502,6 @@ class _AddDistributorState extends State<AddDistributor> {
             ),
           ),
         ),
-      ),
-    );
-  }
-}
-
-class ContainerText extends StatefulWidget {
-  final TextEditingController controller;
-  final String hint;
-  final node;
-  final bool hide;
-  final int maxLength;
-  final int maxLines;
-  final TextInputType inputType;
-  final double width;
-  final double height;
-
-  const ContainerText({
-    Key key,
-    this.controller,
-    this.hint,
-    this.node,
-    this.hide,
-    this.maxLength,
-    this.maxLines,
-    this.inputType,
-    this.width,
-    this.height,
-  });
-
-  @override
-  _ContainerTextState createState() => _ContainerTextState();
-}
-
-class _ContainerTextState extends State<ContainerText> {
-  bool show;
-
-  //
-  //
-  // function to toggle visibility if password
-  passwordVisibility() {
-    if (widget.hide == true) {
-      setState(() {
-        show = false;
-      });
-    } else {
-      setState(() {
-        show = true;
-      });
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    passwordVisibility();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: widget.height,
-      width: widget.width,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15),
-        color: Colors.grey[200],
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Expanded(
-            flex: 5,
-            child: TextField(
-              keyboardType: widget.inputType,
-              // hides the text if password
-              obscureText: show == false ? true : false,
-              controller: widget.controller,
-              textInputAction: TextInputAction.next,
-              maxLength: widget.maxLength,
-              maxLines: widget.maxLines == null ? 1 : widget.maxLines,
-              onEditingComplete: () => widget.node.nextFocus(),
-              decoration: InputDecoration(
-                fillColor: Colors.transparent,
-                counterText: '',
-                hintText: widget.hint,
-                filled: true,
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                  borderSide: BorderSide(
-                    color: Colors.transparent,
-                  ),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                  borderSide: BorderSide(
-                    color: Colors.transparent,
-                  ),
-                ),
-              ),
-            ),
-          ),
-          // shows a visibility button if password
-          widget.hide != null
-              ? Expanded(
-                  flex: 1,
-                  child: IconButton(
-                    icon: Icon(show == false
-                        ? Icons.visibility
-                        : Icons.visibility_off),
-                    onPressed: () {
-                      setState(() {
-                        if (show == false) {
-                          show = true;
-                        } else
-                          show = false;
-                      });
-                    },
-                  ),
-                )
-              : Container(),
-        ],
       ),
     );
   }

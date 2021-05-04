@@ -17,6 +17,7 @@ import 'package:tracker_admin/screens/MedicineInfo.dart';
 import 'package:tracker_admin/screens/Pharmacy/ViewPharmacy.dart';
 import 'package:tracker_admin/screens/Search.dart';
 import 'package:tracker_admin/screens/admin_screens/History.dart';
+import 'package:tracker_admin/screens/distributor_screens/AddMedicine.dart';
 import 'package:tracker_admin/screens/distributor_screens/Requests.dart';
 import 'package:tracker_admin/screens/ViewMedicine.dart';
 
@@ -510,7 +511,14 @@ class _DistributorDashboardState extends State<DistributorDashboard> {
                         Padding(
                           padding: const EdgeInsets.only(bottom: 15),
                           child: GestureDetector(
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => AddMedicine(),
+                                ),
+                              );
+                            },
                             child: Container(
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(

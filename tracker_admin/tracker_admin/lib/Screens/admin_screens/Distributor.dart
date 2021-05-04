@@ -2,11 +2,13 @@ import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
-import 'package:tracker_admin/screens/admin_screens/EditDistributor.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 // ignore: camel_case_types
@@ -36,10 +38,11 @@ class _DistributorState extends State<Distributor> {
 
   var page = PageController();
   var info;
+  bool pass = false;
 
   //
   //
-  // gets the firebase data of that particular medicine
+  // gets the firebase data of that particular distributor
   getDistributorInfo() async {
     try {
       // ignore: unused_local_variable
@@ -73,6 +76,60 @@ class _DistributorState extends State<Distributor> {
         opac2 = 1.0;
       });
     });
+  }
+
+  //
+  //
+  // Delete the user folder contents in firebase storage
+  deleteFolderContents(emailDistributor) {
+    String path = "Distributors/" + "$emailDistributor";
+    var ref = FirebaseStorage.instance.ref(path);
+
+    ref.listAll().then((dir) {
+      dir.items.forEach((fileRef) {
+        this.deleteFile(ref.fullPath, fileRef.name);
+      });
+      dir.prefixes.forEach((folderRef) {
+        this.deleteFolderContents(folderRef.fullPath);
+      });
+    }).catchError((error) => Fluttertoast.showToast(msg: "$error"));
+  }
+
+  deleteFile(pathToFile, fileName) {
+    var ref = FirebaseStorage.instance.ref(pathToFile);
+    var childRef = ref.child(fileName);
+    childRef.delete();
+  }
+
+  //
+  //
+  //delete distributor firestore document
+  deleteDistributor() async {
+    return FirebaseFirestore.instance
+        .collection('Distributor')
+        .doc(info['email'])
+        .delete()
+        .catchError((error) => print("Failed to delete user: $error"));
+  }
+
+  //
+  //
+  // unregister firebase auth
+  unregisterDistributor() async {
+    FirebaseApp app = await Firebase.initializeApp(
+        name: 'Secondary', options: Firebase.app().options);
+    try {
+      var result = await FirebaseAuth.instanceFor(app: app)
+          .currentUser
+          .reauthenticateWithCredential(EmailAuthProvider.credential(
+              email: info['email'], password: info['password']));
+      result.user.delete();
+      print('test');
+    } on Exception catch (e) {
+      Fluttertoast.showToast(msg: '$e');
+      print(e);
+    }
+    await app.delete();
   }
 
   @override
@@ -140,7 +197,38 @@ class _DistributorState extends State<Distributor> {
                   labelBackgroundColor: Colors.grey[800],
                   labelStyle: TextStyle(color: Colors.white),
                   onTap: () {
-                    //delete distributor
+                    showDialog(
+                      context: context,
+                      builder: (_) => AlertDialog(
+                        title: Text('Delete ' + info['name'] + '?'),
+                        content: Text(
+                            'This will delete the distributor and its images folder'),
+                        actions: [
+                          TextButton(
+                            child: Text('Yes'),
+                            onPressed: () {
+                              Navigator.pop(context);
+                              deleteFolderContents(
+                                info['email'],
+                              );
+                              unregisterDistributor();
+
+                              Future.delayed(Duration(milliseconds: 1000), () {
+                                deleteDistributor();
+                                Navigator.pop(context);
+                                //Navigator.pop(context);
+                              });
+                            },
+                          ),
+                          TextButton(
+                            child: Text('No'),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                          ),
+                        ],
+                      ),
+                    );
                   },
                 ),
                 SpeedDialChild(
@@ -179,12 +267,12 @@ class _DistributorState extends State<Distributor> {
                   labelBackgroundColor: Colors.grey[800],
                   labelStyle: TextStyle(color: Colors.white),
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => EditDistributor(),
-                      ),
-                    );
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //     builder: (_) => EditDistributor(),
+                    //   ),
+                    // );
                   },
                 ),
                 SpeedDialChild(
