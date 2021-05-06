@@ -986,6 +986,7 @@ class _AdminStatisticsState extends State<AdminStatistics> {
     super.initState();
     getDistributors();
     checkInternet();
+    getHistory();
     subscription = Connectivity()
         .onConnectivityChanged
         .listen((ConnectivityResult result) {

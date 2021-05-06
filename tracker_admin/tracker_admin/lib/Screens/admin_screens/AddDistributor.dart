@@ -34,6 +34,7 @@ class _AddDistributorState extends State<AddDistributor> {
   String imageURL;
   File image;
   String uploadedFileURL;
+  String adminEmail;
 
   //
   //
@@ -195,13 +196,13 @@ class _AddDistributorState extends State<AddDistributor> {
         "image": uploadedFileURL,
         "salesNumber": 0,
         "sales": {
-          "Timestamp": [
-            "Timestamp",
-            "PharmacistID",
-            "the medicine that was sold/authenticated"
-          ],
+          // "Timestamp": [
+          //   "Timestamp",
+          //   "PharmacistID",
+          //   "the medicine that was sold/authenticated"
+          // ],
         },
-        "EditedBy": {"Timestamp": "AdminID"},
+        "EditedBy": {adminEmail.toString(): Timestamp.now()},
       }).then((_) {
         Fluttertoast.showToast(msg: 'Distributor created Succesfully!');
         setState(() {
@@ -238,6 +239,7 @@ class _AddDistributorState extends State<AddDistributor> {
   @override
   void initState() {
     super.initState();
+    adminEmail = FirebaseAuth.instance.currentUser.email;
     // name;
     // email;
     // password;
@@ -579,6 +581,7 @@ class ContainerText extends StatefulWidget {
   final TextInputType inputType;
   final double width;
   final double height;
+  final bool enabled;
 
   const ContainerText({
     Key key,
@@ -591,6 +594,7 @@ class ContainerText extends StatefulWidget {
     this.inputType,
     this.width,
     this.height,
+    this.enabled,
   });
 
   @override
@@ -638,6 +642,7 @@ class _ContainerTextState extends State<ContainerText> {
           Expanded(
             flex: 5,
             child: TextField(
+              enabled: widget.enabled,
               keyboardType: widget.inputType,
               // hides the text if password
               obscureText: show == false ? true : false,
@@ -646,6 +651,8 @@ class _ContainerTextState extends State<ContainerText> {
               maxLength: widget.maxLength,
               maxLines: widget.maxLines == null ? 1 : widget.maxLines,
               onEditingComplete: () => widget.node.nextFocus(),
+              style: TextStyle(
+                  color: widget.enabled == false ? Colors.grey[600] : null),
               decoration: InputDecoration(
                 fillColor: Colors.transparent,
                 counterText: '',

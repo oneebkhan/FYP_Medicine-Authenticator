@@ -9,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:lottie/lottie.dart';
+import 'package:tracker_admin/screens/admin_screens/EditDistributor.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 // ignore: camel_case_types
@@ -134,6 +136,9 @@ class _DistributorState extends State<Distributor> {
 
   @override
   void dispose() {
+    if (!this.mounted) {
+      info.dispose();
+    }
     super.dispose();
   }
 
@@ -208,12 +213,14 @@ class _DistributorState extends State<Distributor> {
                             child: Text('Yes'),
                             onPressed: () {
                               Navigator.pop(context);
+                              showDialog(
+                                  context: context,
+                                  builder: (_) => customAlert());
                               deleteFolderContents(
                                 info['email'],
                               );
                               unregisterDistributor();
-
-                              Future.delayed(Duration(milliseconds: 1000), () {
+                              Future.delayed(Duration(milliseconds: 2100), () {
                                 deleteDistributor();
                                 Navigator.pop(context);
                                 //Navigator.pop(context);
@@ -267,12 +274,19 @@ class _DistributorState extends State<Distributor> {
                   labelBackgroundColor: Colors.grey[800],
                   labelStyle: TextStyle(color: Colors.white),
                   onTap: () {
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (_) => EditDistributor(),
-                    //   ),
-                    // );
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => EditDistributor(
+                          companyName: info['companyName'],
+                          email: info['email'],
+                          location: info['location'],
+                          name: info['name'],
+                          phoneNumber: info['phoneNumber'],
+                          image: info['image'],
+                        ),
+                      ),
+                    );
                   },
                 ),
                 SpeedDialChild(
@@ -341,7 +355,7 @@ class _DistributorState extends State<Distributor> {
                                     BlendMode.dstATop),
                                 fit: BoxFit.cover,
                                 image: CachedNetworkImageProvider(
-                                  info['image'] == ''
+                                  info['image'] == '' || info['image'] == null
                                       ? 'https://www.spicefactors.com/wp-content/uploads/default-user-image.png'
                                       : info['image'].toString(),
                                 ),
@@ -716,5 +730,55 @@ class _DistributorState extends State<Distributor> {
               ],
             ),
           );
+  }
+
+  //
+  //
+  //custom alert dialogue
+  customAlert() {
+    Future.delayed(Duration(milliseconds: 2000), () {
+      Navigator.pop(context);
+      //Navigator.pop(context);
+    });
+    return AlertDialog(
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      content: Container(
+        width: width,
+        height: height / 5,
+        decoration: BoxDecoration(
+          shape: BoxShape.rectangle,
+          color: Colors.transparent,
+          borderRadius: BorderRadius.all(Radius.circular(32.0)),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Center(
+              child: Container(
+                height: width / 4,
+                child: Lottie.asset(
+                  'assets/lottie/deletedSuccessfully.json',
+                  frameRate: FrameRate(144),
+                  repeat: false,
+                ),
+              ),
+            ),
+            SizedBox(
+              height: height / 30,
+            ),
+            Container(
+              child: Text(
+                'Distributor Deleted Successfully!',
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
