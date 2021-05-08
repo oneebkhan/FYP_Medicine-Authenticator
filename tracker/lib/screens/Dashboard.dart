@@ -1,16 +1,22 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:tracker/Utils/CoronaModel.dart';
+import 'package:tracker/Widgets/CarroselWidgets.dart';
 import 'package:tracker/screens/About.dart';
-import 'package:tracker/screens/Clinic/DistributorClinics.dart';
+import 'package:tracker/screens/Clinic/Clinics.dart';
 import 'package:tracker/screens/MedicineInfo.dart';
-import 'package:tracker/screens/Pharmacy/DistributorPharmacies.dart';
+import 'package:tracker/screens/Pharmacy/Pharmacies.dart';
 import 'package:tracker/screens/Search.dart';
 import 'package:tracker/screens/Tips.dart';
 import 'package:tracker/screens/ViewMedicine.dart';
 import 'package:qrscan/qrscan.dart' as scanner;
 import 'package:permission_handler/permission_handler.dart';
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:http/http.dart' as http;
 
 class Dashboard extends StatefulWidget {
   @override
@@ -24,6 +30,74 @@ class _DashboardState extends State<Dashboard> {
   var medID;
   bool con;
   var subscription;
+  int current = 0;
+  List<Widget> car = [];
+
+  Future<CoronaModel> getCases() async {
+    final url =
+        "https://api.apify.com/v2/key-value-stores/QhfG8Kj6tVYMgud6R/records/LATEST?disableRedirect=true";
+    final response = await http.get(Uri.parse(url));
+    if (response.statusCode == 200) {
+      var json = jsonDecode(response.body);
+      return CoronaModel.fromJson(json);
+    } else {
+      Fluttertoast.showToast(msg: 'Error Loading Corona API');
+      throw Exception();
+    }
+  }
+
+  getWidget() {
+    return FutureBuilder<CoronaModel>(
+      future: getCases(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          final cases = snapshot.data;
+          final casesNumber = cases.infected.toString();
+
+          return RichText(
+            text: TextSpan(
+              text: 'Pakistan: ',
+              style: TextStyle(
+                fontSize: width / 25,
+                fontFamily: 'Montserrat',
+              ),
+              children: <TextSpan>[
+                TextSpan(
+                  text: casesNumber.length >= 4
+                      ? casesNumber.substring(0, casesNumber.length - 4) + 'k'
+                      : casesNumber,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: width / 24,
+                  ),
+                ),
+                TextSpan(
+                  text: ' cases ',
+                ),
+              ],
+            ),
+          );
+        } else if (snapshot.hasError) {
+          print(snapshot.error.toString());
+          return Text(
+            snapshot.error.toString(),
+            style: TextStyle(
+              fontSize: width / 25,
+              fontFamily: 'Montserrat',
+            ),
+          );
+        }
+
+        return Text(
+          '...',
+          style: TextStyle(
+            fontSize: width / 25,
+            fontFamily: 'Montserrat',
+          ),
+        );
+      },
+    );
+  }
 
   //
   //
@@ -121,6 +195,14 @@ class _DashboardState extends State<Dashboard> {
     }
   }
 
+  List<T> map<T>(List list, Function handler) {
+    List<T> result = [];
+    for (var i = 0; i < list.length; i++) {
+      result.add(handler(i, list[i]));
+    }
+    return result;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -143,8 +225,18 @@ class _DashboardState extends State<Dashboard> {
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
-
     safePadding = MediaQuery.of(context).padding.top;
+    car = [
+      Corona(
+        height: height,
+        width: width,
+      ),
+      TipsCarosel(
+        height: height,
+        width: width,
+      )
+    ];
+
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 246, 246, 248),
       body: SingleChildScrollView(
@@ -171,6 +263,76 @@ class _DashboardState extends State<Dashboard> {
                     fontSize: width / 25,
                   ),
                 ),
+                SizedBox(
+                  height: 30,
+                ),
+                //
+                //
+                // The Alerts pane
+                Stack(
+                  children: [
+                    Container(
+                      width: width,
+                      height: width / 2.3,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        color: Colors.black,
+                      ),
+                      child: CarouselSlider(
+                        items: [
+                          Corona(
+                            height: height,
+                            width: width,
+                            widget: getWidget(),
+                          ),
+                          TipsCarosel(
+                            height: height,
+                            width: width,
+                          ),
+                        ],
+                        options: CarouselOptions(
+                          viewportFraction: 1,
+                          height: width / 2.3,
+                          enlargeCenterPage: true,
+                          autoPlay: false,
+                          autoPlayCurve: Curves.easeInOut,
+                          autoPlayAnimationDuration: Duration(
+                            milliseconds: 1200,
+                          ),
+                          autoPlayInterval: Duration(seconds: 4),
+                          onPageChanged: (index, reason) {
+                            setState(() {
+                              current = index;
+                            });
+                          },
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      right: 0,
+                      left: 0,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: map<Widget>(car, (index, url) {
+                          return Container(
+                            width: 7.0,
+                            height: 7.0,
+                            margin: EdgeInsets.symmetric(
+                                vertical: 10.0, horizontal: 2.0),
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: current == index
+                                  ? Colors.white
+                                  : Colors.white30,
+                            ),
+                          );
+                        }),
+                      ),
+                    ),
+                  ],
+                ),
+
                 SizedBox(
                   height: 30,
                 ),
@@ -410,7 +572,7 @@ class _DashboardState extends State<Dashboard> {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (_) => DistributorClinics(),
+                                        builder: (_) => Clinics(),
                                       ),
                                     );
                                   },
@@ -440,7 +602,7 @@ class _DashboardState extends State<Dashboard> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (_) => DistributorPharmacies(),
+                                      builder: (_) => Pharmacies(),
                                     ),
                                   );
                                 },

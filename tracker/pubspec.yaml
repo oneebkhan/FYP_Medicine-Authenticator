@@ -52,6 +52,8 @@ dependencies:
   flutter_displaymode: ^0.1.1
   # to check the internet connection
   connectivity: ^3.0.3
+  carousel_slider: ^3.0.0
+  http: ^0.13.3
   
   
   
