@@ -1,9 +1,17 @@
+import 'dart:async';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:tracker/Utils/CoronaModel.dart';
+import 'package:tracker/screens/Tips.dart';
 
 class Corona extends StatefulWidget {
   final double width;
   final double height;
+  final String title;
+  final String status;
+  final String description;
   final Function func;
   final Widget widget;
 
@@ -13,6 +21,9 @@ class Corona extends StatefulWidget {
     this.height,
     this.func,
     this.widget,
+    this.title,
+    this.status,
+    this.description,
   });
 
   @override
@@ -137,13 +148,11 @@ class _CoronaState extends State<Corona> {
 class TipsCarosel extends StatefulWidget {
   final double width;
   final double height;
-  final Function func;
 
   const TipsCarosel({
     Key key,
     this.width,
     this.height,
-    this.func,
   });
 
   @override
@@ -162,7 +171,12 @@ class _TipsCaroselState extends State<TipsCarosel> {
         focusColor: Colors.white10,
         splashColor: Colors.white10,
         onTap: () {
-          widget.func();
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => Tips(),
+            ),
+          );
         },
         child: Ink(
           width: widget.width,

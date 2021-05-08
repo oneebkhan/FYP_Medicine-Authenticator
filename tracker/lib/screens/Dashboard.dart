@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -32,7 +33,36 @@ class _DashboardState extends State<Dashboard> {
   var subscription;
   int current = 0;
   List<Widget> car = [];
+  var jsonCorona;
+  String alert;
+  String alertStatus;
+  String alertDescription;
 
+  //
+  //
+  // gets the firebase data of that particular medicine
+  getAlertsInfo() async {
+    try {
+      var stream = await FirebaseFirestore.instance
+          .collection('Alerts')
+          .doc('Corona')
+          .get()
+          .then((value) {
+        setState(() {
+          alert = value.data()['name'];
+          alertStatus = value.data()['status'];
+          alertDescription = value.data()['description'];
+        });
+      });
+    } on Exception catch (e) {
+      print(e);
+      Fluttertoast.showToast(msg: '$e');
+    }
+  }
+
+  //
+  //
+  // Get the corona model to get the latest data from API
   Future<CoronaModel> getCases() async {
     final url =
         "https://api.apify.com/v2/key-value-stores/QhfG8Kj6tVYMgud6R/records/LATEST?disableRedirect=true";
@@ -44,59 +74,6 @@ class _DashboardState extends State<Dashboard> {
       Fluttertoast.showToast(msg: 'Error Loading Corona API');
       throw Exception();
     }
-  }
-
-  getWidget() {
-    return FutureBuilder<CoronaModel>(
-      future: getCases(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          final cases = snapshot.data;
-          final casesNumber = cases.infected.toString();
-
-          return RichText(
-            text: TextSpan(
-              text: 'Pakistan: ',
-              style: TextStyle(
-                fontSize: width / 25,
-                fontFamily: 'Montserrat',
-              ),
-              children: <TextSpan>[
-                TextSpan(
-                  text: casesNumber.length >= 4
-                      ? casesNumber.substring(0, casesNumber.length - 4) + 'k'
-                      : casesNumber,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: width / 24,
-                  ),
-                ),
-                TextSpan(
-                  text: ' cases ',
-                ),
-              ],
-            ),
-          );
-        } else if (snapshot.hasError) {
-          print(snapshot.error.toString());
-          return Text(
-            snapshot.error.toString(),
-            style: TextStyle(
-              fontSize: width / 25,
-              fontFamily: 'Montserrat',
-            ),
-          );
-        }
-
-        return Text(
-          '...',
-          style: TextStyle(
-            fontSize: width / 25,
-            fontFamily: 'Montserrat',
-          ),
-        );
-      },
-    );
   }
 
   //
@@ -195,17 +172,10 @@ class _DashboardState extends State<Dashboard> {
     }
   }
 
-  List<T> map<T>(List list, Function handler) {
-    List<T> result = [];
-    for (var i = 0; i < list.length; i++) {
-      result.add(handler(i, list[i]));
-    }
-    return result;
-  }
-
   @override
   void initState() {
     super.initState();
+    getAlertsInfo();
     checkInternet();
     medID = '';
     subscription = Connectivity()
@@ -230,6 +200,10 @@ class _DashboardState extends State<Dashboard> {
       Corona(
         height: height,
         width: width,
+        widget: getWidget(),
+        title: alert,
+        status: alertStatus,
+        description: alertDescription,
       ),
       TipsCarosel(
         height: height,
@@ -269,68 +243,30 @@ class _DashboardState extends State<Dashboard> {
                 //
                 //
                 // The Alerts pane
-                Stack(
-                  children: [
-                    Container(
-                      width: width,
+                Container(
+                  width: width,
+                  height: width / 2.3,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    color: Colors.grey[600],
+                  ),
+                  child: CarouselSlider.builder(
+                    itemCount: 2,
+                    itemBuilder: (BuildContext context, int index, idx) {
+                      return car[index];
+                    },
+                    options: CarouselOptions(
+                      viewportFraction: 1,
                       height: width / 2.3,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        color: Colors.black,
+                      enlargeCenterPage: true,
+                      autoPlay: true,
+                      autoPlayCurve: Curves.easeInOut,
+                      autoPlayAnimationDuration: Duration(
+                        milliseconds: 1200,
                       ),
-                      child: CarouselSlider(
-                        items: [
-                          Corona(
-                            height: height,
-                            width: width,
-                            widget: getWidget(),
-                          ),
-                          TipsCarosel(
-                            height: height,
-                            width: width,
-                          ),
-                        ],
-                        options: CarouselOptions(
-                          viewportFraction: 1,
-                          height: width / 2.3,
-                          enlargeCenterPage: true,
-                          autoPlay: false,
-                          autoPlayCurve: Curves.easeInOut,
-                          autoPlayAnimationDuration: Duration(
-                            milliseconds: 1200,
-                          ),
-                          autoPlayInterval: Duration(seconds: 4),
-                          onPageChanged: (index, reason) {
-                            setState(() {
-                              current = index;
-                            });
-                          },
-                        ),
-                      ),
+                      autoPlayInterval: Duration(seconds: 4),
                     ),
-                    Positioned(
-                      bottom: 0,
-                      right: 0,
-                      left: 0,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: map<Widget>(car, (index, url) {
-                          return Container(
-                            width: 7.0,
-                            height: 7.0,
-                            margin: EdgeInsets.symmetric(
-                                vertical: 10.0, horizontal: 2.0),
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: current == index
-                                  ? Colors.white
-                                  : Colors.white30,
-                            ),
-                          );
-                        }),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
 
                 SizedBox(
@@ -752,6 +688,62 @@ class _DashboardState extends State<Dashboard> {
           ),
         ),
       ),
+    );
+  }
+
+  //
+  //
+  // The future builder widget thet tells you the number of corona cases
+  getWidget() {
+    return FutureBuilder<CoronaModel>(
+      future: getCases(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          final cases = snapshot.data;
+          final casesNumber = cases.infected.toString();
+
+          return RichText(
+            text: TextSpan(
+              text: 'Pakistan: ',
+              style: TextStyle(
+                fontSize: width / 25,
+                fontFamily: 'Montserrat',
+              ),
+              children: <TextSpan>[
+                TextSpan(
+                  text: casesNumber.length >= 4
+                      ? casesNumber.substring(0, casesNumber.length - 4) + 'k'
+                      : casesNumber,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: width / 24,
+                  ),
+                ),
+                TextSpan(
+                  text: ' cases ',
+                ),
+              ],
+            ),
+          );
+        } else if (snapshot.hasError) {
+          print(snapshot.error.toString());
+          return Text(
+            snapshot.error.toString(),
+            style: TextStyle(
+              fontSize: width / 25,
+              fontFamily: 'Montserrat',
+            ),
+          );
+        }
+
+        return Text(
+          '...',
+          style: TextStyle(
+            fontSize: width / 25,
+            fontFamily: 'Montserrat',
+          ),
+        );
+      },
     );
   }
 }
