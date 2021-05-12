@@ -37,6 +37,14 @@ class _DashboardState extends State<Dashboard> {
   String alert;
   String alertStatus;
   String alertDescription;
+  String vaccinationAge;
+
+//api variables
+  String cases;
+  String infected;
+  String critical;
+  String deceased;
+  String recovered;
 
   //
   //
@@ -52,6 +60,7 @@ class _DashboardState extends State<Dashboard> {
           alert = value.data()['name'];
           alertStatus = value.data()['status'];
           alertDescription = value.data()['description'];
+          vaccinationAge = value.data()['ageForVaccination'];
         });
       });
     } on Exception catch (e) {
@@ -205,10 +214,15 @@ class _DashboardState extends State<Dashboard> {
         status: alertStatus,
         description: alertDescription,
       ),
+      Vaccination(
+        height: height,
+        width: width,
+        ageVaccination: vaccinationAge,
+      ),
       TipsCarosel(
         height: height,
         width: width,
-      )
+      ),
     ];
 
     return Scaffold(
@@ -251,7 +265,7 @@ class _DashboardState extends State<Dashboard> {
                     color: Colors.grey[600],
                   ),
                   child: CarouselSlider.builder(
-                    itemCount: 2,
+                    itemCount: 3,
                     itemBuilder: (BuildContext context, int index, idx) {
                       return car[index];
                     },
@@ -262,9 +276,9 @@ class _DashboardState extends State<Dashboard> {
                       autoPlay: true,
                       autoPlayCurve: Curves.easeInOut,
                       autoPlayAnimationDuration: Duration(
-                        milliseconds: 1200,
+                        milliseconds: 1400,
                       ),
-                      autoPlayInterval: Duration(seconds: 4),
+                      autoPlayInterval: Duration(seconds: 5),
                     ),
                   ),
                 ),
@@ -700,7 +714,7 @@ class _DashboardState extends State<Dashboard> {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           final cases = snapshot.data;
-          final casesNumber = cases.infected.toString();
+          final infectedNumber = cases.infected.toString();
 
           return RichText(
             text: TextSpan(
@@ -711,9 +725,14 @@ class _DashboardState extends State<Dashboard> {
               ),
               children: <TextSpan>[
                 TextSpan(
-                  text: casesNumber.length >= 4
-                      ? casesNumber.substring(0, casesNumber.length - 4) + 'k'
-                      : casesNumber,
+                  text: infectedNumber.length >= 4 && infectedNumber.length < 7
+                      ? infectedNumber.substring(0, infectedNumber.length - 3) +
+                          'k'
+                      : infectedNumber.length >= 7
+                          ? infectedNumber.substring(
+                                  0, infectedNumber.length - 6) +
+                              'mil'
+                          : infectedNumber,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: width / 24,
@@ -728,19 +747,21 @@ class _DashboardState extends State<Dashboard> {
         } else if (snapshot.hasError) {
           print(snapshot.error.toString());
           return Text(
-            snapshot.error.toString(),
+            'Error Loading Widget',
             style: TextStyle(
               fontSize: width / 25,
               fontFamily: 'Montserrat',
+              color: Colors.white,
             ),
           );
         }
 
         return Text(
-          '...',
+          'Pakistan: ... cases',
           style: TextStyle(
             fontSize: width / 25,
             fontFamily: 'Montserrat',
+            color: Colors.white,
           ),
         );
       },

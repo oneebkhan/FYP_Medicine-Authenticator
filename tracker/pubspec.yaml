@@ -54,6 +54,7 @@ dependencies:
   connectivity: ^3.0.3
   carousel_slider: ^3.0.0
   http: ^0.13.3
+  shimmer: ^2.0.0
   
   
   
