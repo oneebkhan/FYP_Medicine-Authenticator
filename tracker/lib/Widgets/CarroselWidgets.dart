@@ -6,6 +6,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:tracker/Utils/CoronaModel.dart';
 import 'package:tracker/screens/CoronaTips.dart';
 import 'package:tracker/screens/Tips.dart';
+import 'package:tracker/screens/VaccineCenters.dart';
 
 class Corona extends StatefulWidget {
   final double width;
@@ -175,7 +176,7 @@ class _VaccinationState extends State<Vaccination> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (_) => Tips(),
+              builder: (_) => VaccineCenters(),
             ),
           );
         },

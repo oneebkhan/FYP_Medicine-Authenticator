@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:tracker/Utils/CoronaModel.dart';
 import 'package:tracker/Widgets/CarroselWidgets.dart';
 import 'package:tracker/screens/About.dart';
@@ -756,12 +757,18 @@ class _DashboardState extends State<Dashboard> {
           );
         }
 
-        return Text(
-          'Pakistan: ... cases',
-          style: TextStyle(
-            fontSize: width / 25,
-            fontFamily: 'Montserrat',
-            color: Colors.white,
+        return Shimmer.fromColors(
+          baseColor: Colors.white,
+          highlightColor: Colors.white30,
+          child: Container(
+            child: Text(
+              'Pakistan: .... cases',
+              style: TextStyle(
+                fontSize: width / 25,
+                fontFamily: 'Montserrat',
+                color: Colors.white,
+              ),
+            ),
           ),
         );
       },

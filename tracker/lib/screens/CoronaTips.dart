@@ -7,6 +7,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:lottie/lottie.dart';
 import 'package:tracker/Utils/CoronaModel.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -78,6 +79,7 @@ class _CoronaTipsState extends State<CoronaTips> {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.light,
       child: Scaffold(
+        backgroundColor: Color.fromARGB(255, 246, 246, 248),
         body: CustomScrollView(
           slivers: <Widget>[
             SliverPersistentHeader(
@@ -94,13 +96,13 @@ class _CoronaTipsState extends State<CoronaTips> {
             ),
             SliverToBoxAdapter(
               child: Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: width / 15,
-                  vertical: width / 12,
-                ),
+                padding: EdgeInsets.symmetric(horizontal: width / 15),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    SizedBox(
+                      height: width / 10,
+                    ),
                     Text(
                       'Precautions',
                       style: TextStyle(
@@ -111,17 +113,79 @@ class _CoronaTipsState extends State<CoronaTips> {
                       ),
                     ),
                     SizedBox(
-                      height: width / 7,
+                      height: width / 15,
                     ),
-                    Container(
+                    Precautions(
+                      description:
+                          'Use an alcohol-based hand sanitizer that contains at least 60% alcohol, when going out ',
+                      height: height,
+                      img: 'assets/images/san.png',
+                      title: 'Wash and Sanitize Often',
+                      titleColor: Color.fromARGB(255, 120, 176, 148),
+                      width: width,
+                    ),
+                    SizedBox(
+                      height: width / 15,
+                    ),
+                    Precautions(
                       height: height,
                       width: width,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          fit: BoxFit.fitWidth,
-                          image: AssetImage('assets/images/tipsBackground.png'),
-                        ),
-                      ),
+                      img: 'assets/images/wash.png',
+                      title: 'Wash Your Hands Regularly',
+                      description:
+                          'Make sure to wear a mask at all times to avoid catching or spreading bacteria.',
+                      titleColor: Color.fromARGB(255, 204, 178, 165),
+                    ),
+                    SizedBox(
+                      height: width / 15,
+                    ),
+                    Precautions(
+                      height: height,
+                      width: width,
+                      img: 'assets/images/mask.png',
+                      title: 'Wear a Mask at All Times',
+                      description:
+                          'Make sure to wear a mask at all times to avoid catching or spreading bacteria.',
+                      titleColor: Color.fromARGB(255, 29, 172, 196),
+                    ),
+                    SizedBox(
+                      height: width / 15,
+                    ),
+                    Precautions(
+                      height: height,
+                      width: width,
+                      img: 'assets/images/distance.png',
+                      title: 'Social Distance',
+                      description:
+                          'Keep at least 6 feet or 2 meters of distance between eachother.',
+                      titleColor: Color.fromARGB(255, 195, 112, 42),
+                    ),
+                    SizedBox(
+                      height: width / 15,
+                    ),
+                    Precautions(
+                      height: height,
+                      width: width,
+                      img: 'assets/images/vaccine.png',
+                      title: 'Vaccine',
+                      description:
+                          'Get vaccinated as soon as possible, to keep the chances of you contracting corona to a minimum.',
+                      titleColor: Color.fromARGB(255, 174, 212, 90),
+                    ),
+                    SizedBox(
+                      height: width / 15,
+                    ),
+                    Precautions(
+                      height: height,
+                      width: width,
+                      img: 'assets/images/home.png',
+                      title: 'Stay at Home',
+                      description:
+                          'Keep going out to a minimum and stay at home as much as possible.',
+                      titleColor: Color.fromARGB(255, 182, 54, 66),
+                    ),
+                    SizedBox(
+                      height: width / 8,
                     ),
                   ],
                 ),
@@ -196,83 +260,84 @@ class _MyHeadDelegate extends SliverPersistentHeaderDelegate {
               child: Opacity(
                 opacity: opac,
                 child: Container(
-                    child: FutureBuilder<CoronaModel>(
-                        future: coronaModel,
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            final cases = snapshot.data;
-                            final infected = cases.infected.toString();
-                            final critical = cases.critical.toString();
-                            final deceased = cases.deceased.toString();
-                            final recovered = cases.critical.toString();
-                            return futureWidget(
-                              alert: alert,
-                              alertStatus: alertStatus,
-                              alertDescription: alertDescription,
-                              infected: infected,
-                              critical: critical,
-                              deceased: deceased,
-                              recovered: recovered,
-                              shadow: shadow,
-                              shrinkPercent: shrinkPercent,
-                              snapshot: snapshot,
-                            );
-                          } else {
-                            return Shimmer.fromColors(
-                              baseColor: Colors.red[300],
-                              highlightColor: Colors.red[100],
-                              child: Column(
-                                children: [
-                                  Container(
-                                    width: width / 2,
-                                    height: width / 10,
-                                    color: Colors.red,
-                                  ),
-                                  SizedBox(height: width / 20),
-                                  Container(
-                                    width: width / 2,
-                                    height: width / 6,
-                                    color: Colors.red,
-                                  ),
-                                  Container(
-                                    width: width / 2,
-                                    child: GridView.count(
-                                      children: [
-                                        Container(
-                                          width: width,
-                                          height: height,
-                                          color: Colors.black,
-                                        ),
-                                        Container(
-                                          width: width,
-                                          height: height,
-                                          color: Colors.black,
-                                        ),
-                                        Container(
-                                          width: width,
-                                          height: height,
-                                          color: Colors.black,
-                                        ),
-                                        Container(
-                                          width: width,
-                                          height: height,
-                                          color: Colors.black,
-                                        ),
-                                      ],
-                                      crossAxisSpacing: width / 30,
-                                      mainAxisSpacing: width / 30,
-                                      physics: NeverScrollableScrollPhysics(),
-                                      shrinkWrap: true,
-                                      crossAxisCount: 2,
-                                      childAspectRatio:
-                                          ((width / 5) / (width / 7)),
-                                    ),
-                                  ),
-                                ],
+                  child: FutureBuilder<CoronaModel>(
+                    future: coronaModel,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        final cases = snapshot.data;
+                        final infected = cases.infected.toString();
+                        final critical = cases.critical.toString();
+                        final deceased = cases.deceased.toString();
+                        final recovered = cases.critical.toString();
+                        return futureWidget(
+                          alert: alert,
+                          alertStatus: alertStatus,
+                          alertDescription: alertDescription,
+                          infected: infected,
+                          critical: critical,
+                          deceased: deceased,
+                          recovered: recovered,
+                          shadow: shadow,
+                          shrinkPercent: shrinkPercent,
+                          snapshot: snapshot,
+                        );
+                      } else {
+                        return Shimmer.fromColors(
+                          baseColor: Colors.red[300],
+                          highlightColor: Colors.red[100],
+                          child: Column(
+                            children: [
+                              Container(
+                                width: width / 2,
+                                height: width / 10,
+                                color: Colors.red,
                               ),
-                            );
-                          }
-                        })),
+                              SizedBox(height: width / 20),
+                              Container(
+                                width: width / 2,
+                                height: width / 6,
+                                color: Colors.red,
+                              ),
+                              Container(
+                                width: width / 2,
+                                child: GridView.count(
+                                  children: [
+                                    Container(
+                                      width: width,
+                                      height: height,
+                                      color: Colors.black,
+                                    ),
+                                    Container(
+                                      width: width,
+                                      height: height,
+                                      color: Colors.black,
+                                    ),
+                                    Container(
+                                      width: width,
+                                      height: height,
+                                      color: Colors.black,
+                                    ),
+                                    Container(
+                                      width: width,
+                                      height: height,
+                                      color: Colors.black,
+                                    ),
+                                  ],
+                                  crossAxisSpacing: width / 30,
+                                  mainAxisSpacing: width / 30,
+                                  physics: NeverScrollableScrollPhysics(),
+                                  shrinkWrap: true,
+                                  crossAxisCount: 2,
+                                  childAspectRatio: ((width / 5) / (width / 7)),
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
+                    },
+                  ),
+                ),
               ),
             ),
           ),
@@ -554,4 +619,85 @@ class _MyHeadDelegate extends SliverPersistentHeaderDelegate {
   @override
   bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) =>
       false;
+}
+
+class Precautions extends StatelessWidget {
+  final String img;
+  final String title;
+  final Color titleColor;
+  final String description;
+  final double width;
+  final double height;
+
+  const Precautions({
+    Key key,
+    this.img,
+    this.title,
+    this.description,
+    this.width,
+    this.height,
+    this.titleColor,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: width,
+      padding: EdgeInsets.symmetric(
+        horizontal: width / 30,
+        vertical: width / 30,
+      ),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(15),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: width / 5,
+            height: width / 5,
+            margin: EdgeInsets.only(left: 15),
+            child: Center(
+              child: Image(
+                image: AssetImage(img),
+              ),
+            ),
+          ),
+          SizedBox(width: 10),
+          Container(
+            width: width / 2.2,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: width / 25,
+                    fontFamily: 'Montserrat',
+                    fontWeight: FontWeight.w400,
+                    color: titleColor,
+                  ),
+                ),
+                SizedBox(
+                  height: 3,
+                ),
+                Text(
+                  description,
+                  style: TextStyle(
+                    fontSize: width / 35,
+                    fontFamily: 'Montserrat',
+                    fontWeight: FontWeight.w400,
+                    color: Colors.grey[700],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
