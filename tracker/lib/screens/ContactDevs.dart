@@ -27,7 +27,9 @@ class _ContactDevsState extends State<ContactDevs> {
   // Get length of documents to make a unique ID for the firestore doca
   // ignore: missing_return
   // FIX THE DISPOSE BUG HERE !!!!!!!!!!!!!!!!!!!!!!!!
+  // ignore: missing_return
   Future<double> _getLengthOfContactDevs() async {
+    // ignore: await_only_futures
     await FirebaseFirestore.instance
         .collection("ContactDevelopers")
         .snapshots()

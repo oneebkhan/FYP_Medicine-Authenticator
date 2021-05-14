@@ -184,6 +184,12 @@ class _AboutState extends State<About> {
                           bottomName: 'Lottie Animations',
                           imageURL: 'assets/icons/lottie.png',
                         ),
+                        AvatarRow(
+                          size: width,
+                          name: 'Flaticon',
+                          bottomName: 'Icons',
+                          imageURL: 'assets/icons/flaticon.png',
+                        ),
                       ],
                     ),
                   ),
@@ -298,7 +304,7 @@ class AvatarRow extends StatelessWidget {
         children: [
           CircleAvatar(
             radius: size / 19,
-            backgroundImage: ExactAssetImage('${imageURL}'),
+            backgroundImage: ExactAssetImage('$imageURL'),
           ),
           SizedBox(
             width: 20,

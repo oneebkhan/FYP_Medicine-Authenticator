@@ -1,9 +1,7 @@
-import 'dart:async';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:tracker/Utils/CoronaModel.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:tracker/screens/CoronaTips.dart';
 import 'package:tracker/screens/Tips.dart';
 import 'package:tracker/screens/VaccineCenters.dart';
@@ -87,38 +85,38 @@ class _CoronaState extends State<Corona> {
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(left: 12, top: 5),
-                      child: Container(
-                        width: widget.width / 2.1,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              '${widget.title} - ${widget.status}',
-                              style: TextStyle(
-                                fontSize: widget.width / 22,
-                                fontFamily: 'Montserrat',
-                                fontWeight: FontWeight.w500,
-                                color: Colors.white,
+                      child: Shimmer.fromColors(
+                        baseColor: Colors.white,
+                        highlightColor: Colors.white30,
+                        enabled: widget.title == null,
+                        child: Container(
+                          width: widget.width / 2.1,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                '${widget.title} - ${widget.status}',
+                                style: TextStyle(
+                                  fontSize: widget.width / 22,
+                                  fontFamily: 'Montserrat',
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.white,
+                                ),
                               ),
-                            ),
-                            SizedBox(
-                              height: 9,
-                            ),
-                            widget.description == null
-                                ? SizedBox(
-                                    width: widget.width / 2,
-                                    height: widget.width / 20,
-                                  )
-                                : Text(
-                                    widget.description,
-                                    style: TextStyle(
-                                      fontSize: widget.width / 27,
-                                      fontFamily: 'Montserrat',
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                          ],
+                              SizedBox(
+                                height: 9,
+                              ),
+                              Text(
+                                widget.description,
+                                style: TextStyle(
+                                  fontSize: widget.width / 27,
+                                  fontFamily: 'Montserrat',
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
@@ -214,7 +212,9 @@ class _VaccinationState extends State<Vaccination> {
                         Container(
                           width: widget.width / 2.2,
                           child: Text(
-                            'Get vaccinated if you are ${widget.ageVaccination} years of age',
+                            widget.ageVaccination == null
+                                ? 'Get vaccinated if you are - years of age'
+                                : 'Get vaccinated if you are ${widget.ageVaccination} years of age',
                             style: TextStyle(
                               fontSize: widget.width / 27,
                               fontFamily: 'Montserrat',

@@ -24,6 +24,9 @@ class _SearchState extends State<Search> {
   var snap;
   String hello = '';
   bool con;
+  List<bool> selection;
+  int selectedIndex;
+  String searchTerm;
 
   //
   //
@@ -54,9 +57,12 @@ class _SearchState extends State<Search> {
   void initState() {
     super.initState();
     opac = 0;
+    selection = [false, true];
+    selectedIndex = 1;
     isSearched = false;
     isLoading = false;
     snapshotData = null;
+    searchTerm = 'Medicine Name';
     checkInternet();
     search.addListener(() {
       setState(() {
@@ -101,12 +107,77 @@ class _SearchState extends State<Search> {
                     SizedBox(
                       height: width / 20,
                     ),
-                    Text(
-                      'Search',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: width / 14,
-                      ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Search',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: width / 14,
+                          ),
+                        ),
+                        SizedBox(
+                          width: width / 5,
+                        ),
+                        Text(
+                          'Search by:',
+                          style: TextStyle(
+                            fontSize: width / 30,
+                          ),
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: ToggleButtons(
+                            fillColor: Colors.white,
+                            highlightColor: Color.fromARGB(255, 170, 200, 240),
+                            splashColor: Color.fromARGB(255, 170, 200, 240),
+                            borderRadius: BorderRadius.circular(10),
+                            focusColor: Colors.white,
+                            selectedColor: Color.fromARGB(255, 170, 200, 240),
+                            onPressed: (int index) {
+                              if (index == 0) {
+                                setState(() {
+                                  selection[0] = true;
+                                  selection[1] = false;
+                                  //change to all Pharmacies
+                                  selectedIndex = 0;
+                                });
+                                Fluttertoast.showToast(
+                                    msg: 'Search by Barcode');
+                              } else if (index == 1) {
+                                setState(() {
+                                  selection[1] = true;
+                                  selection[0] = false;
+                                  //change to distributor Pharmacies
+                                  selectedIndex = 1;
+                                });
+                                Fluttertoast.showToast(
+                                    msg: 'Search by Medicine Name');
+                              }
+                            },
+                            constraints: BoxConstraints(
+                              minHeight: width / 11,
+                              minWidth: width / 10,
+                            ),
+                            children: [
+                              Icon(
+                                Icons.qr_code_outlined,
+                                size: width / 20,
+                              ),
+                              Icon(
+                                Icons.sort_by_alpha_outlined,
+                                size: width / 20,
+                              ),
+                            ],
+                            isSelected: selection,
+                          ),
+                        ),
+                      ],
                     ),
                     SizedBox(
                       height: 20,
@@ -134,7 +205,7 @@ class _SearchState extends State<Search> {
                             children: [
                               ContainerText(
                                 node: node,
-                                hint: 'Medicine Name',
+                                hint: '$searchTerm',
                                 controller: search,
                                 maxLines: 1,
                                 width: width / 1.4,

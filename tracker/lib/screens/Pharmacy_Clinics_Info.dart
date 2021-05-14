@@ -162,8 +162,7 @@ class _Pharmacy_Clinics_InfoState extends State<Pharmacy_Clinics_Info> {
   //
   // launch google maps
   static Future<void> openMap(String query) async {
-    String googleUrl =
-        'https://www.google.com/maps/search/?api=1&query=${query}';
+    String googleUrl = 'https://www.google.com/maps/search/?api=1&query=$query';
     if (await canLaunch(googleUrl)) {
       await launch(googleUrl);
     } else {

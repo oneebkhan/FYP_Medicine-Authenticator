@@ -2,13 +2,11 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:connectivity/connectivity.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:lottie/lottie.dart';
-import 'package:tracker/Utils/CoronaModel.dart';
+import 'package:tracker/Models/CoronaModel.dart';
 import 'package:shimmer/shimmer.dart';
 
 class CoronaTips extends StatefulWidget {

@@ -6,7 +6,7 @@ import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:tracker/Utils/CoronaModel.dart';
+import 'package:tracker/Models/CoronaModel.dart';
 import 'package:tracker/Widgets/CarroselWidgets.dart';
 import 'package:tracker/screens/About.dart';
 import 'package:tracker/screens/Clinic/Clinics.dart';
@@ -205,15 +205,16 @@ class _DashboardState extends State<Dashboard> {
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
-    safePadding = MediaQuery.of(context).padding.top;
     car = [
       Corona(
         height: height,
         width: width,
         widget: getWidget(),
-        title: alert,
-        status: alertStatus,
-        description: alertDescription,
+        title: alert == null ? 'Corona' : alert,
+        status: alertStatus == null ? 'High Alert' : alertStatus,
+        description: alertDescription == null
+            ? 'Lockdown in effect stay in-doors'
+            : alertDescription,
       ),
       Vaccination(
         height: height,

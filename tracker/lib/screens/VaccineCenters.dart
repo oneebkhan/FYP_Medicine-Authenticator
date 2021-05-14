@@ -18,29 +18,8 @@ class _VaccineCentersState extends State<VaccineCenters> {
   double width;
   double height;
   double safePadding;
-  String age;
   var vaccinationCenterStream;
   bool con;
-
-  //
-  //
-  // gets the firebase data of that particular medicine
-  getAlertsInfo() async {
-    try {
-      var stream = await FirebaseFirestore.instance
-          .collection('Alerts')
-          .doc('Corona')
-          .get()
-          .then((value) {
-        setState(() {
-          age = value.data()['ageForVaccination'];
-        });
-      });
-    } on Exception catch (e) {
-      print(e);
-      Fluttertoast.showToast(msg: '$e');
-    }
-  }
 
   //
   //
@@ -77,7 +56,7 @@ class _VaccineCentersState extends State<VaccineCenters> {
   @override
   void initState() {
     super.initState();
-    getAlertsInfo();
+
     getVaccinationCenters();
   }
 
@@ -98,7 +77,6 @@ class _VaccineCentersState extends State<VaccineCenters> {
                 safePadding: safePadding,
                 height: height,
                 width: width,
-                age: age,
               ),
               pinned: true,
             ),
@@ -238,10 +216,11 @@ class _MyHeadDelegate extends SliverPersistentHeaderDelegate {
               child: Opacity(
                 opacity: opac,
                 child: Container(
-                  child: futureWidget(
-                    age: age,
+                  child: FutureWidget(
+                    age: age == null ? '-' : age,
                     shadow: shadow,
                     shrinkPercent: shrinkPercent,
+                    width: width,
                   ),
                 ),
               ),
@@ -285,25 +264,76 @@ class _MyHeadDelegate extends SliverPersistentHeaderDelegate {
     );
   }
 
-//
-//
-// widget when snapshot.has data
-  futureWidget({
-    age,
-    shadow,
-    shrinkPercent,
-  }) {
-    //
-    //
-    // The method to send CNIC through sms
-    void customLaunch(command) async {
-      if (await canLaunch(command)) {
-        await launch(command);
-      } else {
-        Fluttertoast.showToast(msg: 'Could not Launch $command');
-      }
-    }
+  @override
+  // TODO: implement maxExtent
+  double get maxExtent => width * 1;
 
+  @override
+  // TODO: implement minExtent
+  double get minExtent => width / 5.5;
+
+  @override
+  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) =>
+      false;
+}
+
+class FutureWidget extends StatefulWidget {
+  final String age;
+  final List<BoxShadow> shadow;
+  final double shrinkPercent;
+  final double width;
+
+  const FutureWidget({
+    Key key,
+    this.age,
+    this.shadow,
+    this.shrinkPercent,
+    this.width,
+  }) : super(key: key);
+
+  @override
+  _FutureWidgetState createState() => _FutureWidgetState();
+}
+
+class _FutureWidgetState extends State<FutureWidget> {
+  String age;
+
+  void customLaunch(command) async {
+    if (await canLaunch(command)) {
+      await launch(command);
+    } else {
+      Fluttertoast.showToast(msg: 'Could not Launch $command');
+    }
+  }
+
+  //
+  //
+  // gets the firebase data of that particular medicine
+  getAlertsInfo() async {
+    try {
+      var stream = await FirebaseFirestore.instance
+          .collection('Alerts')
+          .doc('Corona')
+          .get()
+          .then((value) {
+        setState(() {
+          age = value.data()['ageForVaccination'];
+        });
+      });
+    } on Exception catch (e) {
+      print(e);
+      Fluttertoast.showToast(msg: '$e');
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getAlertsInfo();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
@@ -313,7 +343,7 @@ class _MyHeadDelegate extends SliverPersistentHeaderDelegate {
               'Vaccine Centers',
               style: TextStyle(
                 letterSpacing: -2,
-                fontSize: width / 14,
+                fontSize: widget.width / 14,
                 fontFamily: 'Montserrat',
                 fontWeight: FontWeight.w400,
                 color: Colors.white,
@@ -321,10 +351,10 @@ class _MyHeadDelegate extends SliverPersistentHeaderDelegate {
             ),
           ),
           SizedBox(
-            height: width / 25,
+            height: widget.width / 25,
           ),
           Container(
-            width: width / 2.2,
+            width: widget.width / 2.2,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -332,14 +362,14 @@ class _MyHeadDelegate extends SliverPersistentHeaderDelegate {
                   text: new TextSpan(
                     text: 'Get vaccinated if you are ',
                     style: TextStyle(
-                      fontSize: width / 25,
+                      fontSize: widget.width / 25,
                       fontFamily: 'Montserrat',
                       fontWeight: FontWeight.w400,
                       color: Colors.white,
                     ),
                     children: <TextSpan>[
                       new TextSpan(
-                        text: '$age',
+                        text: age == null ? '-' : '$age',
                         style: new TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
@@ -349,19 +379,19 @@ class _MyHeadDelegate extends SliverPersistentHeaderDelegate {
                   ),
                 ),
                 SizedBox(
-                  height: width / 50,
+                  height: widget.width / 50,
                 ),
                 Text(
                   'Get the code by sending your CNIC to 1166 or by pressing the button below.',
                   style: TextStyle(
-                    fontSize: width / 25,
+                    fontSize: widget.width / 25,
                     fontFamily: 'Montserrat',
                     fontWeight: FontWeight.w400,
                     color: Colors.white,
                   ),
                 ),
                 SizedBox(
-                  height: width / 13,
+                  height: widget.width / 13,
                 ),
               ],
             ),
@@ -387,7 +417,7 @@ class _MyHeadDelegate extends SliverPersistentHeaderDelegate {
                     child: Text(
                       'Tap to send CNIC and get code',
                       style: TextStyle(
-                        fontSize: width / 29,
+                        fontSize: widget.width / 29,
                         fontFamily: 'Montserrat',
                         color: Colors.grey[800],
                       ),
@@ -402,18 +432,6 @@ class _MyHeadDelegate extends SliverPersistentHeaderDelegate {
           ),
         ]);
   }
-
-  @override
-  // TODO: implement maxExtent
-  double get maxExtent => width * 1;
-
-  @override
-  // TODO: implement minExtent
-  double get minExtent => width / 5.5;
-
-  @override
-  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) =>
-      false;
 }
 
 class Locations extends StatelessWidget {
@@ -447,8 +465,7 @@ class Locations extends StatelessWidget {
   //
   // open maps
   static Future<void> openMap(String query) async {
-    String googleUrl =
-        'https://www.google.com/maps/search/?api=1&query=${query}';
+    String googleUrl = 'https://www.google.com/maps/search/?api=1&query=$query';
     if (await canLaunch(googleUrl)) {
       await launch(googleUrl);
     } else {
