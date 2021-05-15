@@ -5,23 +5,22 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:intl/intl.dart';
 
-class MedicineInfo extends StatefulWidget {
-  final String medBarcode;
-  final String medName;
+class MedicineInfo_WithoutBarcode extends StatefulWidget {
+  final String name;
 
-  MedicineInfo({
+  MedicineInfo_WithoutBarcode({
     Key key,
-    this.medBarcode,
-    this.medName,
+    this.name,
   }) : super(key: key);
 
   @override
-  _MedicineInfoState createState() => _MedicineInfoState();
+  _MedicineInfo_WithoutBarcodeState createState() =>
+      _MedicineInfo_WithoutBarcodeState();
 }
 
-class _MedicineInfoState extends State<MedicineInfo> {
+class _MedicineInfo_WithoutBarcodeState
+    extends State<MedicineInfo_WithoutBarcode> {
   double width;
   double height;
   double safePadding;
@@ -35,9 +34,6 @@ class _MedicineInfoState extends State<MedicineInfo> {
   var page = PageController();
   var page2 = PageController();
   var med;
-  var med1;
-  var stream;
-  var stream2;
   List<Widget> numberOfImagesIndex;
 
   //
@@ -70,28 +66,12 @@ class _MedicineInfoState extends State<MedicineInfo> {
   //
   //
   // gets the firebase data of that particular medicine
-  Future getMedicineInfo() async {
+  getMedicineInfo_WithoutBarcode() async {
     try {
-      stream = await FirebaseFirestore.instance
-          .collection('Medicine')
-          .doc(widget.medBarcode)
-          .snapshots()
-          .listen((event) {
-        setState(() {
-          med1 = event.data();
-        });
-      });
-    } on Exception catch (e) {
-      print(e);
-      Fluttertoast.showToast(msg: '$e');
-    }
-  }
-
-  Future getMedFromBarcode() async {
-    try {
-      stream2 = await FirebaseFirestore.instance
+      StreamSubscription<DocumentSnapshot> stream = await FirebaseFirestore
+          .instance
           .collection('MedicineModel')
-          .doc(widget.medName)
+          .doc(widget.name)
           .snapshots()
           .listen((event) {
         setState(() {
@@ -116,8 +96,8 @@ class _MedicineInfoState extends State<MedicineInfo> {
     index = 0;
     index2 = 0;
     numberOfImagesIndex = [];
-    getMedicineInfo();
-    getMedFromBarcode();
+    getMedicineInfo_WithoutBarcode();
+
     Future.delayed(Duration(milliseconds: 1000), () {
       setState(() {
         opac2 = 1.0;
@@ -140,13 +120,6 @@ class _MedicineInfoState extends State<MedicineInfo> {
       duration: Duration(milliseconds: 500),
       curve: Curves.ease,
     );
-  }
-
-  @override
-  void dispose() {
-    stream.cancel();
-    stream2.cancel();
-    super.dispose();
   }
 
   @override
@@ -182,7 +155,6 @@ class _MedicineInfoState extends State<MedicineInfo> {
         ),
         appBar: AppBar(
           backgroundColor: Colors.transparent,
-          brightness: Brightness.light,
           elevation: 0,
           iconTheme: IconThemeData(
             color: Colors.white,
@@ -232,33 +204,16 @@ class _MedicineInfoState extends State<MedicineInfo> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              Row(
-                                children: [
-                                  Text(
-                                    med['name'],
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: width / 10,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  med['name'],
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: width / 10,
+                                    fontWeight: FontWeight.bold,
                                   ),
-                                  SizedBox(
-                                    width: 15,
-                                  ),
-                                  //
-                                  //
-                                  // The Green tick for medicine authentication
-                                  med1['sold'] == null
-                                      ? Container()
-                                      : Container(
-                                          child: Icon(
-                                            Icons.check_circle,
-                                            size: width / 13,
-                                            color: Color.fromARGB(
-                                                255, 130, 255, 159),
-                                          ),
-                                        ),
-                                ],
+                                ),
                               ),
                               SizedBox(
                                 height: 5,
@@ -318,7 +273,7 @@ class _MedicineInfoState extends State<MedicineInfo> {
                                             'Price:',
                                             style: TextStyle(
                                               color: Colors.white,
-                                              fontSize: width / 20,
+                                              fontSize: width / 17,
                                               fontWeight: FontWeight.bold,
                                             ),
                                           ),
@@ -350,7 +305,7 @@ class _MedicineInfoState extends State<MedicineInfo> {
                                             'Dose:',
                                             style: TextStyle(
                                               color: Colors.white,
-                                              fontSize: width / 20,
+                                              fontSize: width / 17,
                                               fontWeight: FontWeight.bold,
                                             ),
                                           ),
@@ -415,7 +370,7 @@ class _MedicineInfoState extends State<MedicineInfo> {
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           color: Colors.white,
-                                          fontSize: width / 20,
+                                          fontSize: width / 16,
                                         ),
                                       ),
                                       SizedBox(
@@ -457,7 +412,7 @@ class _MedicineInfoState extends State<MedicineInfo> {
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           color: Colors.white,
-                                          fontSize: width / 20,
+                                          fontSize: width / 16,
                                         ),
                                       ),
                                       SizedBox(
@@ -476,101 +431,11 @@ class _MedicineInfoState extends State<MedicineInfo> {
                                   ),
                                 ),
                               ),
+
                               SizedBox(
                                 height: 10,
                               ),
 
-                              //
-                              //
-                              // barcode and authenticity
-                              Padding(
-                                padding: const EdgeInsets.only(bottom: 10),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Container(
-                                      height: width / 3.1,
-                                      width: width / 2.3,
-                                      decoration: BoxDecoration(
-                                        color: Color.fromARGB(255, 50, 50, 50),
-                                        borderRadius: BorderRadius.circular(15),
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(20.0),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              'Barcode Number',
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.white,
-                                                fontSize: width / 20,
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              height: 5,
-                                            ),
-                                            Text(
-                                              med1['barcode'],
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: width / 30,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                    Container(
-                                      height: width / 3.1,
-                                      width: width / 2.3,
-                                      decoration: BoxDecoration(
-                                        color: med1['sold'] == null
-                                            ? Color.fromARGB(255, 235, 60, 10)
-                                            : Color.fromARGB(
-                                                255, 104, 204, 127),
-                                        borderRadius: BorderRadius.circular(15),
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 20,
-                                          vertical: 10,
-                                        ),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Icon(
-                                              med1['sold'] == null
-                                                  ? Icons.close
-                                                  : Icons.check,
-                                              color: Colors.white,
-                                              size: width / 8,
-                                            ),
-                                            SizedBox(
-                                              height: 5,
-                                            ),
-                                            Text(
-                                              med1['sold'] == null
-                                                  ? 'Medicine has not been Authenticated'
-                                                  : 'Medicine is Authentic',
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: width / 30,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
                               //
                               //
                               // What the medicine should be used for
@@ -591,7 +456,7 @@ class _MedicineInfoState extends State<MedicineInfo> {
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           color: Colors.white,
-                                          fontSize: width / 20,
+                                          fontSize: width / 16,
                                         ),
                                       ),
                                       SizedBox(
@@ -633,7 +498,7 @@ class _MedicineInfoState extends State<MedicineInfo> {
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           color: Colors.white,
-                                          fontSize: width / 20,
+                                          fontSize: width / 16,
                                         ),
                                       ),
                                       SizedBox(
@@ -655,240 +520,9 @@ class _MedicineInfoState extends State<MedicineInfo> {
                               SizedBox(
                                 height: 10,
                               ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Container(
-                                    width: width / 2.3,
-                                    decoration: BoxDecoration(
-                                      color: Color.fromARGB(255, 50, 50, 50),
-                                      borderRadius: BorderRadius.circular(15),
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(20.0),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            'GTIN Number',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.white,
-                                              fontSize: width / 20,
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 5,
-                                          ),
-                                          Text(
-                                            med1['GTIN'],
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: width / 30,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  Container(
-                                    width: width / 2.3,
-                                    decoration: BoxDecoration(
-                                      color: Color.fromARGB(255, 50, 50, 50),
-                                      borderRadius: BorderRadius.circular(15),
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(20.0),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            'Batch Number',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.white,
-                                              fontSize: width / 20,
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 5,
-                                          ),
-                                          Text(
-                                            med1['batchNumber'],
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: width / 30,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Container(
-                                    width: width / 2.3,
-                                    decoration: BoxDecoration(
-                                      color: Color.fromARGB(255, 50, 50, 50),
-                                      borderRadius: BorderRadius.circular(15),
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(20.0),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            'Product Number',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.white,
-                                              fontSize: width / 20,
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 5,
-                                          ),
-                                          Text(
-                                            med1['productNumber'],
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: width / 30,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  Container(
-                                    width: width / 2.3,
-                                    decoration: BoxDecoration(
-                                      color: Color.fromARGB(255, 50, 50, 50),
-                                      borderRadius: BorderRadius.circular(15),
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(20.0),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            'Batch Status',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.white,
-                                              fontSize: width / 20,
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 5,
-                                          ),
-                                          Text(
-                                            med1['batchStatus'],
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: width / 30,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Container(
-                                    width: width / 2.3,
-                                    height: width / 3.3,
-                                    decoration: BoxDecoration(
-                                      color: Color.fromARGB(255, 50, 50, 50),
-                                      borderRadius: BorderRadius.circular(15),
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(20.0),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            'Registration Num',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.white,
-                                              fontSize: width / 20,
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 5,
-                                          ),
-                                          Text(
-                                            med1['regNumber'],
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: width / 30,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  Container(
-                                    width: width / 2.3,
-                                    height: width / 3.3,
-                                    decoration: BoxDecoration(
-                                      color: Color.fromARGB(255, 50, 50, 50),
-                                      borderRadius: BorderRadius.circular(15),
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(20.0),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            'Registrant',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.white,
-                                              fontSize: width / 20,
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 5,
-                                          ),
-                                          Text(
-                                            med1['registrant'],
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: width / 30,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-
+                              //
+                              //
+                              // the side effects of the medicine
                               Container(
                                 width: width,
                                 decoration: BoxDecoration(
@@ -902,22 +536,20 @@ class _MedicineInfoState extends State<MedicineInfo> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        'Produced On',
+                                        'Active Ingredients',
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           color: Colors.white,
-                                          fontSize: width / 20,
+                                          fontSize: width / 16,
                                         ),
                                       ),
                                       SizedBox(
                                         height: 5,
                                       ),
                                       Text(
-                                        DateFormat.yMMMd()
-                                            .add_jm()
-                                            .format(
-                                                med1['productionDate'].toDate())
-                                            .toString(),
+                                        med['activeIngredients'] == null
+                                            ? Container()
+                                            : med['activeIngredients'],
                                         style: TextStyle(
                                           color: Colors.white,
                                           fontSize: width / 30,
@@ -946,21 +578,20 @@ class _MedicineInfoState extends State<MedicineInfo> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        'Expiry Date',
+                                        'Other Ingredients',
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           color: Colors.white,
-                                          fontSize: width / 20,
+                                          fontSize: width / 16,
                                         ),
                                       ),
                                       SizedBox(
                                         height: 5,
                                       ),
                                       Text(
-                                        DateFormat.yMMMd()
-                                            .add_jm()
-                                            .format(med1['expiryDate'].toDate())
-                                            .toString(),
+                                        med['otherIngredients'] == null
+                                            ? Container()
+                                            : med['otherIngredients'],
                                         style: TextStyle(
                                           color: Colors.white,
                                           fontSize: width / 30,
@@ -970,50 +601,6 @@ class _MedicineInfoState extends State<MedicineInfo> {
                                   ),
                                 ),
                               ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              //
-                              //
-                              // the side effects of the medicine
-                              Container(
-                                width: width,
-                                decoration: BoxDecoration(
-                                  color: Color.fromARGB(255, 50, 50, 50),
-                                  borderRadius: BorderRadius.circular(15),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(20),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Sold On',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white,
-                                          fontSize: width / 20,
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 5,
-                                      ),
-                                      Text(
-                                        DateFormat.yMMMd()
-                                            .add_jm()
-                                            .format(med1['sold'].toDate())
-                                            .toString(),
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: width / 30,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-
                               SizedBox(
                                 height: width / 4,
                               ),

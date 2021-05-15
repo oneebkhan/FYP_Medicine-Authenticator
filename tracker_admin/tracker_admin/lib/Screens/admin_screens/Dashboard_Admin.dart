@@ -11,15 +11,15 @@ import 'package:tracker_admin/Widgets/Admin/BarchartMonthly.dart';
 import 'package:tracker_admin/Widgets/PopupCard.dart';
 import 'package:tracker_admin/Widgets/RowInfo.dart';
 import 'package:tracker_admin/configs/HeroDialogRoute.dart';
+import 'package:tracker_admin/screens/Clinic/Clinics.dart';
+import 'package:tracker_admin/screens/Pharmacy/Pharmacies.dart';
 import 'package:tracker_admin/screens/Search.dart';
 import 'package:tracker_admin/screens/admin_screens/Distributor.dart';
 import 'package:tracker_admin/screens/admin_screens/SearchDistributors.dart';
 import 'package:tracker_admin/screens/admin_screens/ViewDistributors.dart';
 import 'package:tracker_admin/screens/admin_screens/AddDistributor.dart';
 import 'package:tracker_admin/screens/admin_screens/History.dart';
-import 'package:tracker_admin/screens/Clinic/DistributorClinics.dart';
 import 'package:tracker_admin/screens/admin_screens/ContactDevs.dart';
-import 'package:tracker_admin/screens/Pharmacy/DistributorPharmacies.dart';
 import 'package:tracker_admin/screens/ViewMedicine.dart';
 
 class Dashboard_Admin extends StatefulWidget {
@@ -152,10 +152,6 @@ class _Dashboard_AdminState extends State<Dashboard_Admin> {
     getDistributors();
     getMedicine();
     getPharmacy();
-  }
-
-  void dispose() {
-    super.dispose();
   }
 
 //
@@ -341,12 +337,6 @@ class _AdminDashboardState extends State<AdminDashboard> {
         .listen((ConnectivityResult result) {
       checkInternet();
     });
-  }
-
-  @override
-  void dispose() {
-    subscription.cancel();
-    super.dispose();
   }
 
   @override
@@ -706,7 +696,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (_) => DistributorClinics(),
+                                  builder: (_) => Clinics(),
                                 ),
                               );
                             },
@@ -736,7 +726,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (_) => DistributorPharmacies(),
+                                builder: (_) => Pharmacies(),
                               ),
                             );
                           },
@@ -894,6 +884,35 @@ class _AdminDashboardState extends State<AdminDashboard> {
                             ),
                           ),
                         ),
+                        //
+                        //
+                        // The third Add Medicine Model Button
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => Search(),
+                              ),
+                            );
+                          },
+                          child: Container(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 5, horizontal: 5),
+                              child: Image(
+                                width: widget.width / 4.9,
+                                height: widget.width / 4.6,
+                                image: AssetImage(
+                                    'assets/icons/admin_dashboard_medicine/addMedicineModel.png'),
+                              ),
+                            ),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: col,
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ],
@@ -992,12 +1011,6 @@ class _AdminStatisticsState extends State<AdminStatistics> {
         .listen((ConnectivityResult result) {
       checkInternet();
     });
-  }
-
-  @override
-  void dispose() {
-    subscription.cancel();
-    super.dispose();
   }
 
   @override

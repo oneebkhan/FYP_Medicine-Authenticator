@@ -12,6 +12,9 @@ void main() {
   runApp(
     MaterialApp(
       debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        fontFamily: 'Montserrat',
+      ),
       home: Splash(),
       title: 'Medicine Tracker - Admin',
     ),

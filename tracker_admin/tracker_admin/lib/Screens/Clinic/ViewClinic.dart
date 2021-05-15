@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:tracker_admin/Widgets/RowInfo.dart';
@@ -22,6 +23,25 @@ class ViewClinic extends StatefulWidget {
 class _ViewClinicState extends State<ViewClinic> {
   double opac;
   var clinicStream;
+  bool con;
+  double height;
+  double width;
+
+  //
+  //
+  //Check internet connection
+  checkInternet() async {
+    var connectivityResult = await Connectivity().checkConnectivity();
+    if (connectivityResult == ConnectivityResult.none) {
+      Fluttertoast.showToast(msg: 'Not Connected to the Internet!');
+      setState(() {
+        con = true;
+      });
+    } else
+      setState(() {
+        con = false;
+      });
+  }
 
   //
   //
@@ -45,6 +65,7 @@ class _ViewClinicState extends State<ViewClinic> {
     super.initState();
     opac = 0;
     getClinics();
+    checkInternet();
 
     Future.delayed(Duration(milliseconds: 500), () {
       setState(() {
@@ -55,7 +76,8 @@ class _ViewClinicState extends State<ViewClinic> {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
+    width = MediaQuery.of(context).size.width;
+    height = MediaQuery.of(context).size.height;
 
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 246, 246, 248),
@@ -92,57 +114,77 @@ class _ViewClinicState extends State<ViewClinic> {
               AnimatedOpacity(
                 opacity: opac,
                 duration: Duration(milliseconds: 500),
-                child: Container(
-                  width: width,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(15),
-                    ),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                      bottom: 10,
-                      left: 20,
-                      right: 20,
-                      top: 20,
-                    ),
-                    child: StreamBuilder<QuerySnapshot>(
-                        stream: clinicStream,
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData == false) {
-                            return Center(
-                              child: CircularProgressIndicator(),
-                            );
-                          }
-                          return ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: snapshot.data.docs.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              QueryDocumentSnapshot item =
-                                  snapshot.data.docs[index];
-                              return new RowInfo(
-                                imageURL: item['imageURL'][0],
-                                location: item['location'],
-                                width: width,
-                                title: item['name'],
-                                func: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (_) => Pharmacy_Clinics_Info(
-                                        name: item['uid'],
-                                        pharmOrClinic: 'Clinic',
-                                      ),
-                                    ),
+                child: con == true
+                    ? Center(
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding:
+                                  EdgeInsets.only(top: height / 3, bottom: 20),
+                              child: Text('No Internet Connection...'),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                checkInternet();
+                              },
+                              child: Text('Reload'),
+                            ),
+                          ],
+                        ),
+                      )
+                    : Container(
+                        width: width,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(15),
+                          ),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                            bottom: 10,
+                            left: 10,
+                            right: 10,
+                            top: 10,
+                          ),
+                          child: StreamBuilder<QuerySnapshot>(
+                              stream: clinicStream,
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData == false) {
+                                  return Center(
+                                    child: CircularProgressIndicator(),
                                   );
-                                },
-                              );
-                            },
-                          );
-                        }),
-                  ),
-                ),
+                                }
+                                return ListView.builder(
+                                  shrinkWrap: true,
+                                  itemCount: snapshot.data.docs.length,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    QueryDocumentSnapshot item =
+                                        snapshot.data.docs[index];
+                                    return new RowInfo(
+                                      imageURL: item['imageURL'][0],
+                                      location: item['location'],
+                                      width: width,
+                                      title: item['name'],
+                                      func: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (_) =>
+                                                Pharmacy_Clinics_Info(
+                                              name: item['uid'],
+                                              pharmOrClinic: 'Clinic',
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  },
+                                );
+                              }),
+                        ),
+                      ),
               ),
             ],
           ),

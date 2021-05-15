@@ -64,7 +64,7 @@ class RowInfo extends StatelessWidget {
                           : title,
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
-                        fontSize: width / 19,
+                        fontSize: width / 21.5,
                       ),
                     ),
                     location == null
@@ -74,7 +74,7 @@ class RowInfo extends StatelessWidget {
                                 ? location.substring(0, 30) + '...'
                                 : location,
                             style: TextStyle(
-                              fontSize: width / 28,
+                              fontSize: width / 29,
                               fontWeight: FontWeight.w300,
                             ),
                           ),
