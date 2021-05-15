@@ -55,7 +55,7 @@ class _MedicineInfoState extends State<MedicineInfo> {
               image: DecorationImage(
                 colorFilter: new ColorFilter.mode(
                     Colors.black.withOpacity(0.4), BlendMode.dstATop),
-                fit: BoxFit.fitWidth,
+                fit: BoxFit.cover,
                 image: CachedNetworkImageProvider(
                   med['imageURL'][i].toString(),
                 ),
