@@ -73,6 +73,12 @@ class _ViewDistributorsState extends State<ViewDistributors> {
   }
 
   @override
+  void dispose() {
+    subscription.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;

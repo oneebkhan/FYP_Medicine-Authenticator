@@ -913,6 +913,35 @@ class _AdminDashboardState extends State<AdminDashboard> {
                             ),
                           ),
                         ),
+                        //
+                        //
+                        // The 4th delete med model Button
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => Search(),
+                              ),
+                            );
+                          },
+                          child: Container(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 5, horizontal: 5),
+                              child: Image(
+                                width: widget.width / 4.9,
+                                height: widget.width / 4.6,
+                                image: AssetImage(
+                                    'assets/icons/admin_dashboard_medicine/deleteMedModel.png'),
+                              ),
+                            ),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: col,
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ],
