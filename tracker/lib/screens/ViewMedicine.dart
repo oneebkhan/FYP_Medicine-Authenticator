@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:tracker/Widgets/RowInfo.dart';
 import 'package:tracker/screens/MedicineInfo.dart';
+import 'package:tracker/screens/MedicineInfo_WithoutBarcode.dart';
 
 class ViewMedicine extends StatefulWidget {
   // The name of the category opened
@@ -51,7 +52,7 @@ class _ViewMedicineState extends State<ViewMedicine> {
     try {
       setState(() {
         m = FirebaseFirestore.instance
-            .collection('Medicine')
+            .collection('MedicineModel')
             .orderBy('name')
             .snapshots();
       });
@@ -174,8 +175,9 @@ class _ViewMedicineState extends State<ViewMedicine> {
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(
-                                              builder: (_) => MedicineInfo(
-                                                medBarcode: item['barcode'],
+                                              builder: (_) =>
+                                                  MedicineInfo_WithoutBarcode(
+                                                name: item['name'],
                                               ),
                                             ),
                                           );

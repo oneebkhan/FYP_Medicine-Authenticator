@@ -30,6 +30,7 @@ class _DashboardState extends State<Dashboard> {
   double height;
   double safePadding;
   var medID;
+  var medName;
   bool con;
   var subscription;
   int current = 0;
@@ -108,6 +109,7 @@ class _DashboardState extends State<Dashboard> {
   nullTheMed() {
     setState(() {
       medID = '';
+      medName = '';
     });
   }
 
@@ -126,6 +128,7 @@ class _DashboardState extends State<Dashboard> {
       result.docs.forEach((res) {
         setState(() {
           medID = res.data()['barcode'];
+          medName = res.data()['name'];
         });
       });
       if (barcode == null) {
@@ -138,6 +141,7 @@ class _DashboardState extends State<Dashboard> {
           MaterialPageRoute(
             builder: (_) => MedicineInfo(
               medBarcode: medID,
+              medName: medName,
             ),
           ),
         );
@@ -160,6 +164,7 @@ class _DashboardState extends State<Dashboard> {
       result.docs.forEach((res) {
         setState(() {
           medID = res.data()['barcode'];
+          medName = res.data()['name'];
         });
       });
       if (barcode == null) {
@@ -172,6 +177,7 @@ class _DashboardState extends State<Dashboard> {
           MaterialPageRoute(
             builder: (_) => MedicineInfo(
               medBarcode: medID,
+              medName: medName,
             ),
           ),
         );
