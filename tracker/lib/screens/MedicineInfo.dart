@@ -234,12 +234,15 @@ class _MedicineInfoState extends State<MedicineInfo> {
                             children: [
                               Row(
                                 children: [
-                                  Text(
-                                    med['name'],
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: width / 10,
-                                      fontWeight: FontWeight.bold,
+                                  Container(
+                                    width: width / 1.2,
+                                    child: Text(
+                                      med['name'],
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: width / 12,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                   ),
                                   SizedBox(
@@ -270,33 +273,44 @@ class _MedicineInfoState extends State<MedicineInfo> {
                                   ? Container()
                                   : Align(
                                       alignment: Alignment.centerLeft,
-                                      child: SizedBox(
-                                        height: 10,
-                                        child: ListView.builder(
-                                          scrollDirection: Axis.horizontal,
-                                          physics:
-                                              NeverScrollableScrollPhysics(),
-                                          shrinkWrap: true,
-                                          padding: EdgeInsets.all(0),
-                                          itemCount: med['imageURL'].length,
-                                          itemBuilder:
-                                              (BuildContext context, int ind) {
-                                            return Padding(
-                                              padding: const EdgeInsets.only(
-                                                  right: 5),
-                                              child: Container(
-                                                margin: EdgeInsets.all(0),
-                                                width: 10,
-                                                height: 10,
-                                                decoration: BoxDecoration(
-                                                  shape: BoxShape.circle,
-                                                  color: index == ind
-                                                      ? Colors.blue[200]
-                                                      : Colors.grey[700],
+                                      child: Container(
+                                        height: 30,
+                                        decoration: BoxDecoration(
+                                            color: Colors.black45,
+                                            borderRadius:
+                                                BorderRadius.circular(100)),
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 13,
+                                            vertical: 10,
+                                          ),
+                                          child: ListView.builder(
+                                            scrollDirection: Axis.horizontal,
+                                            physics:
+                                                NeverScrollableScrollPhysics(),
+                                            shrinkWrap: true,
+                                            padding: EdgeInsets.all(0),
+                                            itemCount: med['imageURL'].length,
+                                            itemBuilder: (BuildContext context,
+                                                int ind) {
+                                              return Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 2.5),
+                                                child: Container(
+                                                  margin: EdgeInsets.all(0),
+                                                  width: 10,
+                                                  height: 10,
+                                                  decoration: BoxDecoration(
+                                                    shape: BoxShape.circle,
+                                                    color: index == ind
+                                                        ? Colors.blue[200]
+                                                        : Colors.grey[700],
+                                                  ),
                                                 ),
-                                              ),
-                                            );
-                                          },
+                                              );
+                                            },
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -326,7 +340,7 @@ class _MedicineInfoState extends State<MedicineInfo> {
                                             'Rs.' + med['price'].toString(),
                                             style: TextStyle(
                                               color: Colors.white,
-                                              fontSize: width / 22,
+                                              fontSize: width / 27,
                                             ),
                                           ),
                                         ],
@@ -358,7 +372,7 @@ class _MedicineInfoState extends State<MedicineInfo> {
                                             med['dose'],
                                             style: TextStyle(
                                               color: Colors.white,
-                                              fontSize: width / 22,
+                                              fontSize: width / 27,
                                             ),
                                           ),
                                         ],

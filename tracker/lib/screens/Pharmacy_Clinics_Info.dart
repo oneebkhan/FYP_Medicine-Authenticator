@@ -317,30 +317,41 @@ class _Pharmacy_Clinics_InfoState extends State<Pharmacy_Clinics_Info> {
                             //     :
                             Align(
                               alignment: Alignment.centerLeft,
-                              child: SizedBox(
-                                height: 10,
-                                child: ListView.builder(
-                                  scrollDirection: Axis.horizontal,
-                                  physics: NeverScrollableScrollPhysics(),
-                                  shrinkWrap: true,
-                                  padding: EdgeInsets.all(0),
-                                  itemCount: info['imageURL'].length,
-                                  itemBuilder: (BuildContext context, int ind) {
-                                    return Padding(
-                                      padding: const EdgeInsets.only(right: 5),
-                                      child: Container(
-                                        margin: EdgeInsets.all(0),
-                                        width: 10,
-                                        height: 10,
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: index == ind
-                                              ? Colors.blue[200]
-                                              : Colors.grey[700],
+                              child: Container(
+                                height: 30,
+                                decoration: BoxDecoration(
+                                    color: Colors.black45,
+                                    borderRadius: BorderRadius.circular(100)),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 13,
+                                    vertical: 10,
+                                  ),
+                                  child: ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    physics: NeverScrollableScrollPhysics(),
+                                    shrinkWrap: true,
+                                    padding: EdgeInsets.all(0),
+                                    itemCount: info['imageURL'].length,
+                                    itemBuilder:
+                                        (BuildContext context, int ind) {
+                                      return Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 2.5),
+                                        child: Container(
+                                          margin: EdgeInsets.all(0),
+                                          width: 10,
+                                          height: 10,
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: index == ind
+                                                ? Colors.blue[200]
+                                                : Colors.grey[700],
+                                          ),
                                         ),
-                                      ),
-                                    );
-                                  },
+                                      );
+                                    },
+                                  ),
                                 ),
                               ),
                             ),
