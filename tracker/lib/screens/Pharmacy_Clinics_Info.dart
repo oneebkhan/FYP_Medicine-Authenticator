@@ -299,7 +299,7 @@ class _Pharmacy_Clinics_InfoState extends State<Pharmacy_Clinics_Info> {
                                     info['name'],
                                     style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: width / 10,
+                                      fontSize: width / 12,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
@@ -347,24 +347,28 @@ class _Pharmacy_Clinics_InfoState extends State<Pharmacy_Clinics_Info> {
                             SizedBox(
                               height: 20,
                             ),
+
                             Align(
                               alignment: Alignment.centerLeft,
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'Location: ',
+                                    'Phone Number:',
                                     style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: width / 17,
+                                      fontSize: width / 20,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
                                   Text(
-                                    info['location'],
+                                    info['phoneNumber'],
                                     style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: width / 22,
+                                      fontSize: width / 27,
                                     ),
                                   ),
                                 ],
@@ -379,25 +383,29 @@ class _Pharmacy_Clinics_InfoState extends State<Pharmacy_Clinics_Info> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'Phone Number:',
+                                    'Location: ',
                                     style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: width / 17,
+                                      fontSize: width / 20,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
                                   Text(
-                                    info['phoneNumber'],
+                                    info['location'],
                                     style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: width / 22,
+                                      fontSize: width / 27,
                                     ),
                                   ),
                                 ],
                               ),
                             ),
+
                             SizedBox(
-                              height: width / 7,
+                              height: width / 6,
                             ),
                           ],
                         ),
@@ -443,7 +451,7 @@ class _Pharmacy_Clinics_InfoState extends State<Pharmacy_Clinics_Info> {
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         color: Colors.white,
-                                        fontSize: width / 16,
+                                        fontSize: width / 20,
                                       ),
                                     ),
                                     SizedBox(
@@ -480,7 +488,7 @@ class _Pharmacy_Clinics_InfoState extends State<Pharmacy_Clinics_Info> {
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         color: Colors.white,
-                                        fontSize: width / 16,
+                                        fontSize: width / 20,
                                       ),
                                     ),
                                     SizedBox(
@@ -521,7 +529,7 @@ class _Pharmacy_Clinics_InfoState extends State<Pharmacy_Clinics_Info> {
                                               style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 color: Colors.white,
-                                                fontSize: width / 16,
+                                                fontSize: width / 20,
                                               ),
                                             ),
                                             SizedBox(
@@ -567,8 +575,8 @@ class _Pharmacy_Clinics_InfoState extends State<Pharmacy_Clinics_Info> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Container(
-                                    height: 110,
-                                    width: width / 2.3,
+                                    width: width / 2.26,
+                                    height: width / 3.3,
                                     decoration: BoxDecoration(
                                       color: Color.fromARGB(255, 50, 50, 50),
                                       borderRadius: BorderRadius.circular(15),
@@ -584,7 +592,7 @@ class _Pharmacy_Clinics_InfoState extends State<Pharmacy_Clinics_Info> {
                                             style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               color: Colors.white,
-                                              fontSize: width / 16,
+                                              fontSize: width / 20,
                                             ),
                                           ),
                                           SizedBox(
@@ -602,8 +610,8 @@ class _Pharmacy_Clinics_InfoState extends State<Pharmacy_Clinics_Info> {
                                     ),
                                   ),
                                   Container(
-                                    width: width / 2.3,
-                                    height: 110,
+                                    width: width / 2.26,
+                                    height: width / 3.3,
                                     decoration: BoxDecoration(
                                       color: Color.fromARGB(255, 254, 192, 70),
                                       borderRadius: BorderRadius.circular(15),

@@ -370,7 +370,7 @@ class _MedicineInfo_WithoutBarcodeState
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           color: Colors.white,
-                                          fontSize: width / 16,
+                                          fontSize: width / 20,
                                         ),
                                       ),
                                       SizedBox(
@@ -412,7 +412,7 @@ class _MedicineInfo_WithoutBarcodeState
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           color: Colors.white,
-                                          fontSize: width / 16,
+                                          fontSize: width / 20,
                                         ),
                                       ),
                                       SizedBox(
@@ -456,7 +456,7 @@ class _MedicineInfo_WithoutBarcodeState
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           color: Colors.white,
-                                          fontSize: width / 16,
+                                          fontSize: width / 20,
                                         ),
                                       ),
                                       SizedBox(
@@ -498,7 +498,7 @@ class _MedicineInfo_WithoutBarcodeState
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           color: Colors.white,
-                                          fontSize: width / 16,
+                                          fontSize: width / 20,
                                         ),
                                       ),
                                       SizedBox(
@@ -540,7 +540,7 @@ class _MedicineInfo_WithoutBarcodeState
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           color: Colors.white,
-                                          fontSize: width / 16,
+                                          fontSize: width / 20,
                                         ),
                                       ),
                                       SizedBox(
@@ -582,7 +582,7 @@ class _MedicineInfo_WithoutBarcodeState
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           color: Colors.white,
-                                          fontSize: width / 16,
+                                          fontSize: width / 20,
                                         ),
                                       ),
                                       SizedBox(
