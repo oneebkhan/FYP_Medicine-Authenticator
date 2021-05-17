@@ -202,15 +202,10 @@ class _DashboardState extends State<Dashboard> {
   }
 
   @override
-  void dispose() {
-    subscription.cancel();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
+
     car = [
       Corona(
         height: height,
@@ -286,7 +281,7 @@ class _DashboardState extends State<Dashboard> {
                       autoPlayAnimationDuration: Duration(
                         milliseconds: 1400,
                       ),
-                      autoPlayInterval: Duration(seconds: 5),
+                      autoPlayInterval: Duration(seconds: 6),
                     ),
                   ),
                 ),

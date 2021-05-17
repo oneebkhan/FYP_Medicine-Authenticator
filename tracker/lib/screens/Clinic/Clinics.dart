@@ -272,7 +272,10 @@ class _ClinicsState extends State<Clinics> {
                                     title: item['name'],
                                     width: width,
                                     height: height,
-                                    countOfImages: item['clinicImages'].length,
+                                    countOfImages:
+                                        item['clinicImages'].length > 5
+                                            ? 5
+                                            : item['clinicImages'].length,
                                   );
                                 },
                               );

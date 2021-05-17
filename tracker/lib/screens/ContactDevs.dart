@@ -21,6 +21,7 @@ class _ContactDevsState extends State<ContactDevs> {
   TextEditingController emailOfUser = TextEditingController();
   TextEditingController subject = TextEditingController();
   TextEditingController description = TextEditingController();
+  bool con;
 
   //
   //
@@ -56,9 +57,13 @@ class _ContactDevsState extends State<ContactDevs> {
     var connectivityResult = await Connectivity().checkConnectivity();
     if (connectivityResult == ConnectivityResult.none) {
       Fluttertoast.showToast(msg: 'Not Connected to the Internet!');
-      return connectivityResult;
+      setState(() {
+        con = true;
+      });
     } else
-      return null;
+      setState(() {
+        con = false;
+      });
   }
 
   //
@@ -106,13 +111,9 @@ class _ContactDevsState extends State<ContactDevs> {
   @override
   void initState() {
     super.initState();
+    con = false;
     checkInternet();
     _getLengthOfContactDevs();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 
   @override
@@ -230,15 +231,20 @@ class _ContactDevsState extends State<ContactDevs> {
                     child: FlatButton(
                       padding: EdgeInsets.all(0),
                       onPressed: () {
-                        if (validateEmail(emailOfUser.text) == null &&
-                            checkInternet() == null) {
-                          _onPressed();
-                          setState(() {
-                            _isLoading = true;
-                          });
-                          Future.delayed(Duration(milliseconds: 2000), () {
-                            Navigator.pop(context);
-                          });
+                        if (validateEmail(emailOfUser.text) == null) {
+                          checkInternet();
+                          if (con == true) {
+                            Fluttertoast.showToast(
+                                msg: 'No Internet Connection');
+                          } else {
+                            _onPressed();
+                            setState(() {
+                              _isLoading = true;
+                            });
+                            Future.delayed(Duration(milliseconds: 2000), () {
+                              Navigator.pop(context);
+                            });
+                          }
                         }
                       },
                       child: Container(

@@ -131,7 +131,7 @@ class _CoronaTipsState extends State<CoronaTips> {
                       img: 'assets/images/wash.png',
                       title: 'Wash Your Hands Regularly',
                       description:
-                          'Make sure to wear a mask at all times to avoid catching or spreading bacteria.',
+                          'Make sure to to wash your hands regularly especially after any outside exposure.',
                       titleColor: Color.fromARGB(255, 204, 178, 165),
                     ),
                     SizedBox(

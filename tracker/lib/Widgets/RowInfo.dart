@@ -40,8 +40,8 @@ class RowInfo extends StatelessWidget {
                       // the 4th image URL
                       imageURL,
                   imageBuilder: (context, imageProvider) => Container(
-                    width: width / 8,
-                    height: width / 8,
+                    width: width / 9,
+                    height: width / 9,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       image: DecorationImage(
@@ -59,10 +59,12 @@ class RowInfo extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      title.length > 24 ? title.substring(0, 23) + '...' : title,
+                      title.length > 24
+                          ? title.substring(0, 23) + '...'
+                          : title,
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
-                        fontSize: width / 19,
+                        fontSize: width / 21.5,
                       ),
                     ),
                     location == null
@@ -72,7 +74,7 @@ class RowInfo extends StatelessWidget {
                                 ? location.substring(0, 30) + '...'
                                 : location,
                             style: TextStyle(
-                              fontSize: width / 28,
+                              fontSize: width / 29,
                               fontWeight: FontWeight.w300,
                             ),
                           ),

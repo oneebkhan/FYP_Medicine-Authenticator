@@ -491,7 +491,7 @@ class _MedicineInfoState extends State<MedicineInfo> {
                                   children: [
                                     Container(
                                       height: width / 3.1,
-                                      width: width / 2.3,
+                                      width: width / 2.26,
                                       decoration: BoxDecoration(
                                         color: Color.fromARGB(255, 50, 50, 50),
                                         borderRadius: BorderRadius.circular(15),
@@ -526,7 +526,7 @@ class _MedicineInfoState extends State<MedicineInfo> {
                                     ),
                                     Container(
                                       height: width / 3.1,
-                                      width: width / 2.3,
+                                      width: width / 2.26,
                                       decoration: BoxDecoration(
                                         color: med1['sold'] == null
                                             ? Color.fromARGB(255, 235, 60, 10)
@@ -655,12 +655,95 @@ class _MedicineInfoState extends State<MedicineInfo> {
                               SizedBox(
                                 height: 10,
                               ),
+                              //
+                              //
+                              // the side effects of the medicine
+                              Container(
+                                width: width,
+                                decoration: BoxDecoration(
+                                  color: Color.fromARGB(255, 50, 50, 50),
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(20),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Active Ingredients',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                          fontSize: width / 16,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      Text(
+                                        med['activeIngredients'] == null
+                                            ? Container()
+                                            : med['activeIngredients'],
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: width / 30,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              //
+                              //
+                              // the side effects of the medicine
+                              Container(
+                                width: width,
+                                decoration: BoxDecoration(
+                                  color: Color.fromARGB(255, 50, 50, 50),
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(20),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Other Ingredients',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                          fontSize: width / 16,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      Text(
+                                        med['otherIngredients'] == null
+                                            ? Container()
+                                            : med['otherIngredients'],
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: width / 30,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 10),
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Container(
-                                    width: width / 2.3,
+                                    width: width / 2.26,
+                                    height: width / 3.3,
                                     decoration: BoxDecoration(
                                       color: Color.fromARGB(255, 50, 50, 50),
                                       borderRadius: BorderRadius.circular(15),
@@ -694,7 +777,8 @@ class _MedicineInfoState extends State<MedicineInfo> {
                                     ),
                                   ),
                                   Container(
-                                    width: width / 2.3,
+                                    width: width / 2.26,
+                                    height: width / 3.3,
                                     decoration: BoxDecoration(
                                       color: Color.fromARGB(255, 50, 50, 50),
                                       borderRadius: BorderRadius.circular(15),
@@ -737,7 +821,8 @@ class _MedicineInfoState extends State<MedicineInfo> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Container(
-                                    width: width / 2.3,
+                                    width: width / 2.26,
+                                    height: width / 3.3,
                                     decoration: BoxDecoration(
                                       color: Color.fromARGB(255, 50, 50, 50),
                                       borderRadius: BorderRadius.circular(15),
@@ -771,7 +856,8 @@ class _MedicineInfoState extends State<MedicineInfo> {
                                     ),
                                   ),
                                   Container(
-                                    width: width / 2.3,
+                                    width: width / 2.26,
+                                    height: width / 3.3,
                                     decoration: BoxDecoration(
                                       color: Color.fromARGB(255, 50, 50, 50),
                                       borderRadius: BorderRadius.circular(15),
@@ -814,7 +900,7 @@ class _MedicineInfoState extends State<MedicineInfo> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Container(
-                                    width: width / 2.3,
+                                    width: width / 2.26,
                                     height: width / 3.3,
                                     decoration: BoxDecoration(
                                       color: Color.fromARGB(255, 50, 50, 50),
@@ -849,7 +935,7 @@ class _MedicineInfoState extends State<MedicineInfo> {
                                     ),
                                   ),
                                   Container(
-                                    width: width / 2.3,
+                                    width: width / 2.26,
                                     height: width / 3.3,
                                     decoration: BoxDecoration(
                                       color: Color.fromARGB(255, 50, 50, 50),

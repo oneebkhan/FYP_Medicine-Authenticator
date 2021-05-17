@@ -23,6 +23,7 @@ class _RequestMedicineState extends State<RequestMedicine> {
   TextEditingController emailOfUser = TextEditingController();
   TextEditingController cellNumberOfUser = TextEditingController();
   TextEditingController locationOfUser = TextEditingController();
+  bool con;
 
   //
   //
@@ -31,9 +32,13 @@ class _RequestMedicineState extends State<RequestMedicine> {
     var connectivityResult = await Connectivity().checkConnectivity();
     if (connectivityResult == ConnectivityResult.none) {
       Fluttertoast.showToast(msg: 'Not Connected to the Internet!');
-      return connectivityResult;
+      setState(() {
+        con = true;
+      });
     } else
-      return null;
+      setState(() {
+        con = false;
+      });
   }
 
   //
@@ -108,6 +113,7 @@ class _RequestMedicineState extends State<RequestMedicine> {
   @override
   void initState() {
     super.initState();
+    con = true;
     checkInternet();
     _getLengthOfRequestsMedicine();
   }
@@ -257,15 +263,19 @@ class _RequestMedicineState extends State<RequestMedicine> {
                     child: FlatButton(
                       padding: EdgeInsets.all(0),
                       onPressed: () {
-                        if (validateEmail(emailOfUser.text) == null &&
-                            checkInternet() == null) {
-                          _onPressed();
-                          setState(() {
-                            _isLoading = true;
-                          });
-                          Future.delayed(Duration(milliseconds: 2000), () {
-                            Navigator.pop(context);
-                          });
+                        if (validateEmail(emailOfUser.text) == null) {
+                          checkInternet();
+                          if (con == true) {
+                            Fluttertoast.showToast(msg: 'No Connection');
+                          } else {
+                            _onPressed();
+                            setState(() {
+                              _isLoading = true;
+                            });
+                            Future.delayed(Duration(milliseconds: 2000), () {
+                              Navigator.pop(context);
+                            });
+                          }
                         }
                       },
                       child: Container(

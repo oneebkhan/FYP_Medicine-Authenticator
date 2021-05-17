@@ -40,8 +40,8 @@ class RowInfo extends StatelessWidget {
                       // the 4th image URL
                       imageURL,
                   imageBuilder: (context, imageProvider) => Container(
-                    width: width / 8,
-                    height: width / 8,
+                    width: width / 9,
+                    height: width / 9,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       image: DecorationImage(

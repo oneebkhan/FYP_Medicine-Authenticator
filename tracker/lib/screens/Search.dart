@@ -233,27 +233,26 @@ class __NamedResultsState extends State<_NamedResults> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        con == true
-            ? Center(
-                child: Column(
-                  children: [
-                    Padding(
-                      padding:
-                          EdgeInsets.only(top: widget.height / 3, bottom: 20),
-                      child: Text('No Internet Connection...'),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        checkInternet();
-                      },
-                      child: Text('Reload'),
-                    ),
-                  ],
+    return con == true
+        ? Center(
+            child: Column(
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(top: widget.height / 3, bottom: 20),
+                  child: Text('No Internet Connection...'),
                 ),
-              )
-            : Row(
+                TextButton(
+                  onPressed: () {
+                    checkInternet();
+                  },
+                  child: Text('Reload'),
+                ),
+              ],
+            ),
+          )
+        : Column(
+            children: [
+              Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   ContainerText(
@@ -299,85 +298,86 @@ class __NamedResultsState extends State<_NamedResults> {
                   ),
                 ],
               ),
-        SizedBox(
-          height: 20,
-        ),
-        //
-        //
-        // The container fields
-        Container(
-          width: widget.width,
-          child: Padding(
-            padding: const EdgeInsets.only(
-              bottom: 10,
-              left: 20,
-              right: 20,
-              top: 20,
-            ),
-            child: isSearched == false
-                ? Padding(
-                    padding: EdgeInsets.only(top: widget.width / 2),
-                    child: Center(
-                      child: Container(
-                        child: Text(
-                          'Search for a Medicine\nFor the results to appear here',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Colors.grey[500],
-                          ),
-                        ),
-                      ),
-                    ),
-                  )
-                : StreamBuilder<QuerySnapshot>(
-                    stream: snap,
-                    builder: (BuildContext context, AsyncSnapshot snapshot) {
-                      if (snapshot.hasData == false) {
-                        return Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      }
-                      return ListView.builder(
-                          physics: NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: snapshot.data.docs.length > 6
-                              ? 6
-                              : snapshot
-                                  .data.docs.length, //snapshotData.docs.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            QueryDocumentSnapshot item =
-                                snapshot.data.docs[index];
-                            if (item['name']
-                                .toString()
-                                .toLowerCase()
-                                .contains(hello.toLowerCase())) {
-                              return RowInfo(
-                                imageURL: item['imageURL'][0],
-                                location: item['dose'],
-                                width: widget.width,
-                                title: item['name'],
-                                func: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (_) =>
-                                          MedicineInfo_WithoutBarcode(
-                                        name: item['name'],
-                                      ),
-                                    ),
-                                  );
-                                },
-                              );
-                            } else {
-                              return Container();
-                            }
-                          });
-                    },
+              SizedBox(
+                height: 20,
+              ),
+              //
+              //
+              // The container fields
+              Container(
+                width: widget.width,
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                    bottom: 10,
+                    left: 20,
+                    right: 20,
+                    top: 20,
                   ),
-          ),
-        ),
-      ],
-    );
+                  child: isSearched == false
+                      ? Padding(
+                          padding: EdgeInsets.only(top: widget.width / 2),
+                          child: Center(
+                            child: Container(
+                              child: Text(
+                                'Search for a Medicine\nFor the results to appear here',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Colors.grey[500],
+                                ),
+                              ),
+                            ),
+                          ),
+                        )
+                      : StreamBuilder<QuerySnapshot>(
+                          stream: snap,
+                          builder:
+                              (BuildContext context, AsyncSnapshot snapshot) {
+                            if (snapshot.hasData == false) {
+                              return Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            }
+                            return ListView.builder(
+                                physics: NeverScrollableScrollPhysics(),
+                                shrinkWrap: true,
+                                itemCount: snapshot.data.docs.length > 6
+                                    ? 6
+                                    : snapshot.data.docs
+                                        .length, //snapshotData.docs.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  QueryDocumentSnapshot item =
+                                      snapshot.data.docs[index];
+                                  if (item['name']
+                                      .toString()
+                                      .toLowerCase()
+                                      .contains(hello.toLowerCase())) {
+                                    return RowInfo(
+                                      imageURL: item['imageURL'][0],
+                                      location: item['dose'],
+                                      width: widget.width,
+                                      title: item['name'],
+                                      func: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (_) =>
+                                                MedicineInfo_WithoutBarcode(
+                                              name: item['name'],
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  } else {
+                                    return Container();
+                                  }
+                                });
+                          },
+                        ),
+                ),
+              ),
+            ],
+          );
   }
 }
 
@@ -465,34 +465,27 @@ class __BarcodeResults extends State<_BarcodeResults> {
   }
 
   @override
-  void dispose() {
-    stream.cancel();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        con == true
-            ? Center(
-                child: Column(
-                  children: [
-                    Padding(
-                      padding:
-                          EdgeInsets.only(top: widget.height / 3, bottom: 20),
-                      child: Text('No Internet Connection...'),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        checkInternet();
-                      },
-                      child: Text('Reload'),
-                    ),
-                  ],
+    return con == true
+        ? Center(
+            child: Column(
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(top: widget.height / 3, bottom: 20),
+                  child: Text('No Internet Connection...'),
                 ),
-              )
-            : Row(
+                TextButton(
+                  onPressed: () {
+                    checkInternet();
+                  },
+                  child: Text('Reload'),
+                ),
+              ],
+            ),
+          )
+        : Column(
+            children: [
+              Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   ContainerText(
@@ -538,84 +531,85 @@ class __BarcodeResults extends State<_BarcodeResults> {
                   ),
                 ],
               ),
-        SizedBox(
-          height: 20,
-        ),
-        //
-        //
-        // The container fields
-        Container(
-          width: widget.width,
-          child: Padding(
-            padding: const EdgeInsets.only(
-              bottom: 10,
-              left: 20,
-              right: 20,
-              top: 20,
-            ),
-            child: isSearched == false
-                ? Padding(
-                    padding: EdgeInsets.only(top: widget.width / 2),
-                    child: Center(
-                      child: Container(
-                        child: Text(
-                          'Search for a Medicine\nFor the results to appear here',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Colors.grey[500],
-                          ),
-                        ),
-                      ),
-                    ),
-                  )
-                : StreamBuilder<QuerySnapshot>(
-                    stream: snap,
-                    builder: (BuildContext context, AsyncSnapshot snapshot) {
-                      if (snapshot.hasData == false) {
-                        return Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      }
-                      return ListView.builder(
-                          physics: NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: 1, //snapshotData.docs.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            QueryDocumentSnapshot item =
-                                snapshot.data.docs[index];
-                            if (item['barcode']
-                                .toString()
-                                .toLowerCase()
-                                .contains(hello.toLowerCase())) {
-                              getMedicineModel(item['name']);
-                              return RowInfo(
-                                imageURL: imageURL == null
-                                    ? 'https://i0.wp.com/www.cssscript.com/wp-content/uploads/2015/11/ispinner.jpg?fit=400%2C298&ssl=1'
-                                    : imageURL,
-                                location: location,
-                                width: widget.width,
-                                title: item['name'],
-                                func: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (_) => MedicineInfo(
-                                        medBarcode: item['barcode'],
-                                        medName: item['name'],
-                                      ),
-                                    ),
-                                  );
-                                },
-                              );
-                            } else {
-                              return Container();
-                            }
-                          });
-                    },
+              SizedBox(
+                height: 20,
+              ),
+              //
+              //
+              // The container fields
+              Container(
+                width: widget.width,
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                    bottom: 10,
+                    left: 20,
+                    right: 20,
+                    top: 20,
                   ),
-          ),
-        ),
-      ],
-    );
+                  child: isSearched == false
+                      ? Padding(
+                          padding: EdgeInsets.only(top: widget.width / 2),
+                          child: Center(
+                            child: Container(
+                              child: Text(
+                                'Search for a Medicine\nFor the results to appear here',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Colors.grey[500],
+                                ),
+                              ),
+                            ),
+                          ),
+                        )
+                      : StreamBuilder<QuerySnapshot>(
+                          stream: snap,
+                          builder:
+                              (BuildContext context, AsyncSnapshot snapshot) {
+                            if (snapshot.hasData == false) {
+                              return Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            }
+                            return ListView.builder(
+                                physics: NeverScrollableScrollPhysics(),
+                                shrinkWrap: true,
+                                itemCount: 1, //snapshotData.docs.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  QueryDocumentSnapshot item =
+                                      snapshot.data.docs[index];
+                                  if (item['barcode']
+                                      .toString()
+                                      .toLowerCase()
+                                      .contains(hello.toLowerCase())) {
+                                    getMedicineModel(item['name']);
+                                    return RowInfo(
+                                      imageURL: imageURL == null
+                                          ? 'https://i0.wp.com/www.cssscript.com/wp-content/uploads/2015/11/ispinner.jpg?fit=400%2C298&ssl=1'
+                                          : imageURL,
+                                      location: location,
+                                      width: widget.width,
+                                      title: item['name'],
+                                      func: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (_) => MedicineInfo(
+                                              medBarcode: item['barcode'],
+                                              medName: item['name'],
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  } else {
+                                    return Container();
+                                  }
+                                });
+                          },
+                        ),
+                ),
+              ),
+            ],
+          );
   }
 }
