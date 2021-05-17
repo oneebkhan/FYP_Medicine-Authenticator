@@ -232,36 +232,39 @@ class _MedicineInfoState extends State<MedicineInfo> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              Row(
-                                children: [
-                                  Container(
-                                    width: width / 1.2,
-                                    child: Text(
-                                      med['name'],
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: width / 12,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 15,
-                                  ),
-                                  //
-                                  //
-                                  // The Green tick for medicine authentication
-                                  med1['sold'] == null
-                                      ? Container()
-                                      : Container(
-                                          child: Icon(
-                                            Icons.check_circle,
-                                            size: width / 13,
-                                            color: Color.fromARGB(
-                                                255, 130, 255, 159),
-                                          ),
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Container(
+                                  width: width / 1.2,
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        med['name'],
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: width / 12,
+                                          fontWeight: FontWeight.bold,
                                         ),
-                                ],
+                                      ),
+                                      SizedBox(
+                                        width: 15,
+                                      ),
+                                      //
+                                      //
+                                      // The Green tick for medicine authentication
+                                      med1['sold'] == null
+                                          ? Container()
+                                          : Container(
+                                              child: Icon(
+                                                Icons.check_circle,
+                                                size: width / 13,
+                                                color: Color.fromARGB(
+                                                    255, 130, 255, 159),
+                                              ),
+                                            ),
+                                    ],
+                                  ),
+                                ),
                               ),
                               SizedBox(
                                 height: 5,

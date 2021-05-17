@@ -311,6 +311,60 @@ class _TipsState extends State<Tips> {
                               ],
                             ),
                           ),
+                          //
+                          //
+                          // Fifth tips page
+                          Container(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                SizedBox(
+                                  height: height / 2.8,
+                                  child: Lottie.asset(
+                                    'assets/lottie/date.json',
+                                    frameRate: FrameRate(144),
+                                    repeat: true,
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: width / 13,
+                                ),
+                                //
+                                //
+                                // The title text
+                                Container(
+                                  child: Text(
+                                    'Check \'Sold Date\'',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: height / 30,
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                //
+                                //
+                                // The explanation text
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 50),
+                                  child: Container(
+                                    child: Text(
+                                      'Check the sold date before and after the pharmacist has scanned the product. The box next to the barcode should turn green and the sold date should be your current date and time after the pharmacist has scanned the product. Before the box next to the barcode should be red and the sold date should be \'Not sold yet\'.',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: height / 60,
+                                        color: Colors.grey[700],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -342,7 +396,7 @@ class _TipsState extends State<Tips> {
                             }
                           },
                         ),
-                        SizedBox(width: width / 4.5),
+                        SizedBox(width: width / 5),
                         //
                         //
                         // Grey index indicator
@@ -367,7 +421,7 @@ class _TipsState extends State<Tips> {
                           ),
                         ),
                         SizedBox(
-                          width: width / 25,
+                          width: width / 30,
                         ),
                         //
                         //
@@ -393,7 +447,7 @@ class _TipsState extends State<Tips> {
                           ),
                         ),
                         SizedBox(
-                          width: width / 25,
+                          width: width / 30,
                         ),
                         //
                         //
@@ -419,11 +473,8 @@ class _TipsState extends State<Tips> {
                           ),
                         ),
                         SizedBox(
-                          width: width / 25,
+                          width: width / 30,
                         ),
-                        //
-                        //
-                        // Grey index indicator
                         GestureDetector(
                           onTap: () {
                             page.animateToPage(3,
@@ -444,18 +495,44 @@ class _TipsState extends State<Tips> {
                             ),
                           ),
                         ),
-                        SizedBox(width: width / 4.5),
+                        SizedBox(
+                          width: width / 30,
+                        ),
+                        //
+                        //
+                        // Grey index indicator
+                        GestureDetector(
+                          onTap: () {
+                            page.animateToPage(4,
+                                duration: Duration(milliseconds: 250),
+                                curve: Curves.bounceInOut);
+                            setState(() {
+                              index = 4;
+                            });
+                          },
+                          child: Container(
+                            height: 10,
+                            width: 10,
+                            decoration: BoxDecoration(
+                              color: index == 4
+                                  ? Color.fromARGB(255, 149, 192, 255)
+                                  : Colors.grey[400],
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: width / 5),
                         //
                         //
                         // the next page button
                         IconButton(
-                          icon: index == 3
+                          icon: index == 4
                               ? Container()
                               : Icon(
                                   Icons.arrow_forward_ios_outlined,
                                 ),
                           onPressed: () {
-                            if (index < 3) {
+                            if (index < 4) {
                               page.nextPage(
                                   duration: Duration(milliseconds: 250),
                                   curve: Curves.easeIn);
