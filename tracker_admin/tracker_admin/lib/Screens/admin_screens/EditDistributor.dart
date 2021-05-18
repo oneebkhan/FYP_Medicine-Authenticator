@@ -7,6 +7,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:lottie/lottie.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -61,7 +62,8 @@ class _EditDistributorState extends State<EditDistributor> {
     path = path.replaceAll(new RegExp(r'%40'), '@');
     path = path.replaceAll(new RegExp(r'(\?alt).*'), '');
 
-    print('${path.split('appspot.com/o/')[1]}');
+    //print('${path.split('appspot.com/o/')[1]}');
+
     return await FirebaseStorage.instance
         .ref()
         .child('${path.split('appspot.com/o/')[1]}')
@@ -214,17 +216,6 @@ class _EditDistributorState extends State<EditDistributor> {
     });
     // this stores the current distributor email
     currentDistributorEmail = FirebaseAuth.instance.currentUser.email;
-  }
-
-  @override
-  void dispose() {
-    subscription.cancel();
-    name.dispose();
-    email.dispose();
-    companyName.dispose();
-    location.dispose();
-    phoneNumber.dispose();
-    super.dispose();
   }
 
   @override
@@ -548,8 +539,10 @@ class _EditDistributorState extends State<EditDistributor> {
                           location.text.isEmpty) {
                         Fluttertoast.showToast(msg: 'Fill all the fields!');
                       } else {
-                        if (image != null) {
+                        if (image != null && widget.image != '') {
                           deleteImage();
+                        } else if (widget.image == '') {
+                          uploadFile();
                         } else
                           editDistributorInfo();
                       }

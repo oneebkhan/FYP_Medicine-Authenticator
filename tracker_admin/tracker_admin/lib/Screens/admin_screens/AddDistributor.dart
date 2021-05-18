@@ -195,13 +195,6 @@ class _AddDistributorState extends State<AddDistributor> {
         "pharmacyImages": [],
         "image": uploadedFileURL,
         "salesNumber": 0,
-        "sales": {
-          // "Timestamp": [
-          //   "Timestamp",
-          //   "PharmacistID",
-          //   "the medicine that was sold/authenticated"
-          // ],
-        },
         "EditedBy": {adminEmail.toString(): Timestamp.now()},
       }).then((_) {
         Fluttertoast.showToast(msg: 'Distributor created Succesfully!');

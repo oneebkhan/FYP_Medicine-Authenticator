@@ -146,7 +146,7 @@ class _ViewDistributorsState extends State<ViewDistributors> {
                             selection[1] = false;
                             distributorStream = FirebaseFirestore.instance
                                 .collection('Distributor')
-                                .orderBy('companyName', descending: false)
+                                .orderBy('companyName', descending: true)
                                 .snapshots();
                           });
                           Fluttertoast.showToast(msg: 'Sorted by Company Name');
@@ -156,7 +156,7 @@ class _ViewDistributorsState extends State<ViewDistributors> {
                             selection[0] = false;
                             distributorStream = FirebaseFirestore.instance
                                 .collection('Distributor')
-                                .orderBy('name', descending: false)
+                                .orderBy('name', descending: true)
                                 .snapshots();
                           });
                           Fluttertoast.showToast(
@@ -229,7 +229,7 @@ class _ViewDistributorsState extends State<ViewDistributors> {
                                     QueryDocumentSnapshot item =
                                         snapshot.data.docs[index];
                                     return RowInfo(
-                                      imageURL: item['image'] == ''
+                                      imageURL: item['image'] == '' || item['image'] == null
                                           ? 'https://www.spicefactors.com/wp-content/uploads/default-user-image.png'
                                           : item['image'],
                                       location: item['email'],

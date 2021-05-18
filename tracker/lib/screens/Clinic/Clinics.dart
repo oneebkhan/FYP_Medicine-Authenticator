@@ -269,7 +269,13 @@ class _ClinicsState extends State<Clinics> {
                                       );
                                     },
                                     imageUrls: item['clinicImages'],
-                                    title: item['name'],
+                                    title:
+                                        item['location'].toString().length > 23
+                                            ? item['location']
+                                                    .toString()
+                                                    .substring(0, 23) +
+                                                '...'
+                                            : item['location'],
                                     width: width,
                                     height: height,
                                     countOfImages:

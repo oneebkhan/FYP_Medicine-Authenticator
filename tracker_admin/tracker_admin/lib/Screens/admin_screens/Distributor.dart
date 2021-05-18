@@ -134,14 +134,6 @@ class _DistributorState extends State<Distributor> {
     await app.delete();
   }
 
-  @override
-  void dispose() {
-    if (!this.mounted) {
-      info.dispose();
-    }
-    super.dispose();
-  }
-
   //
   //
   // These two functions make the page scroll up even when the page has a singlechildscrollview
@@ -381,7 +373,7 @@ class _DistributorState extends State<Distributor> {
                                     info['name'],
                                     style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: width / 10,
+                                      fontSize: width / 12,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
@@ -400,7 +392,7 @@ class _DistributorState extends State<Distributor> {
                                     'Company: ',
                                     style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: width / 17,
+                                      fontSize: width / 20,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
@@ -408,7 +400,7 @@ class _DistributorState extends State<Distributor> {
                                     info['companyName'],
                                     style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: width / 22,
+                                      fontSize: width / 27,
                                     ),
                                   ),
                                 ],
@@ -426,15 +418,15 @@ class _DistributorState extends State<Distributor> {
                                     'Sales: ',
                                     style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: width / 17,
+                                      fontSize: width / 20,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                   Text(
-                                    info['sales'].length.toString(),
+                                    info['salesNumber'].toString(),
                                     style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: width / 22,
+                                      fontSize: width / 27,
                                     ),
                                   ),
                                 ],
@@ -452,7 +444,7 @@ class _DistributorState extends State<Distributor> {
                                     'Email: ',
                                     style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: width / 17,
+                                      fontSize: width / 20,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
@@ -460,7 +452,7 @@ class _DistributorState extends State<Distributor> {
                                     info['email'],
                                     style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: width / 22,
+                                      fontSize: width / 27,
                                     ),
                                   ),
                                 ],
@@ -513,7 +505,7 @@ class _DistributorState extends State<Distributor> {
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         color: Colors.white,
-                                        fontSize: width / 16,
+                                        fontSize: width / 20,
                                       ),
                                     ),
                                     SizedBox(
@@ -555,7 +547,7 @@ class _DistributorState extends State<Distributor> {
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         color: Colors.white,
-                                        fontSize: width / 16,
+                                        fontSize: width / 20,
                                       ),
                                     ),
                                     SizedBox(
@@ -594,7 +586,7 @@ class _DistributorState extends State<Distributor> {
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           color: Colors.white,
-                                          fontSize: width / 16,
+                                          fontSize: width / 20,
                                         ),
                                       ),
                                       SizedBox(
@@ -632,7 +624,7 @@ class _DistributorState extends State<Distributor> {
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         color: Colors.white,
-                                        fontSize: width / 16,
+                                        fontSize: width / 20,
                                       ),
                                     ),
                                     SizedBox(
@@ -684,7 +676,7 @@ class _DistributorState extends State<Distributor> {
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         color: Colors.white,
-                                        fontSize: width / 16,
+                                        fontSize: width / 20,
                                       ),
                                     ),
                                     SizedBox(

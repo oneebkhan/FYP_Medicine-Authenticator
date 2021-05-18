@@ -22,7 +22,7 @@ class _ContactDevsState extends State<ContactDevs> {
       setState(() {
         devRequestsStream = FirebaseFirestore.instance
             .collection('ContactDevelopers')
-            .orderBy('nameOfUser')
+            .orderBy('number')
             .snapshots();
       });
     } on Exception catch (e) {
@@ -83,6 +83,11 @@ class _ContactDevsState extends State<ContactDevs> {
           color: Colors.grey[800],
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: signOut,
+        backgroundColor: Colors.red[400],
+        child: Icon(Icons.logout),
+      ),
       body: SingleChildScrollView(
         child: SafeArea(
           child: Padding(
@@ -123,6 +128,7 @@ class _ContactDevsState extends State<ContactDevs> {
                           : ListView.builder(
                               shrinkWrap: true,
                               itemCount: snapshot.data.docs.length,
+                              physics: NeverScrollableScrollPhysics(),
                               itemBuilder: (BuildContext context, int index) {
                                 QueryDocumentSnapshot item =
                                     snapshot.data.docs[index];
@@ -139,7 +145,7 @@ class _ContactDevsState extends State<ContactDevs> {
                                     ),
                                     child: Padding(
                                       padding: const EdgeInsets.symmetric(
-                                        vertical: 20.0,
+                                        vertical: 15.0,
                                         horizontal: 15,
                                       ),
                                       child: Column(
@@ -232,38 +238,6 @@ class _ContactDevsState extends State<ContactDevs> {
                               },
                             );
                     }),
-                //
-                //
-                // divider
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 50),
-                  child: Divider(
-                    thickness: 2,
-                    color: Colors.red,
-                  ),
-                ),
-                //
-                //
-                // logout button
-                TextButton(
-                  style: ButtonStyle(
-                    overlayColor: MaterialStateProperty.all<Color>(
-                      Colors.red.withOpacity(0.1),
-                    ),
-                  ),
-                  child: Center(
-                    child: Text(
-                      'Logout',
-                      style: TextStyle(
-                        color: Colors.red,
-                        fontSize: width / 18,
-                      ),
-                    ),
-                  ),
-                  onPressed: () {
-                    signOut();
-                  },
-                ),
               ],
             ),
           ),

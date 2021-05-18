@@ -143,13 +143,6 @@ class _MedicineInfoState extends State<MedicineInfo> {
   }
 
   @override
-  void dispose() {
-    stream.cancel();
-    stream2.cancel();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
@@ -232,33 +225,39 @@ class _MedicineInfoState extends State<MedicineInfo> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              Row(
-                                children: [
-                                  Text(
-                                    med['name'],
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: width / 10,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 15,
-                                  ),
-                                  //
-                                  //
-                                  // The Green tick for medicine authentication
-                                  med1['sold'] == null
-                                      ? Container()
-                                      : Container(
-                                          child: Icon(
-                                            Icons.check_circle,
-                                            size: width / 13,
-                                            color: Color.fromARGB(
-                                                255, 130, 255, 159),
-                                          ),
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Container(
+                                  width: width / 1.2,
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        med['name'],
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: width / 12,
+                                          fontWeight: FontWeight.bold,
                                         ),
-                                ],
+                                      ),
+                                      SizedBox(
+                                        width: 15,
+                                      ),
+                                      //
+                                      //
+                                      // The Green tick for medicine authentication
+                                      med1['sold'] == null
+                                          ? Container()
+                                          : Container(
+                                              child: Icon(
+                                                Icons.check_circle,
+                                                size: width / 13,
+                                                color: Color.fromARGB(
+                                                    255, 130, 255, 159),
+                                              ),
+                                            ),
+                                    ],
+                                  ),
+                                ),
                               ),
                               SizedBox(
                                 height: 5,
@@ -270,33 +269,44 @@ class _MedicineInfoState extends State<MedicineInfo> {
                                   ? Container()
                                   : Align(
                                       alignment: Alignment.centerLeft,
-                                      child: SizedBox(
-                                        height: 10,
-                                        child: ListView.builder(
-                                          scrollDirection: Axis.horizontal,
-                                          physics:
-                                              NeverScrollableScrollPhysics(),
-                                          shrinkWrap: true,
-                                          padding: EdgeInsets.all(0),
-                                          itemCount: med['imageURL'].length,
-                                          itemBuilder:
-                                              (BuildContext context, int ind) {
-                                            return Padding(
-                                              padding: const EdgeInsets.only(
-                                                  right: 5),
-                                              child: Container(
-                                                margin: EdgeInsets.all(0),
-                                                width: 10,
-                                                height: 10,
-                                                decoration: BoxDecoration(
-                                                  shape: BoxShape.circle,
-                                                  color: index == ind
-                                                      ? Colors.blue[200]
-                                                      : Colors.grey[700],
+                                      child: Container(
+                                        height: 30,
+                                        decoration: BoxDecoration(
+                                            color: Colors.black45,
+                                            borderRadius:
+                                                BorderRadius.circular(100)),
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 13,
+                                            vertical: 10,
+                                          ),
+                                          child: ListView.builder(
+                                            scrollDirection: Axis.horizontal,
+                                            physics:
+                                                NeverScrollableScrollPhysics(),
+                                            shrinkWrap: true,
+                                            padding: EdgeInsets.all(0),
+                                            itemCount: med['imageURL'].length,
+                                            itemBuilder: (BuildContext context,
+                                                int ind) {
+                                              return Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 2.5),
+                                                child: Container(
+                                                  margin: EdgeInsets.all(0),
+                                                  width: 10,
+                                                  height: 10,
+                                                  decoration: BoxDecoration(
+                                                    shape: BoxShape.circle,
+                                                    color: index == ind
+                                                        ? Colors.blue[200]
+                                                        : Colors.grey[700],
+                                                  ),
                                                 ),
-                                              ),
-                                            );
-                                          },
+                                              );
+                                            },
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -326,7 +336,7 @@ class _MedicineInfoState extends State<MedicineInfo> {
                                             'Rs.' + med['price'].toString(),
                                             style: TextStyle(
                                               color: Colors.white,
-                                              fontSize: width / 22,
+                                              fontSize: width / 27,
                                             ),
                                           ),
                                         ],
@@ -358,7 +368,7 @@ class _MedicineInfoState extends State<MedicineInfo> {
                                             med['dose'],
                                             style: TextStyle(
                                               color: Colors.white,
-                                              fontSize: width / 22,
+                                              fontSize: width / 27,
                                             ),
                                           ),
                                         ],
@@ -491,7 +501,7 @@ class _MedicineInfoState extends State<MedicineInfo> {
                                   children: [
                                     Container(
                                       height: width / 3.1,
-                                      width: width / 2.3,
+                                      width: width / 2.26,
                                       decoration: BoxDecoration(
                                         color: Color.fromARGB(255, 50, 50, 50),
                                         borderRadius: BorderRadius.circular(15),
@@ -526,7 +536,7 @@ class _MedicineInfoState extends State<MedicineInfo> {
                                     ),
                                     Container(
                                       height: width / 3.1,
-                                      width: width / 2.3,
+                                      width: width / 2.26,
                                       decoration: BoxDecoration(
                                         color: med1['sold'] == null
                                             ? Color.fromARGB(255, 235, 60, 10)
@@ -655,12 +665,95 @@ class _MedicineInfoState extends State<MedicineInfo> {
                               SizedBox(
                                 height: 10,
                               ),
+                              //
+                              //
+                              // the side effects of the medicine
+                              Container(
+                                width: width,
+                                decoration: BoxDecoration(
+                                  color: Color.fromARGB(255, 50, 50, 50),
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(20),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Active Ingredients',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                          fontSize: width / 16,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      Text(
+                                        med['activeIngredients'] == null
+                                            ? Container()
+                                            : med['activeIngredients'],
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: width / 30,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              //
+                              //
+                              // the side effects of the medicine
+                              Container(
+                                width: width,
+                                decoration: BoxDecoration(
+                                  color: Color.fromARGB(255, 50, 50, 50),
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(20),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Other Ingredients',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                          fontSize: width / 16,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      Text(
+                                        med['otherIngredients'] == null
+                                            ? Container()
+                                            : med['otherIngredients'],
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: width / 30,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 10),
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Container(
-                                    width: width / 2.3,
+                                    width: width / 2.26,
+                                    height: width / 3.3,
                                     decoration: BoxDecoration(
                                       color: Color.fromARGB(255, 50, 50, 50),
                                       borderRadius: BorderRadius.circular(15),
@@ -694,7 +787,8 @@ class _MedicineInfoState extends State<MedicineInfo> {
                                     ),
                                   ),
                                   Container(
-                                    width: width / 2.3,
+                                    width: width / 2.26,
+                                    height: width / 3.3,
                                     decoration: BoxDecoration(
                                       color: Color.fromARGB(255, 50, 50, 50),
                                       borderRadius: BorderRadius.circular(15),
@@ -737,7 +831,8 @@ class _MedicineInfoState extends State<MedicineInfo> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Container(
-                                    width: width / 2.3,
+                                    width: width / 2.26,
+                                    height: width / 3.3,
                                     decoration: BoxDecoration(
                                       color: Color.fromARGB(255, 50, 50, 50),
                                       borderRadius: BorderRadius.circular(15),
@@ -771,7 +866,8 @@ class _MedicineInfoState extends State<MedicineInfo> {
                                     ),
                                   ),
                                   Container(
-                                    width: width / 2.3,
+                                    width: width / 2.26,
+                                    height: width / 3.3,
                                     decoration: BoxDecoration(
                                       color: Color.fromARGB(255, 50, 50, 50),
                                       borderRadius: BorderRadius.circular(15),
@@ -814,7 +910,7 @@ class _MedicineInfoState extends State<MedicineInfo> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Container(
-                                    width: width / 2.3,
+                                    width: width / 2.26,
                                     height: width / 3.3,
                                     decoration: BoxDecoration(
                                       color: Color.fromARGB(255, 50, 50, 50),
@@ -849,7 +945,7 @@ class _MedicineInfoState extends State<MedicineInfo> {
                                     ),
                                   ),
                                   Container(
-                                    width: width / 2.3,
+                                    width: width / 2.26,
                                     height: width / 3.3,
                                     decoration: BoxDecoration(
                                       color: Color.fromARGB(255, 50, 50, 50),

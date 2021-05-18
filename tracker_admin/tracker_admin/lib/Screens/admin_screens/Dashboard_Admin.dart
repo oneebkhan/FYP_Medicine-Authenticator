@@ -933,7 +933,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                 width: widget.width / 4.9,
                                 height: widget.width / 4.6,
                                 image: AssetImage(
-                                    'assets/icons/admin_dashboard_medicine/deleteMedModel.png'),
+                                    'assets/icons/admin_dashboard_medicine/editMedModel.png'),
                               ),
                             ),
                             decoration: BoxDecoration(
