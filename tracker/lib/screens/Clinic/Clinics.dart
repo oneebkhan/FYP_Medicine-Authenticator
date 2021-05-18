@@ -264,7 +264,7 @@ class _ClinicsState extends State<Clinics> {
                                           context,
                                           MaterialPageRoute(
                                             builder: (_) => ViewClinic(
-                                              pageName: item['name'],
+                                              pageName: item['location'],
                                               clinics: item['clinicsAdded'],
                                             ),
                                           ),

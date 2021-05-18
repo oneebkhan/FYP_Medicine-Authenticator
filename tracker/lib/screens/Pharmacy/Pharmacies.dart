@@ -264,7 +264,7 @@ class _PharmaciesState extends State<Pharmacies> {
                                           context,
                                           MaterialPageRoute(
                                             builder: (_) => ViewPharmacy(
-                                              pageName: item['name'],
+                                              pageName: item['location'],
                                               pharmacies: item['pharmacyAdded'],
                                             ),
                                           ),
