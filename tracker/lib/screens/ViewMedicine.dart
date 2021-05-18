@@ -5,7 +5,6 @@ import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:tracker/Widgets/RowInfo.dart';
-import 'package:tracker/screens/MedicineInfo.dart';
 import 'package:tracker/screens/MedicineInfo_WithoutBarcode.dart';
 
 class ViewMedicine extends StatefulWidget {
@@ -160,6 +159,7 @@ class _ViewMedicineState extends State<ViewMedicine> {
                                   }
                                   return ListView.builder(
                                     shrinkWrap: true,
+                                    physics: NeverScrollableScrollPhysics(),
                                     itemCount: snapshot.data.docs.length,
                                     itemBuilder:
                                         (BuildContext context, int index) {
