@@ -63,98 +63,101 @@ class _HistoryState extends State<History> {
           color: Colors.grey[700],
         ),
       ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                height: width / 20,
-              ),
-              Text(
-                'History',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: width / 14,
+      body: SingleChildScrollView(
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: width / 20,
                 ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              //
-              //
-              // The container fields
-              AnimatedOpacity(
-                opacity: opac,
-                duration: Duration(milliseconds: 500),
-                child: Container(
-                  width: width,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(15),
-                    ),
+                Text(
+                  'History',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: width / 14,
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                      bottom: 20,
-                      left: 20,
-                      right: 20,
-                      top: 20,
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                //
+                //
+                // The container fields
+                AnimatedOpacity(
+                  opacity: opac,
+                  duration: Duration(milliseconds: 500),
+                  child: Container(
+                    width: width,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(15),
+                      ),
                     ),
-                    child: StreamBuilder<QuerySnapshot>(
-                        stream: historyStream,
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData == false) {
-                            return Center(
-                              child: CircularProgressIndicator(),
-                            );
-                          }
-                          return ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: snapshot.data.docs.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              QueryDocumentSnapshot item =
-                                  snapshot.data.docs[index];
-                              return Hero(
-                                tag: 'popupContainer',
-                                child: Material(
-                                  borderRadius: BorderRadius.circular(15.0),
-                                  color: Colors.white,
-                                  child: RowInfo(
-                                    imageURL: item['image'] == ''
-                                        ? 'http://www.spicefactors.com/wp-content/uploads/default-user-image.png'
-                                        : item['image'],
-                                    location: item['by'],
-                                    width: width,
-                                    title: item['name'],
-                                    func: () {
-                                      Navigator.of(context).push(
-                                          HeroDialogRoute(builder: (context) {
-                                        return PopupCard(
-                                          by: item['by'].toString(),
-                                          dateTime: DateFormat.yMMMd()
-                                              .add_jm()
-                                              .format(
-                                                  item['timestamp'].toDate())
-                                              .toString(),
-                                          image: item['image'],
-                                          name: item['name'],
-                                        );
-                                      }));
-                                    },
-                                  ),
-                                ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        bottom: 20,
+                        left: 20,
+                        right: 20,
+                        top: 20,
+                      ),
+                      child: StreamBuilder<QuerySnapshot>(
+                          stream: historyStream,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData == false) {
+                              return Center(
+                                child: CircularProgressIndicator(),
                               );
-                            },
-                          );
-                        }),
+                            }
+                            return ListView.builder(
+                              physics: NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount: snapshot.data.docs.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                QueryDocumentSnapshot item =
+                                    snapshot.data.docs[index];
+                                return Hero(
+                                  tag: 'popupContainer',
+                                  child: Material(
+                                    borderRadius: BorderRadius.circular(15.0),
+                                    color: Colors.white,
+                                    child: RowInfo(
+                                      imageURL: item['image'] == ''
+                                          ? 'http://www.spicefactors.com/wp-content/uploads/default-user-image.png'
+                                          : item['image'],
+                                      location: item['by'],
+                                      width: width,
+                                      title: item['name'],
+                                      func: () {
+                                        Navigator.of(context).push(
+                                            HeroDialogRoute(builder: (context) {
+                                          return PopupCard(
+                                            by: item['by'].toString(),
+                                            dateTime: DateFormat.yMMMd()
+                                                .add_jm()
+                                                .format(
+                                                    item['timestamp'].toDate())
+                                                .toString(),
+                                            image: item['image'],
+                                            name: item['name'],
+                                          );
+                                        }));
+                                      },
+                                    ),
+                                  ),
+                                );
+                              },
+                            );
+                          }),
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

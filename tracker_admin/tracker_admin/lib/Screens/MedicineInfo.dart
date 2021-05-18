@@ -260,7 +260,7 @@ class _MedicineInfoState extends State<MedicineInfo> {
                                 ),
                               ),
                               SizedBox(
-                                height: 5,
+                                height: 10,
                               ),
                               //
                               //

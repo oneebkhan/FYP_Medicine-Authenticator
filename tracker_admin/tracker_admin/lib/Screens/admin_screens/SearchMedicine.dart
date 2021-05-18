@@ -7,23 +7,23 @@ import 'package:tracker_admin/screens/MedicineInfo.dart';
 import 'package:tracker_admin/screens/admin_screens/MedicineInfo_WithoutBarcode.dart';
 import 'package:tracker_admin/screens/admin_screens/AddDistributor.dart';
 
-class Search extends StatefulWidget {
-  Search({Key key}) : super(key: key);
+class SearchMedicine extends StatefulWidget {
+  SearchMedicine({Key key}) : super(key: key);
 
   @override
-  _SearchState createState() => _SearchState();
+  _SearchMedicineState createState() => _SearchMedicineState();
 }
 
-class _SearchState extends State<Search> {
+class _SearchMedicineState extends State<SearchMedicine> {
   double opac;
   double height;
-  bool isSearched;
+  bool isSearchMedicineed;
   bool isLoading;
   String hello = '';
   bool con;
   List<bool> selection;
   int selectedIndex;
-  String searchTerm;
+  String searchMedicineTerm;
 
   @override
   void initState() {
@@ -31,7 +31,7 @@ class _SearchState extends State<Search> {
     opac = 0;
     selection = [false, true];
     selectedIndex = 1;
-    searchTerm = 'Medicine Name';
+    searchMedicineTerm = 'Medicine Name';
   }
 
   @override
@@ -106,7 +106,7 @@ class _SearchState extends State<Search> {
                                 selection[1] = false;
                                 //change to all Pharmacies
                                 selectedIndex = 0;
-                                searchTerm = 'Barcode';
+                                searchMedicineTerm = 'Barcode';
                               });
                               Fluttertoast.showToast(msg: 'Search by Barcode');
                             } else if (index == 1) {
@@ -115,7 +115,7 @@ class _SearchState extends State<Search> {
                                 selection[0] = false;
                                 //change to distributor Pharmacies
                                 selectedIndex = 1;
-                                searchTerm = 'Medicine Name';
+                                searchMedicineTerm = 'Medicine Name';
                               });
                               Fluttertoast.showToast(
                                   msg: 'Search by Medicine Name');
@@ -148,12 +148,12 @@ class _SearchState extends State<Search> {
                     children: [
                       _BarcodeResults(
                         height: height,
-                        searchTerm: searchTerm,
+                        searchMedicineTerm: searchMedicineTerm,
                         width: width,
                       ),
                       _NamedResults(
                         height: height,
-                        searchTerm: searchTerm,
+                        searchMedicineTerm: searchMedicineTerm,
                         width: width,
                       ),
                     ],
@@ -171,12 +171,12 @@ class _SearchState extends State<Search> {
 class _NamedResults extends StatefulWidget {
   final double height;
   final double width;
-  final String searchTerm;
+  final String searchMedicineTerm;
 
   _NamedResults({
     this.height,
     this.width,
-    this.searchTerm,
+    this.searchMedicineTerm,
   });
 
   @override
@@ -187,10 +187,10 @@ class __NamedResultsState extends State<_NamedResults> {
   bool con;
   var snap;
   bool isLoading;
-  bool isSearched;
+  bool isSearchMedicineed;
   var node;
   String hello = '';
-  TextEditingController search = TextEditingController();
+  TextEditingController searchMedicine = TextEditingController();
 
   //
   //
@@ -220,12 +220,12 @@ class __NamedResultsState extends State<_NamedResults> {
   @override
   void initState() {
     super.initState();
-    search.text = '';
-    isSearched = false;
+    searchMedicine.text = '';
+    isSearchMedicineed = false;
     isLoading = false;
-    search.addListener(() {
+    searchMedicine.addListener(() {
       setState(() {
-        hello = search.text;
+        hello = searchMedicine.text;
       });
     });
   }
@@ -256,8 +256,8 @@ class __NamedResultsState extends State<_NamedResults> {
                 children: [
                   ContainerText(
                     node: node,
-                    hint: '${widget.searchTerm}',
-                    controller: search,
+                    hint: '${widget.searchMedicineTerm}',
+                    controller: searchMedicine,
                     maxLines: 1,
                     width: widget.width / 1.4,
                   ),
@@ -278,13 +278,14 @@ class __NamedResultsState extends State<_NamedResults> {
                           if (!currentFocus.hasPrimaryFocus) {
                             currentFocus.unfocus();
                           }
-                          if (search.text == null || search.text == '') {
+                          if (searchMedicine.text == null ||
+                              searchMedicine.text == '') {
                           } else {
                             setState(() {
                               isLoading = true;
-                              isSearched = true;
+                              isSearchMedicineed = true;
                             });
-                            queryData(search.text.toUpperCase())
+                            queryData(searchMedicine.text.toUpperCase())
                                 .whenComplete(() {
                               setState(() {
                                 isLoading = false;
@@ -312,13 +313,13 @@ class __NamedResultsState extends State<_NamedResults> {
                     right: 20,
                     top: 20,
                   ),
-                  child: isSearched == false
+                  child: isSearchMedicineed == false
                       ? Padding(
                           padding: EdgeInsets.only(top: widget.width / 2),
                           child: Center(
                             child: Container(
                               child: Text(
-                                'Search for a Medicine\nFor the results to appear here',
+                                'SearchMedicine for a Medicine\nFor the results to appear here',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   color: Colors.grey[500],
@@ -383,12 +384,12 @@ class __NamedResultsState extends State<_NamedResults> {
 class _BarcodeResults extends StatefulWidget {
   final double height;
   final double width;
-  final String searchTerm;
+  final String searchMedicineTerm;
 
   _BarcodeResults({
     this.height,
     this.width,
-    this.searchTerm,
+    this.searchMedicineTerm,
   });
 
   @override
@@ -399,10 +400,10 @@ class __BarcodeResults extends State<_BarcodeResults> {
   bool con;
   var snap;
   bool isLoading;
-  bool isSearched;
+  bool isSearchMedicineed;
   var node;
   String hello = '';
-  TextEditingController search = TextEditingController();
+  TextEditingController searchMedicine = TextEditingController();
   var snap2;
   String imageURL;
   String location;
@@ -453,12 +454,12 @@ class __BarcodeResults extends State<_BarcodeResults> {
   @override
   void initState() {
     super.initState();
-    search.text = '';
-    isSearched = false;
+    searchMedicine.text = '';
+    isSearchMedicineed = false;
     isLoading = false;
-    search.addListener(() {
+    searchMedicine.addListener(() {
       setState(() {
-        hello = search.text;
+        hello = searchMedicine.text;
       });
     });
   }
@@ -489,8 +490,8 @@ class __BarcodeResults extends State<_BarcodeResults> {
                 children: [
                   ContainerText(
                     node: node,
-                    hint: '${widget.searchTerm}',
-                    controller: search,
+                    hint: '${widget.searchMedicineTerm}',
+                    controller: searchMedicine,
                     maxLines: 1,
                     width: widget.width / 1.4,
                   ),
@@ -511,13 +512,14 @@ class __BarcodeResults extends State<_BarcodeResults> {
                           if (!currentFocus.hasPrimaryFocus) {
                             currentFocus.unfocus();
                           }
-                          if (search.text == null || search.text == '') {
+                          if (searchMedicine.text == null ||
+                              searchMedicine.text == '') {
                           } else {
                             setState(() {
                               isLoading = true;
-                              isSearched = true;
+                              isSearchMedicineed = true;
                             });
-                            queryData(search.text.toUpperCase())
+                            queryData(searchMedicine.text.toUpperCase())
                                 .whenComplete(() {
                               setState(() {
                                 isLoading = false;
@@ -545,13 +547,13 @@ class __BarcodeResults extends State<_BarcodeResults> {
                     right: 20,
                     top: 20,
                   ),
-                  child: isSearched == false
+                  child: isSearchMedicineed == false
                       ? Padding(
                           padding: EdgeInsets.only(top: widget.width / 2),
                           child: Center(
                             child: Container(
                               child: Text(
-                                'Search for a Medicine\nFor the results to appear here',
+                                'SearchMedicine for a Medicine\nFor the results to appear here',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   color: Colors.grey[500],

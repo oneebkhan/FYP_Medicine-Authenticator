@@ -7,20 +7,20 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:tracker_admin/Widgets/RowInfo.dart';
 import 'package:tracker_admin/screens/admin_screens/MedicineInfo_WithoutBarcode.dart';
 
-class ViewMedicine extends StatefulWidget {
+class ViewMedicineModel extends StatefulWidget {
   // The name of the category opened
   final String pageName;
 
-  const ViewMedicine({
+  const ViewMedicineModel({
     Key key,
     @required this.pageName,
   }) : super(key: key);
 
   @override
-  _ViewMedicineState createState() => _ViewMedicineState();
+  _ViewMedicineModelState createState() => _ViewMedicineModelState();
 }
 
-class _ViewMedicineState extends State<ViewMedicine> {
+class _ViewMedicineModelState extends State<ViewMedicineModel> {
   double opac;
   var m;
   double height;

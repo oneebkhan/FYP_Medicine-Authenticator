@@ -14,13 +14,16 @@ import 'package:tracker_admin/configs/HeroDialogRoute.dart';
 import 'package:tracker_admin/screens/Clinic/Clinics.dart';
 import 'package:tracker_admin/screens/Pharmacy/Pharmacies.dart';
 import 'package:tracker_admin/screens/Search.dart';
+import 'package:tracker_admin/screens/admin_screens/AddMedicineModel.dart';
 import 'package:tracker_admin/screens/admin_screens/Distributor.dart';
 import 'package:tracker_admin/screens/admin_screens/SearchDistributors.dart';
+import 'package:tracker_admin/screens/admin_screens/SearchMedicine.dart';
 import 'package:tracker_admin/screens/admin_screens/ViewDistributors.dart';
 import 'package:tracker_admin/screens/admin_screens/AddDistributor.dart';
 import 'package:tracker_admin/screens/admin_screens/History.dart';
 import 'package:tracker_admin/screens/admin_screens/ContactDevs.dart';
 import 'package:tracker_admin/screens/ViewMedicine.dart';
+import 'package:tracker_admin/screens/admin_screens/ViewMedicineModel.dart';
 
 class Dashboard_Admin extends StatefulWidget {
   @override
@@ -831,7 +834,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (_) => ViewMedicine(
+                                  builder: (_) => ViewMedicineModel(
                                     pageName: 'View Medicine',
                                   ),
                                 ),
@@ -863,7 +866,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (_) => Search(),
+                                builder: (_) => SearchMedicine(),
                               ),
                             );
                           },
@@ -892,7 +895,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (_) => Search(),
+                                builder: (_) => AddMedicineModel(),
                               ),
                             );
                           },
@@ -905,35 +908,6 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                 height: widget.width / 4.6,
                                 image: AssetImage(
                                     'assets/icons/admin_dashboard_medicine/addMedicineModel.png'),
-                              ),
-                            ),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: col,
-                            ),
-                          ),
-                        ),
-                        //
-                        //
-                        // The 4th delete med model Button
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) => Search(),
-                              ),
-                            );
-                          },
-                          child: Container(
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 5, horizontal: 5),
-                              child: Image(
-                                width: widget.width / 4.9,
-                                height: widget.width / 4.6,
-                                image: AssetImage(
-                                    'assets/icons/admin_dashboard_medicine/editMedModel.png'),
                               ),
                             ),
                             decoration: BoxDecoration(

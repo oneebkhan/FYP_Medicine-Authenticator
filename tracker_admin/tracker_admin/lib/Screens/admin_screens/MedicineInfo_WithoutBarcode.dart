@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class MedicineInfo_WithoutBarcode extends StatefulWidget {
@@ -135,23 +136,50 @@ class _MedicineInfo_WithoutBarcodeState
       child: Scaffold(
         extendBodyBehindAppBar: true,
         backgroundColor: Color.fromARGB(255, 0, 0, 0),
-        floatingActionButton: FloatingActionButton(
-          child: Icon(index2 == 0
-              ? Icons.keyboard_arrow_down_outlined
-              : Icons.keyboard_arrow_up_outlined),
-          onPressed: () {
-            if (index2 == 1) {
-              page.previousPage(
-                duration: Duration(milliseconds: 500),
-                curve: Curves.ease,
-              );
-            } else {
-              page.nextPage(
-                duration: Duration(milliseconds: 500),
-                curve: Curves.ease,
-              );
-            }
-          },
+        floatingActionButton: SpeedDial(
+          backgroundColor: Colors.blue[500],
+          overlayColor: Colors.black,
+          overlayOpacity: 0.4,
+          animatedIcon: AnimatedIcons.menu_close,
+          animatedIconTheme: IconThemeData(color: Colors.white),
+          children: [
+            SpeedDialChild(
+              child: Icon(
+                Icons.edit,
+                color: Colors.white,
+              ),
+              label: 'Edit Medicine Model',
+              backgroundColor: Colors.blue[500],
+              labelBackgroundColor: Colors.grey[800],
+              labelStyle: TextStyle(color: Colors.white),
+              onTap: () {},
+            ),
+            SpeedDialChild(
+              child: Icon(
+                index2 == 0
+                    ? Icons.keyboard_arrow_down_outlined
+                    : Icons.keyboard_arrow_up_outlined,
+                color: Colors.white,
+              ),
+              onTap: () {
+                if (index2 == 1) {
+                  page.previousPage(
+                    duration: Duration(milliseconds: 500),
+                    curve: Curves.ease,
+                  );
+                } else {
+                  page.nextPage(
+                    duration: Duration(milliseconds: 500),
+                    curve: Curves.ease,
+                  );
+                }
+              },
+              backgroundColor: Colors.blue[500],
+              label: index2 == 0 ? 'Go to Next Page' : 'Go to Previous Page',
+              labelBackgroundColor: Colors.grey[800],
+              labelStyle: TextStyle(color: Colors.white),
+            ),
+          ],
         ),
         appBar: AppBar(
           backgroundColor: Colors.transparent,
@@ -219,7 +247,7 @@ class _MedicineInfo_WithoutBarcodeState
                                 ),
                               ),
                               SizedBox(
-                                height: 5,
+                                height: 10,
                               ),
                               //
                               //
