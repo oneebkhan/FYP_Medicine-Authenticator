@@ -84,6 +84,7 @@ class _ViewDistributorsState extends State<ViewDistributors> {
     height = MediaQuery.of(context).size.height;
 
     return Scaffold(
+      extendBodyBehindAppBar: true,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           print(FirebaseAuth.instance.currentUser.email);

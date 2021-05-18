@@ -237,6 +237,7 @@ class _EditDistributorState extends State<EditDistributor> {
           }
         },
         child: Scaffold(
+          extendBodyBehindAppBar: true,
           floatingActionButton: FloatingActionButton(
             onPressed: () {
               print(widget.image);
@@ -251,324 +252,327 @@ class _EditDistributorState extends State<EditDistributor> {
             ),
           ),
           body: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(
-                    left: 20,
-                    right: 20,
-                  ),
-                  child: Center(
-                    child: Container(
-                      width: width,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(20.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Edit Distributor',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: width / 16,
-                              ),
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 5, bottom: 5),
-                              child: Text(
-                                'Email:',
+            child: SafeArea(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      left: 20,
+                      right: 20,
+                    ),
+                    child: Center(
+                      child: Container(
+                        width: width,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Edit Distributor',
                                 style: TextStyle(
-                                  fontSize: width / 25,
-                                  color: Colors.grey[600],
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: width / 16,
                                 ),
                               ),
-                            ),
-                            ContainerText(
-                              enabled: false,
-                              hint: 'User Email',
-                              node: node,
-                              controller: email,
-                              inputType: TextInputType.emailAddress,
-                              maxLength: 30,
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 5, bottom: 5),
-                              child: Text(
-                                'Name:',
-                                style: TextStyle(
-                                  fontSize: width / 25,
-                                  color: Colors.grey[600],
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 5, bottom: 5),
+                                child: Text(
+                                  'Email:',
+                                  style: TextStyle(
+                                    fontSize: width / 25,
+                                    color: Colors.grey[600],
+                                  ),
                                 ),
                               ),
-                            ),
-                            Row(
-                              children: [
-                                image == null
-                                    ? Material(
-                                        color: Colors.transparent,
-                                        child: InkWell(
-                                          customBorder: CircleBorder(),
-                                          onTap: () {
-                                            showDialog(
-                                              context: context,
-                                              builder: (_) => AlertDialog(
-                                                title:
-                                                    Text('Camera or Gallery'),
-                                                content: Text(
-                                                    'Choose either the camera or the gallery to get the image'),
-                                                actions: [
-                                                  TextButton(
-                                                    child: Text('Camera'),
-                                                    onPressed: () {
-                                                      chooseCameraImage();
-                                                      Navigator.pop(context);
-                                                    },
-                                                  ),
-                                                  TextButton(
-                                                    child: Text('Gallery'),
-                                                    onPressed: () {
-                                                      chooseGalleryImage();
-                                                      Navigator.pop(context);
-                                                    },
-                                                  ),
-                                                ],
-                                              ),
-                                            );
-                                            //chooseImage();
-                                          },
-                                          child: Stack(
-                                            children: [
-                                              CachedNetworkImage(
-                                                imageUrl:
-                                                    // the 4th image URL
-                                                    widget.image,
-                                                imageBuilder:
-                                                    (context, imageProvider) =>
-                                                        Container(
-                                                  width: width / 8,
-                                                  height: width / 8,
-                                                  decoration: BoxDecoration(
-                                                    shape: BoxShape.circle,
-                                                    image: DecorationImage(
-                                                      image: imageProvider,
-                                                      fit: BoxFit.cover,
+                              ContainerText(
+                                enabled: false,
+                                hint: 'User Email',
+                                node: node,
+                                controller: email,
+                                inputType: TextInputType.emailAddress,
+                                maxLength: 30,
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 5, bottom: 5),
+                                child: Text(
+                                  'Name:',
+                                  style: TextStyle(
+                                    fontSize: width / 25,
+                                    color: Colors.grey[600],
+                                  ),
+                                ),
+                              ),
+                              Row(
+                                children: [
+                                  image == null
+                                      ? Material(
+                                          color: Colors.transparent,
+                                          child: InkWell(
+                                            customBorder: CircleBorder(),
+                                            onTap: () {
+                                              showDialog(
+                                                context: context,
+                                                builder: (_) => AlertDialog(
+                                                  title:
+                                                      Text('Camera or Gallery'),
+                                                  content: Text(
+                                                      'Choose either the camera or the gallery to get the image'),
+                                                  actions: [
+                                                    TextButton(
+                                                      child: Text('Camera'),
+                                                      onPressed: () {
+                                                        chooseCameraImage();
+                                                        Navigator.pop(context);
+                                                      },
+                                                    ),
+                                                    TextButton(
+                                                      child: Text('Gallery'),
+                                                      onPressed: () {
+                                                        chooseGalleryImage();
+                                                        Navigator.pop(context);
+                                                      },
+                                                    ),
+                                                  ],
+                                                ),
+                                              );
+                                              //chooseImage();
+                                            },
+                                            child: Stack(
+                                              children: [
+                                                CachedNetworkImage(
+                                                  imageUrl:
+                                                      // the 4th image URL
+                                                      widget.image,
+                                                  imageBuilder: (context,
+                                                          imageProvider) =>
+                                                      Container(
+                                                    width: width / 8,
+                                                    height: width / 8,
+                                                    decoration: BoxDecoration(
+                                                      shape: BoxShape.circle,
+                                                      image: DecorationImage(
+                                                        image: imageProvider,
+                                                        fit: BoxFit.cover,
+                                                      ),
                                                     ),
                                                   ),
+                                                  placeholder: (context, url) =>
+                                                      CircularProgressIndicator(),
+                                                  errorWidget:
+                                                      (context, url, error) =>
+                                                          Icon(Icons.error),
                                                 ),
-                                                placeholder: (context, url) =>
-                                                    CircularProgressIndicator(),
-                                                errorWidget:
-                                                    (context, url, error) =>
-                                                        Icon(Icons.error),
-                                              ),
-                                              Container(
-                                                width: width / 7.5,
-                                                height: width / 7.8,
-                                                decoration: BoxDecoration(
-                                                  shape: BoxShape.circle,
-                                                  color: Colors.black26,
-                                                ),
-                                                child: Align(
-                                                  alignment: Alignment.center,
-                                                  child: Icon(
-                                                    Icons.camera_alt,
-                                                    color: Colors.white,
+                                                Container(
+                                                  width: width / 7.5,
+                                                  height: width / 7.8,
+                                                  decoration: BoxDecoration(
+                                                    shape: BoxShape.circle,
+                                                    color: Colors.black26,
                                                   ),
-                                                ),
-                                              )
-                                            ],
+                                                  child: Align(
+                                                    alignment: Alignment.center,
+                                                    child: Icon(
+                                                      Icons.camera_alt,
+                                                      color: Colors.white,
+                                                    ),
+                                                  ),
+                                                )
+                                              ],
+                                            ),
                                           ),
-                                        ),
-                                      )
-                                    : Material(
-                                        color: Colors.transparent,
-                                        child: InkWell(
-                                          onTap: () {
-                                            showDialog(
-                                              context: context,
-                                              builder: (_) => AlertDialog(
-                                                title:
-                                                    Text('Camera or Gallery'),
-                                                content: Text(
-                                                    'Choose either the camera or the gallery to get the image'),
-                                                actions: [
-                                                  TextButton(
-                                                    child: Text('Camera'),
-                                                    onPressed: () {
-                                                      chooseCameraImage();
-                                                      Navigator.pop(context);
-                                                    },
-                                                  ),
-                                                  TextButton(
-                                                    child: Text('Gallery'),
-                                                    onPressed: () {
-                                                      chooseGalleryImage();
-                                                      Navigator.pop(context);
-                                                    },
-                                                  ),
-                                                ],
-                                              ),
-                                            );
-                                          },
-                                          customBorder: CircleBorder(),
-                                          child: Container(
-                                            width: width / 8,
-                                            height: width / 8,
-                                            decoration: BoxDecoration(
-                                              color: Colors.black,
-                                              shape: BoxShape.circle,
-                                              image: DecorationImage(
-                                                image: FileImage(
-                                                  image,
+                                        )
+                                      : Material(
+                                          color: Colors.transparent,
+                                          child: InkWell(
+                                            onTap: () {
+                                              showDialog(
+                                                context: context,
+                                                builder: (_) => AlertDialog(
+                                                  title:
+                                                      Text('Camera or Gallery'),
+                                                  content: Text(
+                                                      'Choose either the camera or the gallery to get the image'),
+                                                  actions: [
+                                                    TextButton(
+                                                      child: Text('Camera'),
+                                                      onPressed: () {
+                                                        chooseCameraImage();
+                                                        Navigator.pop(context);
+                                                      },
+                                                    ),
+                                                    TextButton(
+                                                      child: Text('Gallery'),
+                                                      onPressed: () {
+                                                        chooseGalleryImage();
+                                                        Navigator.pop(context);
+                                                      },
+                                                    ),
+                                                  ],
                                                 ),
-                                                fit: BoxFit.cover,
+                                              );
+                                            },
+                                            customBorder: CircleBorder(),
+                                            child: Container(
+                                              width: width / 8,
+                                              height: width / 8,
+                                              decoration: BoxDecoration(
+                                                color: Colors.black,
+                                                shape: BoxShape.circle,
+                                                image: DecorationImage(
+                                                  image: FileImage(
+                                                    image,
+                                                  ),
+                                                  fit: BoxFit.cover,
+                                                ),
                                               ),
                                             ),
                                           ),
                                         ),
-                                      ),
-                                SizedBox(
-                                  width: width / 40,
-                                ),
-                                Expanded(
-                                  child: ContainerText(
-                                    hint: 'User Name',
-                                    node: node,
-                                    controller: name,
-                                    maxLength: 20,
+                                  SizedBox(
+                                    width: width / 40,
+                                  ),
+                                  Expanded(
+                                    child: ContainerText(
+                                      hint: 'User Name',
+                                      node: node,
+                                      controller: name,
+                                      maxLength: 20,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 5, bottom: 5),
+                                child: Text(
+                                  'Phone Number:',
+                                  style: TextStyle(
+                                    fontSize: width / 25,
+                                    color: Colors.grey[600],
                                   ),
                                 ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 5, bottom: 5),
-                              child: Text(
-                                'Phone Number:',
-                                style: TextStyle(
-                                  fontSize: width / 25,
-                                  color: Colors.grey[600],
+                              ),
+                              ContainerText(
+                                hint: 'Phone Number',
+                                node: node,
+                                controller: phoneNumber,
+                                inputType: TextInputType.phone,
+                                maxLength: 15,
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 5, bottom: 5),
+                                child: Text(
+                                  'Company Name:',
+                                  style: TextStyle(
+                                    fontSize: width / 25,
+                                    color: Colors.grey[600],
+                                  ),
                                 ),
                               ),
-                            ),
-                            ContainerText(
-                              hint: 'Phone Number',
-                              node: node,
-                              controller: phoneNumber,
-                              inputType: TextInputType.phone,
-                              maxLength: 15,
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 5, bottom: 5),
-                              child: Text(
-                                'Company Name:',
-                                style: TextStyle(
-                                  fontSize: width / 25,
-                                  color: Colors.grey[600],
+                              ContainerText(
+                                hint: 'Company Name',
+                                node: node,
+                                controller: companyName,
+                                maxLength: 30,
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 5, bottom: 5),
+                                child: Text(
+                                  'Location:',
+                                  style: TextStyle(
+                                    fontSize: width / 25,
+                                    color: Colors.grey[600],
+                                  ),
                                 ),
                               ),
-                            ),
-                            ContainerText(
-                              hint: 'Company Name',
-                              node: node,
-                              controller: companyName,
-                              maxLength: 30,
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 5, bottom: 5),
-                              child: Text(
-                                'Location:',
-                                style: TextStyle(
-                                  fontSize: width / 25,
-                                  color: Colors.grey[600],
-                                ),
+                              ContainerText(
+                                hint: 'Location',
+                                node: node,
+                                controller: location,
+                                maxLength: 30,
                               ),
-                            ),
-                            ContainerText(
-                              hint: 'Location',
-                              node: node,
-                              controller: location,
-                              maxLength: 30,
-                            ),
-                            SizedBox(
-                              height: 20,
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Center(
-                  child: FlatButton(
-                    padding: EdgeInsets.all(0),
-                    onPressed: () {
-                      if (con == true) {
-                        Fluttertoast.showToast(msg: 'No internet connection!');
-                      } else if (name.text.isEmpty ||
-                          email.text.isEmpty ||
-                          phoneNumber.text.isEmpty ||
-                          companyName.text.isEmpty ||
-                          location.text.isEmpty) {
-                        Fluttertoast.showToast(msg: 'Fill all the fields!');
-                      } else {
-                        if (image != null && widget.image != '') {
-                          deleteImage();
-                        } else if (widget.image == '') {
-                          uploadFile();
-                        } else
-                          editDistributorInfo();
-                      }
-                    },
-                    child: Container(
-                      width: width / 1.1,
-                      height: width / 8,
-                      decoration: BoxDecoration(
-                        color: Color.fromARGB(255, 149, 192, 255),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Center(
-                        child: Text(
-                          'Submit',
-                          style: TextStyle(
-                            color: Colors.white,
+                              SizedBox(
+                                height: 20,
+                              )
+                            ],
                           ),
                         ),
                       ),
                     ),
                   ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-              ],
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Center(
+                    child: FlatButton(
+                      padding: EdgeInsets.all(0),
+                      onPressed: () {
+                        if (con == true) {
+                          Fluttertoast.showToast(
+                              msg: 'No internet connection!');
+                        } else if (name.text.isEmpty ||
+                            email.text.isEmpty ||
+                            phoneNumber.text.isEmpty ||
+                            companyName.text.isEmpty ||
+                            location.text.isEmpty) {
+                          Fluttertoast.showToast(msg: 'Fill all the fields!');
+                        } else {
+                          if (image != null && widget.image != '') {
+                            deleteImage();
+                          } else if (widget.image == '') {
+                            uploadFile();
+                          } else
+                            editDistributorInfo();
+                        }
+                      },
+                      child: Container(
+                        width: width / 1.1,
+                        height: width / 8,
+                        decoration: BoxDecoration(
+                          color: Color.fromARGB(255, 149, 192, 255),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Center(
+                          child: Text(
+                            'Submit',
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                ],
+              ),
             ),
           ),
         ),

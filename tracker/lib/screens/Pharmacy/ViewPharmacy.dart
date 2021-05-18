@@ -79,6 +79,7 @@ class _ViewPharmacyState extends State<ViewPharmacy> {
     height = MediaQuery.of(context).size.height;
 
     return Scaffold(
+      extendBodyBehindAppBar: true,
       backgroundColor: Color.fromARGB(255, 246, 246, 248),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -87,105 +88,108 @@ class _ViewPharmacyState extends State<ViewPharmacy> {
           color: Colors.grey[700],
         ),
       ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                height: width / 20,
-              ),
-              Text(
-                widget.pageName,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: width / 14,
+      body: SingleChildScrollView(
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: width / 20,
                 ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              //
-              //
-              // The container fields
-              AnimatedOpacity(
-                opacity: opac,
-                duration: Duration(milliseconds: 500),
-                child: con == true
-                    ? Center(
-                        child: Column(
-                          children: [
-                            Padding(
-                              padding:
-                                  EdgeInsets.only(top: height / 3, bottom: 20),
-                              child: Text('No Internet Connection...'),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                checkInternet();
-                              },
-                              child: Text('Reload'),
-                            ),
-                          ],
-                        ),
-                      )
-                    : Container(
-                        width: width,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(15),
+                Text(
+                  widget.pageName,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: width / 14,
+                  ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                //
+                //
+                // The container fields
+                AnimatedOpacity(
+                  opacity: opac,
+                  duration: Duration(milliseconds: 500),
+                  child: con == true
+                      ? Center(
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.only(
+                                    top: height / 3, bottom: 20),
+                                child: Text('No Internet Connection...'),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  checkInternet();
+                                },
+                                child: Text('Reload'),
+                              ),
+                            ],
                           ),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                            bottom: 10,
-                            left: 10,
-                            right: 10,
-                            top: 10,
+                        )
+                      : Container(
+                          width: width,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(15),
+                            ),
                           ),
-                          child: StreamBuilder<QuerySnapshot>(
-                              stream: pharmacyStream,
-                              builder: (context, snapshot) {
-                                if (snapshot.hasData == false) {
-                                  return Center(
-                                    child: CircularProgressIndicator(),
-                                  );
-                                }
-                                return ListView.builder(
-                                  shrinkWrap: true,
-                                  itemCount: snapshot.data.docs.length,
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
-                                    QueryDocumentSnapshot item =
-                                        snapshot.data.docs[index];
-                                    return RowInfo(
-                                      imageURL: item['imageURL'][0],
-                                      location: item['location'],
-                                      width: width,
-                                      title: item['name'],
-                                      func: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (_) =>
-                                                Pharmacy_Clinics_Info(
-                                              name: item['uid'],
-                                              pharmOrClinic: 'Pharmacy',
-                                            ),
-                                          ),
-                                        );
-                                      },
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                              bottom: 10,
+                              left: 10,
+                              right: 10,
+                              top: 10,
+                            ),
+                            child: StreamBuilder<QuerySnapshot>(
+                                stream: pharmacyStream,
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData == false) {
+                                    return Center(
+                                      child: CircularProgressIndicator(),
                                     );
-                                  },
-                                );
-                              }),
+                                  }
+                                  return ListView.builder(
+                                    shrinkWrap: true,
+                                    physics: NeverScrollableScrollPhysics(),
+                                    itemCount: snapshot.data.docs.length,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      QueryDocumentSnapshot item =
+                                          snapshot.data.docs[index];
+                                      return RowInfo(
+                                        imageURL: item['imageURL'][0],
+                                        location: item['location'],
+                                        width: width,
+                                        title: item['name'],
+                                        func: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (_) =>
+                                                  Pharmacy_Clinics_Info(
+                                                name: item['uid'],
+                                                pharmOrClinic: 'Pharmacy',
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      );
+                                    },
+                                  );
+                                }),
+                          ),
                         ),
-                      ),
-              ),
-            ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

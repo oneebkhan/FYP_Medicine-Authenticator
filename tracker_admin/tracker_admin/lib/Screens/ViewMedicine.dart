@@ -81,6 +81,7 @@ class _ViewMedicineState extends State<ViewMedicine> {
     safePadding = MediaQuery.of(context).padding.top;
 
     return Scaffold(
+      extendBodyBehindAppBar: true,
       backgroundColor: Color.fromARGB(255, 246, 246, 248),
       appBar: AppBar(
         backgroundColor: Colors.transparent,

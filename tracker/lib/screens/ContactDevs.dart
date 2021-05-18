@@ -134,6 +134,7 @@ class _ContactDevsState extends State<ContactDevs> {
           }
         },
         child: Scaffold(
+          extendBodyBehindAppBar: true,
           backgroundColor: Color.fromARGB(255, 246, 246, 248),
           appBar: AppBar(
             backgroundColor: Colors.transparent,
