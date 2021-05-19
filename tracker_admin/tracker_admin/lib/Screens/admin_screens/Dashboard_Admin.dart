@@ -41,6 +41,7 @@ class _Dashboard_AdminState extends State<Dashboard_Admin> {
   int selectedIndex;
   int count;
   int medCount;
+  int medModelCount;
   int pharmCount;
   int clinicCount;
   int distributorCount;
@@ -126,6 +127,25 @@ class _Dashboard_AdminState extends State<Dashboard_Admin> {
   //
   //
   // FUNCTION TO GET THE MEDICINE COUNT
+  getMedicineModel() async {
+    try {
+      FirebaseFirestore.instance
+          .collection('MedicineModel')
+          .snapshots()
+          .listen((event) {
+        setState(() {
+          medModelCount = event.docs.length;
+        });
+      });
+    } on Exception catch (e) {
+      print(e);
+      Fluttertoast.showToast(msg: '$e');
+    }
+  }
+
+  //
+  //
+  // FUNCTION TO GET THE MEDICINE COUNT
   getMedicine() async {
     try {
       FirebaseFirestore.instance
@@ -154,6 +174,7 @@ class _Dashboard_AdminState extends State<Dashboard_Admin> {
     getClinic();
     getDistributors();
     getMedicine();
+    getMedicineModel();
     getPharmacy();
   }
 
@@ -250,11 +271,13 @@ class _Dashboard_AdminState extends State<Dashboard_Admin> {
                     child: AdminDashboard(
                       width: width,
                       height: height,
-                      count: count,
-                      clinicCount: clinicCount,
-                      distributorCount: distributorCount,
-                      medCount: medCount,
-                      pharmCount: pharmCount,
+                      count: count == null ? 0 : count,
+                      clinicCount: clinicCount == null ? 0 : clinicCount,
+                      distributorCount:
+                          distributorCount == null ? 0 : distributorCount,
+                      medCount: medCount == null ? 0 : medCount,
+                      pharmCount: pharmCount == null ? 0 : pharmCount,
+                      medModelCount: medModelCount,
                     ),
                   ),
                 ),
@@ -268,7 +291,7 @@ class _Dashboard_AdminState extends State<Dashboard_Admin> {
                     child: AdminStatistics(
                       width: width,
                       height: height,
-                      count: count,
+                      count: count == null ? 0 : count,
                     ),
                   ),
                 ),
@@ -293,6 +316,7 @@ class AdminDashboard extends StatefulWidget {
   final int pharmCount;
   final int clinicCount;
   final int medCount;
+  final int medModelCount;
 
   AdminDashboard({
     Key key,
@@ -303,6 +327,7 @@ class AdminDashboard extends StatefulWidget {
     this.pharmCount,
     this.clinicCount,
     this.medCount,
+    this.medModelCount,
   }) : super(key: key);
 
   @override
@@ -789,7 +814,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Total Medicine:',
+                          'Total Authenticated Medicine:',
                           style: TextStyle(
                             fontSize: widget.width / 30,
                             color: Colors.grey[700],
@@ -806,6 +831,39 @@ class _AdminDashboardState extends State<AdminDashboard> {
                           child: Center(
                             child: Text(
                               widget.medCount.toString(),
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: widget.width / 30,
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Total Medicine Models:',
+                          style: TextStyle(
+                            fontSize: widget.width / 30,
+                            color: Colors.grey[700],
+                            fontWeight: FontWeight.w300,
+                          ),
+                        ),
+                        Container(
+                          width: widget.width / 15,
+                          height: widget.width / 20,
+                          decoration: BoxDecoration(
+                            color: col,
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: Center(
+                            child: Text(
+                              widget.medModelCount.toString(),
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: widget.width / 30,

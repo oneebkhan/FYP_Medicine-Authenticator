@@ -104,6 +104,7 @@ class _LoginScreenState extends State<LoginScreen> {
             userName = value.data()['name'].toString();
             user = value.data()['email'].toString().toLowerCase();
           });
+
           login();
         } else {
           setState(() {
@@ -344,21 +345,21 @@ class _LoginScreenState extends State<LoginScreen> {
                                 if (validateEmail(email.text) == null &&
                                     validatePassword(pass.text) == null) {
                                   if (widget.i == 1) {
+                                    getDistributors(email.text);
                                     setState(() {
                                       nav = Dashboard_Distributor(
                                           distCompName: distCompName);
                                     });
-                                    getDistributors(email.text);
                                   } else if (widget.i == 0) {
+                                    getAdmins(email.text);
                                     setState(() {
                                       nav = Dashboard_Admin();
                                     });
-                                    getAdmins(email.text);
                                   } else if (widget.i == 2) {
+                                    getPharmacists(email.text);
                                     setState(() {
                                       nav = Dashboard_Pharmacist();
                                     });
-                                    getPharmacists(email.text);
                                   }
                                 }
                               }
