@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:tracker_admin/screens/admin_screens/EditMedicineModel.dart';
 
 class MedicineInfo_WithoutBarcode extends StatefulWidget {
   final String name;
@@ -152,7 +153,27 @@ class _MedicineInfo_WithoutBarcodeState
               backgroundColor: Colors.blue[500],
               labelBackgroundColor: Colors.grey[800],
               labelStyle: TextStyle(color: Colors.white),
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => EditMedicineModel(
+                      activeIngredients: med['activeIngredients'],
+                      compName: med['companyName'],
+                      description: med['description'],
+                      dose: med['dose'],
+                      imageURL: med['imageURL'],
+                      medName: med['name'],
+                      otherIngredients: med['otherIngredients'],
+                      price: med['price'],
+                      quantity: med['quantity'],
+                      sideEffects: med['sideEffects'],
+                      uses: med['uses'],
+                      sales: med['totalSales'],
+                    ),
+                  ),
+                );
+              },
             ),
             SpeedDialChild(
               child: Icon(

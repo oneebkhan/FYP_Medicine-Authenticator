@@ -238,11 +238,6 @@ class _EditDistributorState extends State<EditDistributor> {
         },
         child: Scaffold(
           extendBodyBehindAppBar: true,
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              print(widget.image);
-            },
-          ),
           backgroundColor: Color.fromARGB(255, 246, 246, 248),
           appBar: AppBar(
             backgroundColor: Colors.transparent,

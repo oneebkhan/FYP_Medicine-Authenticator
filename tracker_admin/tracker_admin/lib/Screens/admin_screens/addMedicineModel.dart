@@ -460,6 +460,8 @@ class _AddMedicineModelState extends State<AddMedicineModel> {
                                 node: node,
                                 controller: description,
                                 maxLength: 300,
+                                maxLines: 8,
+                                height: width / 3,
                               ),
                               SizedBox(
                                 height: 10,
@@ -469,6 +471,8 @@ class _AddMedicineModelState extends State<AddMedicineModel> {
                                 node: node,
                                 controller: activeIngredients,
                                 maxLength: 300,
+                                maxLines: 8,
+                                height: width / 3,
                               ),
                               SizedBox(
                                 height: 10,
@@ -478,6 +482,8 @@ class _AddMedicineModelState extends State<AddMedicineModel> {
                                 node: node,
                                 controller: otherIngredients,
                                 maxLength: 300,
+                                maxLines: 8,
+                                height: width / 3,
                               ),
                               SizedBox(
                                 height: 10,
@@ -487,6 +493,8 @@ class _AddMedicineModelState extends State<AddMedicineModel> {
                                 node: node,
                                 controller: sideEffects,
                                 maxLength: 300,
+                                maxLines: 8,
+                                height: width / 3,
                               ),
                               SizedBox(
                                 height: 10,
@@ -496,6 +504,8 @@ class _AddMedicineModelState extends State<AddMedicineModel> {
                                 node: node,
                                 controller: uses,
                                 maxLength: 300,
+                                maxLines: 8,
+                                height: width / 3,
                               ),
                               SizedBox(
                                 height: 10,
