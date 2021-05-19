@@ -280,7 +280,7 @@ class _Dashboard_AdminState extends State<Dashboard_Admin> {
                       onPressed: () {},
                     ),
                     GButton(
-                      icon: LineIcons.stethoscope,
+                      icon: LineIcons.barChartAlt,
                       text: 'Statistics',
                       onPressed: () {},
                     ),
