@@ -173,6 +173,11 @@ class _EditDistributorState extends State<EditDistributor> {
   //
   // this function adds distributor information to Firebase Firestore
   editDistributorInfo() async {
+    if (uploadedFileURL == null) {
+      setState(() {
+        uploadedFileURL = widget.image.toString();
+      });
+    }
     try {
       // ignore: await_only_futures
       var firestore = await FirebaseFirestore.instance;
@@ -185,7 +190,7 @@ class _EditDistributorState extends State<EditDistributor> {
         "image": uploadedFileURL,
         "EditedBy": {adminEmail: Timestamp.now()},
       }).then((_) {
-        Fluttertoast.showToast(msg: 'Distributor created Succesfully!');
+        Fluttertoast.showToast(msg: 'Distributor updated Succesfully!');
         setState(() {
           _isLoading = false;
         });
