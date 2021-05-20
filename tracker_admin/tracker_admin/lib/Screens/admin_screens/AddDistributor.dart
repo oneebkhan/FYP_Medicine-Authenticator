@@ -250,18 +250,6 @@ class _AddDistributorState extends State<AddDistributor> {
   }
 
   @override
-  void dispose() {
-    subscription.cancel();
-    name.dispose();
-    email.dispose();
-    password.dispose();
-    companyName.dispose();
-    location.dispose();
-    phoneNumber.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
