@@ -1100,7 +1100,7 @@ class _AdminStatisticsState extends State<AdminStatistics> {
       setState(() {
         historyStream = FirebaseFirestore.instance
             .collection('History')
-            .orderBy('timestamp', descending: false)
+            .orderBy('timestamp', descending: true)
             .limit(5)
             .snapshots();
       });
@@ -1406,7 +1406,7 @@ class _AdminStatisticsState extends State<AdminStatistics> {
                                   QueryDocumentSnapshot item =
                                       snapshot.data.docs[index];
                                   return Hero(
-                                    tag: 'popupContainer',
+                                    tag: item['timestamp'].toString(),
                                     child: Material(
                                       borderRadius: BorderRadius.circular(15.0),
                                       color: Colors.white,
@@ -1424,6 +1424,7 @@ class _AdminStatisticsState extends State<AdminStatistics> {
                                               HeroDialogRoute(
                                                   builder: (context) {
                                             return PopupCard(
+                                              tag: item['timestamp'].toString(),
                                               by: item['by'].toString(),
                                               dateTime: DateFormat.yMMMd()
                                                   .add_jm()

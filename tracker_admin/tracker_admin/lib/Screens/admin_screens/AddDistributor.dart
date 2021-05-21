@@ -35,6 +35,64 @@ class _AddDistributorState extends State<AddDistributor> {
   File image;
   String uploadedFileURL;
   String adminEmail;
+  String by;
+  String byCompany;
+  String imageAdmin;
+
+  //
+  //
+  // get admin
+  getAdmin() async {
+    await FirebaseFirestore.instance
+        .collection('Admin')
+        .doc(FirebaseAuth.instance.currentUser.email)
+        .get()
+        .then((value) {
+      setState(() {
+        by = value.data()['email'];
+        byCompany = value.data()['companyName'];
+        imageAdmin = value.data()['image'];
+      });
+    });
+  }
+
+  //
+  //
+  // check distributor
+  checkDistributor() async {
+    await FirebaseFirestore.instance
+        .collection('Distributor')
+        .doc(email.text.toLowerCase())
+        .get()
+        .then((value) {
+      if (value.data() == null) {
+        uploadFile();
+        return null;
+      } else {
+        Fluttertoast.showToast(msg: 'Distributor already exists!');
+        return null;
+      }
+    });
+  }
+
+  //
+  //
+  //update History
+  updateHistory() {
+    var fire = FirebaseFirestore.instance;
+    fire.collection('History').doc(DateTime.now().toString()).set({
+      "timestamp": DateTime.now(),
+      "by": by,
+      "byCompany": byCompany,
+      "image": imageAdmin,
+      "name": name.text + ' added as a distributor',
+    }).then((value) {
+      setState(() {
+        _isLoading = false;
+      });
+      Navigator.pop(context);
+    });
+  }
 
   //
   //
@@ -180,13 +238,13 @@ class _AddDistributorState extends State<AddDistributor> {
     try {
       // ignore: await_only_futures
       var firestore = await FirebaseFirestore.instance;
-      firestore.collection("Distributor").doc(email.text).set({
+      firestore.collection("Distributor").doc(email.text.toLowerCase()).set({
         "name": name.text,
-        "email": email.text,
+        "email": email.text.toLowerCase(),
         "password": password.text,
         "companyName": companyName.text,
         "location": location.text,
-        "addedByAdmin": currentDistributorEmail,
+        "addedBy": currentDistributorEmail,
         "phoneNumber": phoneNumber.text,
         "dateAdded": Timestamp.now(),
         "clinicImages": [],
@@ -198,10 +256,7 @@ class _AddDistributorState extends State<AddDistributor> {
         "EditedBy": {adminEmail.toString(): Timestamp.now()},
       }).then((_) {
         Fluttertoast.showToast(msg: 'Distributor created Succesfully!');
-        setState(() {
-          _isLoading = false;
-        });
-        Navigator.pop(context);
+        updateHistory();
       });
     } on Exception catch (e) {
       Fluttertoast.showToast(msg: '$e');
@@ -232,7 +287,6 @@ class _AddDistributorState extends State<AddDistributor> {
   @override
   void initState() {
     super.initState();
-    adminEmail = FirebaseAuth.instance.currentUser.email;
     // name;
     // email;
     // password;
@@ -240,6 +294,7 @@ class _AddDistributorState extends State<AddDistributor> {
     // location;
     // phoneNumber;
     checkInternet();
+    getAdmin();
     subscription = Connectivity()
         .onConnectivityChanged
         .listen((ConnectivityResult result) {
@@ -523,7 +578,7 @@ class _AddDistributorState extends State<AddDistributor> {
                           Fluttertoast.showToast(
                               msg: 'Select a profile image!');
                         } else if (validateEmail(email.text) == null) {
-                          uploadFile();
+                          checkDistributor();
                         }
                       },
                       child: Container(

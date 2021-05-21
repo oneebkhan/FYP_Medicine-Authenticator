@@ -76,6 +76,22 @@ class _EditMedicineModelState extends State<EditMedicineModel> {
   List<bool> check = [false, false, false];
   List images;
   int check1 = 0;
+  var info;
+
+  //
+  //
+  //get Admin
+  getAdmin() async {
+    await FirebaseFirestore.instance
+        .collection('Admin')
+        .doc(FirebaseAuth.instance.currentUser.email)
+        .get()
+        .then((value) {
+      setState(() {
+        info = value.data();
+      });
+    });
+  }
 
   //
   //
@@ -260,8 +276,16 @@ class _EditMedicineModelState extends State<EditMedicineModel> {
         "lastEditedBy": {
           FirebaseAuth.instance.currentUser.email: Timestamp.now()
         },
-      }).then((_) {
-        Fluttertoast.showToast(msg: 'Medicine Model created Succesfully!');
+      }).then((_) async {
+        var fire = await FirebaseFirestore.instance;
+        fire.collection("History").doc(DateTime.now().toString()).set({
+          "timestamp": DateTime.now(),
+          "by": info['email'],
+          "byCompany": info['companyName'],
+          "image": info['image'],
+          "name": medName.text + ' model was edited',
+        });
+        Fluttertoast.showToast(msg: 'Medicine Model edited Succesfully!');
         setState(() {
           _isLoading = false;
         });
@@ -279,6 +303,7 @@ class _EditMedicineModelState extends State<EditMedicineModel> {
   @override
   void initState() {
     super.initState();
+    getAdmin();
     medName.text = widget.medName;
     price.text = widget.price;
     dose.text = widget.dose;

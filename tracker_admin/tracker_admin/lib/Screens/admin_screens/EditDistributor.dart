@@ -52,6 +52,22 @@ class _EditDistributorState extends State<EditDistributor> {
   File image;
   String uploadedFileURL;
   String adminEmail;
+  var info;
+
+  //
+  //
+  //get Admin
+  getAdmin() async {
+    await FirebaseFirestore.instance
+        .collection('Admin')
+        .doc(FirebaseAuth.instance.currentUser.email)
+        .get()
+        .then((value) {
+      setState(() {
+        info = value.data();
+      });
+    });
+  }
 
   //
   //
@@ -189,7 +205,15 @@ class _EditDistributorState extends State<EditDistributor> {
         "phoneNumber": phoneNumber.text,
         "image": uploadedFileURL,
         "EditedBy": {adminEmail: Timestamp.now()},
-      }).then((_) {
+      }).then((_) async {
+        var fire = await FirebaseFirestore.instance;
+        firestore.collection("History").doc(DateTime.now().toString()).set({
+          "timestamp": DateTime.now(),
+          "by": info['email'],
+          "byCompany": info['companyName'],
+          "image": info['image'],
+          "name": name.text + ' has been edited',
+        });
         Fluttertoast.showToast(msg: 'Distributor updated Succesfully!');
         setState(() {
           _isLoading = false;
@@ -207,6 +231,7 @@ class _EditDistributorState extends State<EditDistributor> {
   @override
   void initState() {
     super.initState();
+    getAdmin();
     name.text = widget.name;
     email.text = widget.email;
     companyName.text = widget.companyName;

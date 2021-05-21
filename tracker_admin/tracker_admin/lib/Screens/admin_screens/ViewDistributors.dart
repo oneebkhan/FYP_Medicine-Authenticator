@@ -85,11 +85,6 @@ class _ViewDistributorsState extends State<ViewDistributors> {
 
     return Scaffold(
       extendBodyBehindAppBar: true,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          print(FirebaseAuth.instance.currentUser.email);
-        },
-      ),
       backgroundColor: Color.fromARGB(255, 246, 246, 248),
       appBar: AppBar(
         backgroundColor: Colors.transparent,

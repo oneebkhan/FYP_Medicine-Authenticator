@@ -41,6 +41,22 @@ class _DistributorState extends State<Distributor> {
   var page = PageController();
   var info;
   bool pass = false;
+  var info2;
+
+  //
+  //
+  //get Admin
+  getAdmin() async {
+    await FirebaseFirestore.instance
+        .collection('Admin')
+        .doc(FirebaseAuth.instance.currentUser.email)
+        .get()
+        .then((value) {
+      setState(() {
+        info2 = value.data();
+      });
+    });
+  }
 
   //
   //
@@ -64,9 +80,21 @@ class _DistributorState extends State<Distributor> {
     }
   }
 
+  updateHistory() async {
+    var fire = await FirebaseFirestore.instance;
+    fire.collection("History").doc(DateTime.now().toString()).set({
+      "timestamp": DateTime.now(),
+      "by": info2['email'],
+      "byCompany": info2['companyName'],
+      "image": info2['image'],
+      "name": info['name'] + ' deleted',
+    });
+  }
+
   @override
   void initState() {
     super.initState();
+    getAdmin();
     opac = 0;
     opac2 = 0;
     index = 0;
@@ -208,6 +236,7 @@ class _DistributorState extends State<Distributor> {
                               showDialog(
                                   context: context,
                                   builder: (_) => customAlert());
+                              updateHistory();
                               deleteFolderContents(
                                 info['email'],
                               );
@@ -512,7 +541,7 @@ class _DistributorState extends State<Distributor> {
                                       height: 5,
                                     ),
                                     Text(
-                                      info['addedByAdmin'] +
+                                      info['addedBy'] +
                                           ' - ' +
                                           DateFormat.yMMMd()
                                               .add_jm()

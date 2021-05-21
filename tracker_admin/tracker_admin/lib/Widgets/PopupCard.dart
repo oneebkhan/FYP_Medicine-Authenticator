@@ -6,6 +6,7 @@ class PopupCard extends StatelessWidget {
   final String by;
   final String image;
   final String name;
+  final String tag;
   double width;
   double height;
 
@@ -15,6 +16,7 @@ class PopupCard extends StatelessWidget {
     this.by,
     this.image,
     this.name,
+    this.tag,
   }) : super(key: key);
 
   @override
@@ -25,7 +27,7 @@ class PopupCard extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(32.0),
         child: Hero(
-          tag: 'popupContainer',
+          tag: tag,
           child: Material(
             color: Colors.white,
             elevation: 2,
@@ -38,7 +40,6 @@ class PopupCard extends StatelessWidget {
                 children: [
                   Container(
                     width: width,
-                    height: height / 12,
                     decoration: BoxDecoration(
                       color: Color.fromARGB(255, 149, 191, 255),
                       borderRadius: BorderRadius.only(
@@ -48,13 +49,17 @@ class PopupCard extends StatelessWidget {
                         topRight: Radius.circular(20),
                       ),
                     ),
-                    child: Center(
-                      child: Text(
-                        '$name',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: width / 16,
-                          color: Colors.white,
+                    child: Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Center(
+                        child: Text(
+                          '$name',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: width / 18,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ),
@@ -66,11 +71,21 @@ class PopupCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+                      Text(
+                        'By: ',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w300,
+                          fontSize: width / 30,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
                       CachedNetworkImage(
                         imageUrl: image,
                         imageBuilder: (context, imageProvider) => Container(
-                          width: width / 12,
-                          height: width / 12,
+                          width: width / 15,
+                          height: width / 15,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             image: DecorationImage(
@@ -87,7 +102,7 @@ class PopupCard extends StatelessWidget {
                       Text(
                         '$by',
                         style: TextStyle(
-                          fontSize: width / 23,
+                          fontSize: width / 25,
                         ),
                       )
                     ],

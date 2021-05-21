@@ -41,6 +41,22 @@ class _AddMedicineModelState extends State<AddMedicineModel> {
   String adminEmail;
   int index;
   int index2;
+  var info;
+
+  //
+  //
+  //get Admin
+  getAdmin() async {
+    await FirebaseFirestore.instance
+        .collection('Admin')
+        .doc(FirebaseAuth.instance.currentUser.email)
+        .get()
+        .then((value) {
+      setState(() {
+        info = value.data();
+      });
+    });
+  }
 
   //
   //
@@ -165,7 +181,15 @@ class _AddMedicineModelState extends State<AddMedicineModel> {
         "lastEditedBy": {
           FirebaseAuth.instance.currentUser.email: Timestamp.now()
         },
-      }).then((_) {
+      }).then((_) async {
+        var fire = await FirebaseFirestore.instance;
+        fire.collection("History").doc(DateTime.now().toString()).set({
+          "timestamp": DateTime.now(),
+          "by": info['email'],
+          "byCompany": info['companyName'],
+          "image": info['image'],
+          "name": 'Addition of ' + medName.text + ' model',
+        });
         Fluttertoast.showToast(msg: 'Medicine Model created Succesfully!');
         setState(() {
           _isLoading = false;
@@ -180,9 +204,26 @@ class _AddMedicineModelState extends State<AddMedicineModel> {
     }
   }
 
+  checkForMed() async {
+    var fire = await FirebaseFirestore.instance
+        .collection('MedicineModel')
+        .doc(medName.text)
+        .get()
+        .then((value) {
+      if (value.data().toString() == 'null') {
+        uploadFile();
+        return null;
+      } else {
+        Fluttertoast.showToast(msg: 'Medicine Model already present!');
+        return null;
+      }
+    });
+  }
+
   @override
   void initState() {
     super.initState();
+    getAdmin();
     List<File> _image = [];
     List<String> _uploadedFileURL = [];
     index2 = 0;
@@ -549,7 +590,7 @@ class _AddMedicineModelState extends State<AddMedicineModel> {
                         } else if (image == []) {
                           Fluttertoast.showToast(msg: 'Select an image');
                         } else {
-                          uploadFile();
+                          checkForMed();
                         }
                       },
                       child: Container(
