@@ -88,6 +88,7 @@ class _DistributorState extends State<Distributor> {
       "byCompany": info2['companyName'],
       "image": info2['image'],
       "name": info['name'] + ' deleted',
+      "category": 'admin',
     });
   }
 

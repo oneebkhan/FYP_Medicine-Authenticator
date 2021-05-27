@@ -86,6 +86,7 @@ class _AddDistributorState extends State<AddDistributor> {
       "byCompany": byCompany,
       "image": imageAdmin,
       "name": name.text + ' added as a distributor',
+      "category": 'admin',
     }).then((value) {
       setState(() {
         _isLoading = false;
@@ -623,6 +624,7 @@ class ContainerText extends StatefulWidget {
   final double width;
   final double height;
   final bool enabled;
+  final bool nextFocus;
 
   const ContainerText({
     Key key,
@@ -636,6 +638,7 @@ class ContainerText extends StatefulWidget {
     this.width,
     this.height,
     this.enabled,
+    this.nextFocus,
   });
 
   @override
@@ -663,6 +666,7 @@ class _ContainerTextState extends State<ContainerText> {
   @override
   void initState() {
     super.initState();
+
     passwordVisibility();
   }
 
@@ -691,7 +695,8 @@ class _ContainerTextState extends State<ContainerText> {
               textInputAction: TextInputAction.next,
               maxLength: widget.maxLength,
               maxLines: widget.maxLines == null ? 1 : widget.maxLines,
-              onEditingComplete: () => widget.node.nextFocus(),
+              onEditingComplete: () =>
+                  widget.nextFocus == true ? null : widget.node.nextFocus(),
               style: TextStyle(
                   color: widget.enabled == false ? Colors.grey[600] : null),
               decoration: InputDecoration(

@@ -176,8 +176,8 @@ class _MyHeadDelegate extends SliverPersistentHeaderDelegate {
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
-    double max = width * 1;
-    double min = width / 5.5;
+    double max = (width * 0.93) + safePadding;
+    double min = (width / 5.5) + safePadding;
     double shrink = (max - shrinkOffset) * (100 / max);
     double shrinkPercent = (1 - shrinkOffset / max);
     double opac = (pow(shrinkPercent, 4)).clamp(0.0, 1.0);
@@ -206,11 +206,10 @@ class _MyHeadDelegate extends SliverPersistentHeaderDelegate {
         ),
       ),
       child: Stack(
-        fit: StackFit.expand,
         clipBehavior: Clip.none,
         children: [
           Positioned(
-            top: ((width / 4.5) * shrinkPercent),
+            top: ((width / 6) * shrinkPercent) + safePadding,
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: width / 15),
               child: Opacity(
@@ -266,11 +265,11 @@ class _MyHeadDelegate extends SliverPersistentHeaderDelegate {
 
   @override
   // TODO: implement maxExtent
-  double get maxExtent => width * 1;
+  double get maxExtent => (width * 0.93) + safePadding;
 
   @override
   // TODO: implement minExtent
-  double get minExtent => width / 5.5;
+  double get minExtent => (width / 5.5) + safePadding;
 
   @override
   bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) =>

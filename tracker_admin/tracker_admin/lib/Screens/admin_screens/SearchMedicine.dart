@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:tracker_admin/Widgets/RowInfo.dart';
 import 'package:tracker_admin/screens/MedicineInfo.dart';
-import 'package:tracker_admin/screens/admin_screens/MedicineInfo_WithoutBarcode.dart';
+import 'package:tracker_admin/screens/admin_screens/MedicineModelInfo.dart';
 import 'package:tracker_admin/screens/admin_screens/AddDistributor.dart';
 
 class SearchMedicine extends StatefulWidget {
@@ -361,8 +361,7 @@ class __NamedResultsState extends State<_NamedResults> {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (_) =>
-                                                MedicineInfo_WithoutBarcode(
+                                            builder: (_) => MedicineModelInfo(
                                               name: item['name'],
                                             ),
                                           ),

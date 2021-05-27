@@ -14,12 +14,18 @@ import 'package:tracker_admin/Widgets/RowInfo.dart';
 import 'package:tracker_admin/configs/HeroDialogRoute.dart';
 import 'package:tracker_admin/screens/Clinic/ViewClinic.dart';
 import 'package:tracker_admin/screens/MedicineInfo.dart';
+import 'package:tracker_admin/screens/MedicineInfo_WithoutBarcode.dart';
 import 'package:tracker_admin/screens/Pharmacy/ViewPharmacy.dart';
 import 'package:tracker_admin/screens/Search.dart';
+import 'package:tracker_admin/screens/StartingPage.dart';
 import 'package:tracker_admin/screens/admin_screens/History.dart';
+import 'package:tracker_admin/screens/admin_screens/MedicineModelInfo.dart';
 import 'package:tracker_admin/screens/distributor_screens/AddMedicine.dart';
+import 'package:tracker_admin/screens/distributor_screens/DistributorHistory.dart';
 import 'package:tracker_admin/screens/distributor_screens/Requests.dart';
 import 'package:tracker_admin/screens/ViewMedicine.dart';
+import 'package:tracker_admin/screens/distributor_screens/SelectMedicineModel.dart';
+import 'package:tracker_admin/screens/distributor_screens/ViewTopMedicine.dart';
 
 class Dashboard_Distributor extends StatefulWidget {
   final String distCompName;
@@ -46,6 +52,25 @@ class _Dashboard_DistributorState extends State<Dashboard_Distributor> {
   int medCount;
   int pharmCount;
   int clinicCount;
+
+  //
+  //
+  // Sign out and go to starting page
+  signOut() async {
+    try {
+      await FirebaseAuth.instance.signOut();
+      Fluttertoast.showToast(msg: 'Distributor Signed Out');
+      Navigator.pushAndRemoveUntil<dynamic>(
+        context,
+        MaterialPageRoute<dynamic>(
+          builder: (BuildContext context) => StartingPage(),
+        ),
+        (route) => false, //if you want to disable back feature set to false
+      );
+    } on Exception catch (e) {
+      Fluttertoast.showToast(msg: '$e');
+    }
+  }
 
   //
   //
@@ -172,112 +197,139 @@ class _Dashboard_DistributorState extends State<Dashboard_Distributor> {
     return Container(
       height: height,
       width: width,
-      child: Scaffold(
-        extendBody: true,
-        extendBodyBehindAppBar: true,
-        bottomNavigationBar: Padding(
-          padding: EdgeInsets.only(
-            bottom: 20,
-            left: width / 5.8,
-            right: width / 5.8,
-          ),
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(100),
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                  blurRadius: 20,
-                  color: Colors.black.withOpacity(.1),
-                )
+      child: WillPopScope(
+        onWillPop: () {
+          return showDialog(
+            context: context,
+            builder: (_) => AlertDialog(
+              title: Text('Close Dashboard?'),
+              content: Text(
+                  'Closing the dashboard means you will be logged out of your account'),
+              actions: [
+                TextButton(
+                  child: Text('Yes'),
+                  onPressed: () {
+                    Navigator.pop(context);
+                    signOut();
+                  },
+                ),
+                TextButton(
+                  child: Text('No'),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
               ],
             ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 10.0,
-                vertical: 10,
-              ),
-              child: GNav(
-                mainAxisAlignment: MainAxisAlignment.center,
-                haptic: true,
-                rippleColor: col,
-                hoverColor: col,
-                gap: 8,
-                activeColor: floatingButtonColor,
-                iconSize: 24,
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                duration: Duration(milliseconds: 400),
-                tabBackgroundColor: Colors.grey[100],
-                tabs: [
-                  GButton(
-                    icon: LineIcons.userShield,
-                    text: 'Dashboard',
-                    onPressed: () {},
-                  ),
-                  GButton(
-                    icon: LineIcons.stethoscope,
-                    text: 'Statistics',
-                    onPressed: () {},
-                  ),
+          );
+        },
+        child: Scaffold(
+          extendBody: true,
+          extendBodyBehindAppBar: true,
+          bottomNavigationBar: Padding(
+            padding: EdgeInsets.only(
+              bottom: 20,
+              left: width / 5.8,
+              right: width / 5.8,
+            ),
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(100),
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    blurRadius: 20,
+                    color: Colors.black.withOpacity(.1),
+                  )
                 ],
-                selectedIndex: selectedIndex,
-                onTabChange: (index) {
-                  setState(() {
-                    selectedIndex = index;
-                    if (index == 0) {
-                      opac = 1;
-                      opac2 = 0;
-                    } else {
-                      opac = 0;
-                      opac2 = 1;
-                    }
-                  });
-                },
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10.0,
+                  vertical: 10,
+                ),
+                child: GNav(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  haptic: true,
+                  rippleColor: col,
+                  hoverColor: col,
+                  gap: 8,
+                  activeColor: floatingButtonColor,
+                  iconSize: 24,
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                  duration: Duration(milliseconds: 400),
+                  tabBackgroundColor: Colors.grey[100],
+                  tabs: [
+                    GButton(
+                      icon: LineIcons.userShield,
+                      text: 'Dashboard',
+                      onPressed: () {},
+                    ),
+                    GButton(
+                      icon: LineIcons.stethoscope,
+                      text: 'Statistics',
+                      onPressed: () {},
+                    ),
+                  ],
+                  selectedIndex: selectedIndex,
+                  onTabChange: (index) {
+                    setState(() {
+                      selectedIndex = index;
+                      if (index == 0) {
+                        opac = 1;
+                        opac2 = 0;
+                      } else {
+                        opac = 0;
+                        opac2 = 1;
+                      }
+                    });
+                  },
+                ),
               ),
             ),
           ),
-        ),
-        backgroundColor: Color.fromARGB(255, 246, 246, 248),
-        body: Container(
-          height: height,
-          width: width,
-          child: IndexedStack(
-            index: selectedIndex,
-            children: <Widget>[
-              AnimatedOpacity(
-                opacity: opac,
-                duration: Duration(milliseconds: 500),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: SingleChildScrollView(
-                    child: DistributorDashboard(
-                      width: width,
-                      height: height,
-                      clinicCount: clinicCount,
-                      count: count,
-                      medCount: medCount,
-                      pharmCount: pharmCount,
-                      pharmacistCount: pharmacistCount,
+          backgroundColor: Color.fromARGB(255, 246, 246, 248),
+          body: Container(
+            height: height,
+            width: width,
+            child: IndexedStack(
+              index: selectedIndex,
+              children: <Widget>[
+                AnimatedOpacity(
+                  opacity: opac,
+                  duration: Duration(milliseconds: 500),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: SingleChildScrollView(
+                      child: DistributorDashboard(
+                        width: width,
+                        height: height,
+                        clinicCount: clinicCount,
+                        count: count,
+                        medCount: medCount,
+                        pharmCount: pharmCount,
+                        pharmacistCount: pharmacistCount,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              AnimatedOpacity(
-                opacity: opac2,
-                duration: Duration(milliseconds: 500),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: SingleChildScrollView(
-                    child: DistributorStatistics(
-                      width: width,
-                      height: height,
-                      count: count,
-                      distCompName: widget.distCompName,
+                AnimatedOpacity(
+                  opacity: opac2,
+                  duration: Duration(milliseconds: 500),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: SingleChildScrollView(
+                      child: DistributorStatistics(
+                        width: width,
+                        height: height,
+                        count: count,
+                        distCompName: widget.distCompName,
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -515,7 +567,7 @@ class _DistributorDashboardState extends State<DistributorDashboard> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (_) => AddMedicine(),
+                                  builder: (_) => SelectMedicineModel(),
                                 ),
                               );
                             },
@@ -1008,7 +1060,6 @@ class _DistributorStatisticsState extends State<DistributorStatistics> {
   var basicMedStream;
   var historyStream;
   var med;
-  Map<String, int> medMap = {};
 
   //
   //
@@ -1031,28 +1082,9 @@ class _DistributorStatisticsState extends State<DistributorStatistics> {
     try {
       setState(() {
         basicMedStream = FirebaseFirestore.instance
-            .collection('BasicMedicine')
+            .collection('MedicineModel')
             .orderBy('totalSales', descending: true)
             .limit(5)
-            .get()
-            .then((value) {
-          value.docs.forEach((element) {
-            medMap
-                .addAll({element.data()['name']: element.data()['totalSales']});
-          });
-        });
-      });
-    } on Exception catch (e) {
-      print(e);
-    }
-  }
-
-  getTopMedicine() async {
-    try {
-      setState(() {
-        med = FirebaseFirestore.instance
-            .collection('Medicine')
-            .where('name', whereIn: medMap.keys.toList())
             .snapshots();
       });
     } on Exception catch (e) {
@@ -1065,8 +1097,9 @@ class _DistributorStatisticsState extends State<DistributorStatistics> {
       setState(() {
         historyStream = FirebaseFirestore.instance
             .collection('History')
+            .where('category', whereIn: ['distributor', 'pharmacist'])
+            .where('byCompany', isEqualTo: widget.distCompName)
             .orderBy('timestamp', descending: false)
-            .where('by', isEqualTo: widget.distCompName)
             .limit(5)
             .snapshots();
       });
@@ -1081,10 +1114,8 @@ class _DistributorStatisticsState extends State<DistributorStatistics> {
     getTopMedicineName();
     getHistory();
     checkInternet();
+    getTopMedicineName();
 
-    Future.delayed(Duration(seconds: 2), () {
-      getTopMedicine();
-    });
     subscription = Connectivity()
         .onConnectivityChanged
         .listen((ConnectivityResult result) {
@@ -1372,7 +1403,7 @@ class _DistributorStatisticsState extends State<DistributorStatistics> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (_) => History(),
+                                  builder: (_) => DistributorHistory(),
                                 ),
                               );
                             },
@@ -1411,7 +1442,7 @@ class _DistributorStatisticsState extends State<DistributorStatistics> {
                                   QueryDocumentSnapshot item =
                                       snapshot.data.docs[index];
                                   return Hero(
-                                    tag: 'popupContainer',
+                                    tag: item['timestamp'].toString(),
                                     child: Material(
                                       borderRadius: BorderRadius.circular(15.0),
                                       color: Colors.white,
@@ -1429,6 +1460,7 @@ class _DistributorStatisticsState extends State<DistributorStatistics> {
                                               HeroDialogRoute(
                                                   builder: (context) {
                                             return PopupCard(
+                                              tag: item['timestamp'].toString(),
                                               by: item['by'].toString(),
                                               dateTime: DateFormat.yMMMd()
                                                   .add_jm()
@@ -1502,8 +1534,8 @@ class _DistributorStatisticsState extends State<DistributorStatistics> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (_) =>
-                                      ViewMedicine(pageName: 'View Medicine'),
+                                  builder: (_) => ViewTopMedicine(
+                                      pageName: 'View Top Medicine'),
                                 ),
                               );
                             },
@@ -1527,7 +1559,7 @@ class _DistributorStatisticsState extends State<DistributorStatistics> {
                             ),
                           )
                         : StreamBuilder<QuerySnapshot>(
-                            stream: med,
+                            stream: basicMedStream,
                             builder: (context, snapshot) {
                               if (snapshot.hasData == false) {
                                 return Center(
@@ -1546,15 +1578,16 @@ class _DistributorStatisticsState extends State<DistributorStatistics> {
                                         ? 'https://www.spicefactors.com/wp-content/uploads/default-user-image.png'
                                         : item['imageURL'][0],
                                     location: 'Sales: ' +
-                                        medMap[item['name']].toString(),
+                                        item['totalSales'].toString(),
                                     width: widget.width,
                                     title: item['name'],
                                     func: () {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (_) => MedicineInfo(
-                                            medName: item['name'],
+                                          builder: (_) =>
+                                              MedicineInfo_WithoutBarcode(
+                                            name: item['name'],
                                           ),
                                         ),
                                       );

@@ -14,7 +14,6 @@ import 'package:tracker_admin/Widgets/RowInfo.dart';
 import 'package:tracker_admin/configs/HeroDialogRoute.dart';
 import 'package:tracker_admin/screens/Clinic/Clinics.dart';
 import 'package:tracker_admin/screens/Pharmacy/Pharmacies.dart';
-import 'package:tracker_admin/screens/Search.dart';
 import 'package:tracker_admin/screens/StartingPage.dart';
 import 'package:tracker_admin/screens/admin_screens/AddMedicineModel.dart';
 import 'package:tracker_admin/screens/admin_screens/Distributor.dart';
@@ -24,7 +23,6 @@ import 'package:tracker_admin/screens/admin_screens/ViewDistributors.dart';
 import 'package:tracker_admin/screens/admin_screens/AddDistributor.dart';
 import 'package:tracker_admin/screens/admin_screens/History.dart';
 import 'package:tracker_admin/screens/admin_screens/ContactDevs.dart';
-import 'package:tracker_admin/screens/ViewMedicine.dart';
 import 'package:tracker_admin/screens/admin_screens/ViewMedicineModel.dart';
 
 class Dashboard_Admin extends StatefulWidget {

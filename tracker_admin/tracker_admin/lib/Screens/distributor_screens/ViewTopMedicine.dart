@@ -8,20 +8,20 @@ import 'package:tracker_admin/Widgets/RowInfo.dart';
 import 'package:tracker_admin/screens/MedicineInfo_WithoutBarcode.dart';
 import 'package:tracker_admin/screens/admin_screens/MedicineModelInfo.dart';
 
-class ViewMedicine extends StatefulWidget {
+class ViewTopMedicine extends StatefulWidget {
   // The name of the category opened
   final String pageName;
 
-  const ViewMedicine({
+  const ViewTopMedicine({
     Key key,
     @required this.pageName,
   }) : super(key: key);
 
   @override
-  _ViewMedicineState createState() => _ViewMedicineState();
+  _ViewTopMedicineState createState() => _ViewTopMedicineState();
 }
 
-class _ViewMedicineState extends State<ViewMedicine> {
+class _ViewTopMedicineState extends State<ViewTopMedicine> {
   double opac;
   var m;
   double height;
@@ -53,7 +53,7 @@ class _ViewMedicineState extends State<ViewMedicine> {
       setState(() {
         m = FirebaseFirestore.instance
             .collection('MedicineModel')
-            .orderBy('name')
+            .orderBy('totalSales', descending: true)
             .snapshots();
       });
     } on Exception catch (e) {

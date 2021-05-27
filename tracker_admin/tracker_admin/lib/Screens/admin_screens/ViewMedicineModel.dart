@@ -5,7 +5,7 @@ import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:tracker_admin/Widgets/RowInfo.dart';
-import 'package:tracker_admin/screens/admin_screens/MedicineInfo_WithoutBarcode.dart';
+import 'package:tracker_admin/screens/admin_screens/MedicineModelInfo.dart';
 
 class ViewMedicineModel extends StatefulWidget {
   // The name of the category opened
@@ -176,8 +176,7 @@ class _ViewMedicineModelState extends State<ViewMedicineModel> {
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(
-                                              builder: (_) =>
-                                                  MedicineInfo_WithoutBarcode(
+                                              builder: (_) => MedicineModelInfo(
                                                 name: item['name'],
                                               ),
                                             ),

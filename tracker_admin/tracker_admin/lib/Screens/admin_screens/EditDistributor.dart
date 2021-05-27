@@ -213,6 +213,7 @@ class _EditDistributorState extends State<EditDistributor> {
           "byCompany": info['companyName'],
           "image": info['image'],
           "name": name.text + ' has been edited',
+          "category": 'admin',
         });
         Fluttertoast.showToast(msg: 'Distributor updated Succesfully!');
         setState(() {

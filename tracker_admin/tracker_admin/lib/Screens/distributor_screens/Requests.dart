@@ -12,15 +12,15 @@ class Requests extends StatefulWidget {
 class _RequestsState extends State<Requests> {
   double width;
   double height;
-  var devRequestsStream;
+  var medRequestsStream;
 
   //
   //
   // FUNCTION TO GET THE REQUESTS STREAM
-  getDevRequests() async {
+  getMedRequests() async {
     try {
       setState(() {
-        devRequestsStream = FirebaseFirestore.instance
+        medRequestsStream = FirebaseFirestore.instance
             .collection('RequestsMedicine')
             .orderBy('number')
             .snapshots();
@@ -67,7 +67,7 @@ class _RequestsState extends State<Requests> {
   @override
   void initState() {
     super.initState();
-    getDevRequests();
+    getMedRequests();
   }
 
   @override
@@ -76,12 +76,18 @@ class _RequestsState extends State<Requests> {
     height = MediaQuery.of(context).size.height;
 
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         iconTheme: IconThemeData(
           color: Colors.grey[800],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: signOut,
+        backgroundColor: Colors.red[400],
+        child: Icon(Icons.logout),
       ),
       body: SingleChildScrollView(
         child: SafeArea(
@@ -105,7 +111,7 @@ class _RequestsState extends State<Requests> {
                   height: 20,
                 ),
                 StreamBuilder<QuerySnapshot>(
-                    stream: devRequestsStream,
+                    stream: medRequestsStream,
                     builder: (context, snapshot) {
                       if (snapshot.hasData == false) {
                         return Center(
@@ -123,6 +129,7 @@ class _RequestsState extends State<Requests> {
                           : ListView.builder(
                               shrinkWrap: true,
                               itemCount: snapshot.data.docs.length,
+                              physics: NeverScrollableScrollPhysics(),
                               itemBuilder: (BuildContext context, int index) {
                                 QueryDocumentSnapshot item =
                                     snapshot.data.docs[index];
@@ -139,7 +146,7 @@ class _RequestsState extends State<Requests> {
                                     ),
                                     child: Padding(
                                       padding: const EdgeInsets.symmetric(
-                                        vertical: 20.0,
+                                        vertical: 15.0,
                                         horizontal: 15,
                                       ),
                                       child: Column(
@@ -182,13 +189,6 @@ class _RequestsState extends State<Requests> {
                                                       ),
                                                     ),
                                                     Text(
-                                                      'Number: ${item['cellNoOfUser']}',
-                                                      style: TextStyle(
-                                                        color: Colors.grey[600],
-                                                        fontSize: width / 28,
-                                                      ),
-                                                    ),
-                                                    Text(
                                                       'Location: ${item['locationOfUser']}',
                                                       style: TextStyle(
                                                         color: Colors.grey[600],
@@ -196,14 +196,31 @@ class _RequestsState extends State<Requests> {
                                                       ),
                                                     ),
                                                     Text(
-                                                      'Medicine: ${item['nameOfMedicine']}',
+                                                      'Cell Phone Number: ${item['cellNoOfUser']}',
+                                                      style: TextStyle(
+                                                        color: Colors.grey[600],
+                                                        fontSize: width / 28,
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      height: 10,
+                                                    ),
+                                                    Text(
+                                                      'Medicine Name: ${item['nameOfMedicine']}',
                                                       style: TextStyle(
                                                         color: Colors.grey[600],
                                                         fontSize: width / 28,
                                                       ),
                                                     ),
                                                     Text(
-                                                      'Company: ${item['companyName']}',
+                                                      'Medicine Barcode: ${item['barcode']}',
+                                                      style: TextStyle(
+                                                        color: Colors.grey[600],
+                                                        fontSize: width / 28,
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      'Medicine Company: ${item['companyName']}',
                                                       style: TextStyle(
                                                         color: Colors.grey[600],
                                                         fontSize: width / 28,
@@ -243,38 +260,6 @@ class _RequestsState extends State<Requests> {
                               },
                             );
                     }),
-                //
-                //
-                // divider
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 50),
-                  child: Divider(
-                    thickness: 2,
-                    color: Colors.red,
-                  ),
-                ),
-                //
-                //
-                // logout button
-                TextButton(
-                  style: ButtonStyle(
-                    overlayColor: MaterialStateProperty.all<Color>(
-                      Colors.red.withOpacity(0.1),
-                    ),
-                  ),
-                  child: Center(
-                    child: Text(
-                      'Logout',
-                      style: TextStyle(
-                        color: Colors.red,
-                        fontSize: width / 18,
-                      ),
-                    ),
-                  ),
-                  onPressed: () {
-                    signOut();
-                  },
-                ),
               ],
             ),
           ),

@@ -8,21 +8,19 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:tracker_admin/screens/admin_screens/EditMedicineModel.dart';
 
-class MedicineInfo_WithoutBarcode extends StatefulWidget {
+class MedicineModelInfo extends StatefulWidget {
   final String name;
 
-  MedicineInfo_WithoutBarcode({
+  MedicineModelInfo({
     Key key,
     this.name,
   }) : super(key: key);
 
   @override
-  _MedicineInfo_WithoutBarcodeState createState() =>
-      _MedicineInfo_WithoutBarcodeState();
+  _MedicineModelInfoState createState() => _MedicineModelInfoState();
 }
 
-class _MedicineInfo_WithoutBarcodeState
-    extends State<MedicineInfo_WithoutBarcode> {
+class _MedicineModelInfoState extends State<MedicineModelInfo> {
   double width;
   double height;
   double safePadding;
@@ -68,7 +66,7 @@ class _MedicineInfo_WithoutBarcodeState
   //
   //
   // gets the firebase data of that particular medicine
-  getMedicineInfo_WithoutBarcode() async {
+  getMedicineModelInfo() async {
     try {
       StreamSubscription<DocumentSnapshot> stream = await FirebaseFirestore
           .instance
@@ -98,7 +96,7 @@ class _MedicineInfo_WithoutBarcodeState
     index = 0;
     index2 = 0;
     numberOfImagesIndex = [];
-    getMedicineInfo_WithoutBarcode();
+    getMedicineModelInfo();
 
     Future.delayed(Duration(milliseconds: 1000), () {
       setState(() {

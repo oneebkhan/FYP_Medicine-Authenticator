@@ -284,6 +284,7 @@ class _EditMedicineModelState extends State<EditMedicineModel> {
           "byCompany": info['companyName'],
           "image": info['image'],
           "name": medName.text + ' model was edited',
+          "category": 'admin',
         });
         Fluttertoast.showToast(msg: 'Medicine Model edited Succesfully!');
         setState(() {

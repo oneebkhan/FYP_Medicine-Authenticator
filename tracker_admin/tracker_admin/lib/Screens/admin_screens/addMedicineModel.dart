@@ -10,6 +10,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:tracker_admin/screens/admin_screens/AddDistributor.dart';
 
 // ignore: must_be_immutable
 class AddMedicineModel extends StatefulWidget {
@@ -189,6 +190,7 @@ class _AddMedicineModelState extends State<AddMedicineModel> {
           "byCompany": info['companyName'],
           "image": info['image'],
           "name": 'Addition of ' + medName.text + ' model',
+          "category": 'admin',
         });
         Fluttertoast.showToast(msg: 'Medicine Model created Succesfully!');
         setState(() {
@@ -619,133 +621,6 @@ class _AddMedicineModelState extends State<AddMedicineModel> {
             ),
           ),
         ),
-      ),
-    );
-  }
-}
-
-class ContainerText extends StatefulWidget {
-  final TextEditingController controller;
-  final String hint;
-  final node;
-  final bool hide;
-  final int maxLength;
-  final int maxLines;
-  final TextInputType inputType;
-  final double width;
-  final double height;
-  final bool enabled;
-
-  const ContainerText({
-    Key key,
-    this.controller,
-    this.hint,
-    this.node,
-    this.hide,
-    this.maxLength,
-    this.maxLines,
-    this.inputType,
-    this.width,
-    this.height,
-    this.enabled,
-  });
-
-  @override
-  _ContainerTextState createState() => _ContainerTextState();
-}
-
-class _ContainerTextState extends State<ContainerText> {
-  bool show;
-
-  //
-  //
-  // function to toggle visibility if password
-  passwordVisibility() {
-    if (widget.hide == true) {
-      setState(() {
-        show = false;
-      });
-    } else {
-      setState(() {
-        show = true;
-      });
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    passwordVisibility();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: widget.height,
-      width: widget.width,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15),
-        color: Colors.grey[200],
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Expanded(
-            flex: 5,
-            child: TextField(
-              enabled: widget.enabled,
-              keyboardType: widget.inputType,
-              // hides the text if password
-              obscureText: show == false ? true : false,
-              controller: widget.controller,
-              textInputAction: TextInputAction.next,
-              maxLength: widget.maxLength,
-              maxLines: widget.maxLines == null ? 1 : widget.maxLines,
-              onEditingComplete: () => widget.node.nextFocus(),
-              style: TextStyle(
-                  color: widget.enabled == false ? Colors.grey[600] : null),
-              decoration: InputDecoration(
-                fillColor: Colors.transparent,
-                counterText: '',
-                hintText: widget.hint,
-                filled: true,
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                  borderSide: BorderSide(
-                    color: Colors.transparent,
-                  ),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                  borderSide: BorderSide(
-                    color: Colors.transparent,
-                  ),
-                ),
-              ),
-            ),
-          ),
-          // shows a visibility button if password
-          widget.hide != null
-              ? Expanded(
-                  flex: 1,
-                  child: IconButton(
-                    icon: Icon(show == false
-                        ? Icons.visibility
-                        : Icons.visibility_off),
-                    onPressed: () {
-                      setState(() {
-                        if (show == false) {
-                          show = true;
-                        } else
-                          show = false;
-                      });
-                    },
-                  ),
-                )
-              : Container(),
-        ],
       ),
     );
   }
