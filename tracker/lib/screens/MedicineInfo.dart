@@ -252,7 +252,7 @@ class _MedicineInfoState extends State<MedicineInfo> {
                                       //
                                       //
                                       // The Green tick for medicine authentication
-                                      med1['sold'] == null
+                                      med1['sold'].toString() == ''
                                           ? Container()
                                           : Container(
                                               child: Icon(
@@ -545,7 +545,7 @@ class _MedicineInfoState extends State<MedicineInfo> {
                                       height: width / 3.1,
                                       width: width / 2.26,
                                       decoration: BoxDecoration(
-                                        color: med1['sold'] == null
+                                        color: med1['sold'].toString() == ''
                                             ? Color.fromARGB(255, 235, 60, 10)
                                             : Color.fromARGB(
                                                 255, 104, 204, 127),
@@ -563,7 +563,7 @@ class _MedicineInfoState extends State<MedicineInfo> {
                                               MainAxisAlignment.center,
                                           children: [
                                             Icon(
-                                              med1['sold'] == null
+                                              med1['sold'].toString() == ''
                                                   ? Icons.close
                                                   : Icons.check,
                                               color: Colors.white,
@@ -573,7 +573,7 @@ class _MedicineInfoState extends State<MedicineInfo> {
                                               height: 5,
                                             ),
                                             Text(
-                                              med1['sold'] == null
+                                              med1['sold'].toString() == ''
                                                   ? 'Medicine has not been Authenticated'
                                                   : 'Medicine is Authentic',
                                               style: TextStyle(
@@ -1103,10 +1103,54 @@ class _MedicineInfoState extends State<MedicineInfo> {
                                         height: 5,
                                       ),
                                       Text(
-                                        DateFormat.yMMMd()
-                                            .add_jm()
-                                            .format(med1['sold'].toDate())
-                                            .toString(),
+                                        med1['sold'].toString() == ''
+                                            ? 'Not sold yet'
+                                            : DateFormat.yMMMd()
+                                                .add_jm()
+                                                .format(med1['sold'].toDate())
+                                                .toString(),
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: width / 30,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              //
+                              //
+                              // the side effects of the medicine
+                              Container(
+                                width: width,
+                                decoration: BoxDecoration(
+                                  color: Color.fromARGB(255, 50, 50, 50),
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(20),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Sold At',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                          fontSize: width / 20,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      Text(
+                                        med1['soldAt'].toString() == ''
+                                            ? 'Not sold yet'
+                                            : med1['soldAt'],
                                         style: TextStyle(
                                           color: Colors.white,
                                           fontSize: width / 30,
