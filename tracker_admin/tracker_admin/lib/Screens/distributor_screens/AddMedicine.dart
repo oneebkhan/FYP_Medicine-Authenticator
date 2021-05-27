@@ -30,7 +30,6 @@ class _AddMedicineState extends State<AddMedicine> {
   double width;
   double height;
   double safePadding;
-  TextEditingController medName = TextEditingController();
   TextEditingController gtin = TextEditingController();
   TextEditingController barcode = TextEditingController();
   TextEditingController batchNumber = TextEditingController();
@@ -88,8 +87,8 @@ class _AddMedicineState extends State<AddMedicine> {
     try {
       // ignore: await_only_futures
       var firestore = await FirebaseFirestore.instance;
-      firestore.collection("Medicine").doc(medName.text).set({
-        "name": medName.text,
+      firestore.collection("Medicine").doc(barcode.text).set({
+        "name": widget.medName,
         "GTIN": gtin.text,
         "barcode": barcode.text,
         "batchNumber": batchNumber.text,
@@ -110,8 +109,8 @@ class _AddMedicineState extends State<AddMedicine> {
           "by": info['email'],
           "byCompany": info['companyName'],
           "image": info['image'],
-          "name": 'Addition of ' + medName.text + ' model',
-          "category": 'Distributor',
+          "name": 'Addition of ' + barcode.text + ' as ${widget.medName}',
+          "category": 'distributor',
         });
         Fluttertoast.showToast(msg: 'Medicine Model created Succesfully!');
         setState(() {
@@ -128,9 +127,12 @@ class _AddMedicineState extends State<AddMedicine> {
   }
 
   checkForMed() async {
+    setState(() {
+      _isLoading = true;
+    });
     var fire = await FirebaseFirestore.instance
         .collection('Medicine')
-        .doc(medName.text)
+        .doc(barcode.text)
         .get()
         .then((value) {
       if (value.data().toString() == 'null') {
@@ -139,6 +141,9 @@ class _AddMedicineState extends State<AddMedicine> {
       } else {
         Fluttertoast.showToast(
             msg: 'Medicine with same barcode already present!');
+        setState(() {
+          _isLoading = false;
+        });
         return null;
       }
     });
@@ -209,6 +214,11 @@ class _AddMedicineState extends State<AddMedicine> {
           }
         },
         child: Scaffold(
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              print(widget.medName);
+            },
+          ),
           extendBodyBehindAppBar: true,
           backgroundColor: Color.fromARGB(255, 246, 246, 248),
           appBar: AppBar(
@@ -264,7 +274,6 @@ class _AddMedicineState extends State<AddMedicine> {
                                 enabled: false,
                                 node: node,
                                 hint: widget.medName,
-                                controller: medName,
                                 maxLength: 30,
                               ),
                               SizedBox(
@@ -492,8 +501,7 @@ class _AddMedicineState extends State<AddMedicine> {
                         if (con == true) {
                           Fluttertoast.showToast(
                               msg: 'No internet connection!');
-                        } else if (medName.text.isEmpty ||
-                            bacthStatus.text.isEmpty ||
+                        } else if (bacthStatus.text.isEmpty ||
                             barcode.text.isEmpty ||
                             batchNumber.text.isEmpty ||
                             expiryDateTime == productionDateTime ||

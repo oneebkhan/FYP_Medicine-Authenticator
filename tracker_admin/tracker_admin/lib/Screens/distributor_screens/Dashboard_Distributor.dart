@@ -16,7 +16,7 @@ import 'package:tracker_admin/screens/Clinic/ViewClinic.dart';
 import 'package:tracker_admin/screens/MedicineInfo.dart';
 import 'package:tracker_admin/screens/MedicineInfo_WithoutBarcode.dart';
 import 'package:tracker_admin/screens/Pharmacy/ViewPharmacy.dart';
-import 'package:tracker_admin/screens/Search.dart';
+import 'package:tracker_admin/screens/distributor_screens/MedicineSearch_Distributor.dart';
 import 'package:tracker_admin/screens/StartingPage.dart';
 import 'package:tracker_admin/screens/admin_screens/History.dart';
 import 'package:tracker_admin/screens/admin_screens/MedicineModelInfo.dart';
@@ -627,7 +627,7 @@ class _DistributorDashboardState extends State<DistributorDashboard> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (_) => Search(),
+                                builder: (_) => MedicineSearch_Distributor(),
                               ),
                             );
                           },
@@ -1099,7 +1099,7 @@ class _DistributorStatisticsState extends State<DistributorStatistics> {
             .collection('History')
             .where('category', whereIn: ['distributor', 'pharmacist'])
             .where('byCompany', isEqualTo: widget.distCompName)
-            .orderBy('timestamp', descending: false)
+            .orderBy('timestamp', descending: true)
             .limit(5)
             .snapshots();
       });

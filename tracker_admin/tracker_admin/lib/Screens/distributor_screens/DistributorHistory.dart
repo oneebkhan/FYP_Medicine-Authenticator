@@ -30,7 +30,7 @@ class _DistributorHistoryState extends State<DistributorHistory> {
             .collection('History')
             .where('category', whereIn: ['distributor', 'pharmacist'])
             .where('byCompany', isEqualTo: widget.compName)
-            .orderBy('timestamp', descending: false)
+            .orderBy('timestamp', descending: true)
             .snapshots();
       });
     } on Exception catch (e) {

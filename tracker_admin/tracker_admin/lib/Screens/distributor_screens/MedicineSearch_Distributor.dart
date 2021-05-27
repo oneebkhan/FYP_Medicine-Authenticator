@@ -8,14 +8,16 @@ import 'package:tracker_admin/screens/MedicineInfo_WithoutBarcode.dart';
 import 'package:tracker_admin/screens/admin_screens/MedicineModelInfo.dart';
 import 'package:tracker_admin/screens/admin_screens/AddDistributor.dart';
 
-class Search extends StatefulWidget {
-  Search({Key key}) : super(key: key);
+class MedicineSearch_Distributor extends StatefulWidget {
+  MedicineSearch_Distributor({Key key}) : super(key: key);
 
   @override
-  _SearchState createState() => _SearchState();
+  _MedicineSearch_DistributorState createState() =>
+      _MedicineSearch_DistributorState();
 }
 
-class _SearchState extends State<Search> {
+class _MedicineSearch_DistributorState
+    extends State<MedicineSearch_Distributor> {
   double opac;
   double height;
   bool isSearched;
@@ -96,11 +98,11 @@ class _SearchState extends State<Search> {
                         ),
                         child: ToggleButtons(
                           fillColor: Colors.white,
-                          highlightColor: Color.fromARGB(255, 170, 200, 240),
-                          splashColor: Color.fromARGB(255, 170, 200, 240),
+                          highlightColor: Color.fromARGB(255, 148, 210, 146),
+                          splashColor: Color.fromARGB(255, 148, 210, 146),
                           borderRadius: BorderRadius.circular(10),
                           focusColor: Colors.white,
-                          selectedColor: Color.fromARGB(255, 170, 200, 240),
+                          selectedColor: Color.fromARGB(255, 148, 210, 146),
                           onPressed: (int index) {
                             if (index == 0) {
                               setState(() {
@@ -399,7 +401,7 @@ class _BarcodeResults extends StatefulWidget {
 
 class __BarcodeResults extends State<_BarcodeResults> {
   bool con;
-  var snap;
+  var medicineStream;
   bool isLoading;
   bool isSearched;
   var node;
@@ -409,7 +411,7 @@ class __BarcodeResults extends State<_BarcodeResults> {
   String imageURL;
   String location;
   String title;
-  var stream;
+  var medicineModelStream;
 
   //
   //
@@ -432,22 +434,26 @@ class __BarcodeResults extends State<_BarcodeResults> {
   // get medicine data
   Future queryData(String queryString) async {
     setState(() {
-      snap = FirebaseFirestore.instance.collection('Medicine').snapshots();
+      medicineStream = FirebaseFirestore.instance
+          .collection('Medicine')
+          .where('barcode', isEqualTo: queryString)
+          .orderBy('name')
+          .limit(1)
+          .snapshots();
     });
   }
 
   //
   //
   //get dose and image values
-  Future getMedicineModel(String query) async {
-    stream = await FirebaseFirestore.instance
+  Future getMedicineModel(String name) async {
+    var p = FirebaseFirestore.instance
         .collection('MedicineModel')
-        .doc(query)
-        .snapshots()
-        .listen((value) {
+        .doc(name)
+        .get()
+        .then((value) {
       setState(() {
-        imageURL = value.data()['imageURL'][0];
-        location = value.data()['dose'];
+        medicineModelStream = value.data();
       });
     });
   }
@@ -562,11 +568,12 @@ class __BarcodeResults extends State<_BarcodeResults> {
                             ),
                           ),
                         )
-                      : StreamBuilder<QuerySnapshot>(
-                          stream: snap,
-                          builder:
-                              (BuildContext context, AsyncSnapshot snapshot) {
-                            if (snapshot.hasData == false) {
+                      : StreamBuilder(
+                          //barcode
+                          stream: medicineStream,
+                          builder: (BuildContext context,
+                              AsyncSnapshot medicineSnapshot) {
+                            if (medicineSnapshot.hasData == false) {
                               return Center(
                                 child: CircularProgressIndicator(),
                               );
@@ -574,29 +581,38 @@ class __BarcodeResults extends State<_BarcodeResults> {
                             return ListView.builder(
                                 physics: NeverScrollableScrollPhysics(),
                                 shrinkWrap: true,
-                                itemCount: 1, //snapshotData.docs.length,
+                                itemCount: medicineSnapshot.data.docs
+                                    .length, //snapshotData.docs.length,
                                 itemBuilder: (BuildContext context, int index) {
-                                  QueryDocumentSnapshot item =
-                                      snapshot.data.docs[index];
-                                  if (item['barcode']
-                                      .toString()
-                                      .toLowerCase()
-                                      .contains(hello.toLowerCase())) {
-                                    getMedicineModel(item['name']);
+                                  QueryDocumentSnapshot medicineSnap =
+                                      medicineSnapshot.data.docs[index];
+
+                                  if (medicineSnap['barcode']
+                                          .toString()
+                                          .toLowerCase()
+                                          .allMatches(hello.toLowerCase()) !=
+                                      null) {
+                                    getMedicineModel(medicineSnap['name']);
+                                    if (medicineModelStream == null) {
+                                      return CircularProgressIndicator();
+                                    }
                                     return RowInfo(
-                                      imageURL: imageURL == null
+                                      imageURL: medicineModelStream['imageURL']
+                                                  [0] ==
+                                              null
                                           ? 'https://i0.wp.com/www.cssscript.com/wp-content/uploads/2015/11/ispinner.jpg?fit=400%2C298&ssl=1'
-                                          : imageURL,
-                                      location: location,
+                                          : medicineModelStream['imageURL'][0],
+                                      location: medicineModelStream['dose'],
                                       width: widget.width,
-                                      title: item['name'],
+                                      title: medicineSnap['name'],
                                       func: () {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
                                             builder: (_) => MedicineInfo(
-                                              medBarcode: item['barcode'],
-                                              medName: item['name'],
+                                              medBarcode:
+                                                  medicineSnap['barcode'],
+                                              medName: medicineSnap['name'],
                                             ),
                                           ),
                                         );
