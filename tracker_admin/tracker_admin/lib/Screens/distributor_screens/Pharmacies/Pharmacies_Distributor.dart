@@ -1,33 +1,41 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity/connectivity.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:tracker_admin/Widgets/InfoContainer.dart';
 import 'package:tracker_admin/Widgets/RowInfo.dart';
-import 'package:tracker_admin/screens/Clinic/ViewClinic.dart';
+
 import 'dart:math' as math;
 
 import 'package:tracker_admin/screens/Pharmacy_Clinics_Info.dart';
+import 'package:tracker_admin/screens/admin_screens/Pharmacy/ViewPharmacy.dart';
+import 'package:tracker_admin/screens/distributor_screens/Pharmacy_Clinics_Info_Distributor.dart';
 
-class Clinics extends StatefulWidget {
+class Pharmacies_Distributor extends StatefulWidget {
   @override
-  _ClinicsState createState() => _ClinicsState();
+  _Pharmacies_DistributorState createState() => _Pharmacies_DistributorState();
 }
 
-class _ClinicsState extends State<Clinics> {
+class _Pharmacies_DistributorState extends State<Pharmacies_Distributor> {
   double width;
   double height;
   double opac;
   double opac2;
   // Variable that stores the distributors
   var distributorStream;
-  var clinicStream;
+  var pharmaciesStream;
   // variable to store urls in the
   List<String> imageURL;
   // connectivity of the application
   bool con;
   List<bool> selection;
   int selectedIndex;
+  List<String> pharmacyImages;
+
+  //
+  //
+  // get pharmacy images
 
   //
   //
@@ -56,11 +64,11 @@ class _ClinicsState extends State<Clinics> {
     }
   }
 
-  getClinics() async {
+  getPharmacies_Distributor() async {
     try {
       setState(() {
-        clinicStream = FirebaseFirestore.instance
-            .collection('Clinic')
+        pharmaciesStream = FirebaseFirestore.instance
+            .collection('Pharmacy')
             .orderBy('name')
             .snapshots();
       });
@@ -77,7 +85,7 @@ class _ClinicsState extends State<Clinics> {
       setState(() {
         distributorStream = FirebaseFirestore.instance
             .collection('Distributor')
-            .where('clinicsAdded', isNotEqualTo: []).snapshots();
+            .where('pharmacyAdded', isNotEqualTo: []).snapshots();
       });
     } on Exception catch (e) {
       print(e);
@@ -92,7 +100,7 @@ class _ClinicsState extends State<Clinics> {
     opac2 = 0;
     imageURL = [];
     selectedIndex = 1;
-    getClinics();
+    getPharmacies_Distributor();
     getDistributors();
     checkInternet();
 
@@ -134,14 +142,14 @@ class _ClinicsState extends State<Clinics> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Clinics',
+                      'Pharmacies',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: width / 14,
                       ),
                     ),
                     SizedBox(
-                      width: width / 3.8,
+                      width: width / 10,
                     ),
                     Text(
                       'View:',
@@ -166,7 +174,7 @@ class _ClinicsState extends State<Clinics> {
                             setState(() {
                               selection[0] = true;
                               selection[1] = false;
-                              //change to all clinics
+                              //change to all Pharmacies_Distributor
                               selectedIndex = 0;
                               opac2 = 1;
                               opac = 0;
@@ -177,13 +185,13 @@ class _ClinicsState extends State<Clinics> {
                             setState(() {
                               selection[1] = true;
                               selection[0] = false;
-                              //change to distributor clinics
+                              //change to distributor Pharmacies_Distributor
                               selectedIndex = 1;
 
                               opac2 = 0;
                               opac = 1;
                             });
-                            Fluttertoast.showToast(msg: 'All Clinics');
+                            Fluttertoast.showToast(msg: 'All Pharmacies');
                           }
                         },
                         constraints: BoxConstraints(
@@ -260,24 +268,24 @@ class _ClinicsState extends State<Clinics> {
                                               .toInt())
                                           .withOpacity(1.0),
                                       description:
-                                          '${item['clinicsAdded'].length} Clinics',
+                                          '${item['pharmacyAdded'].length} Pharmacies',
                                       func: () {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (_) => ViewClinic(
+                                            builder: (_) => ViewPharmacy(
                                               pageName: item['name'],
-                                              clinics: item['clinicsAdded'],
+                                              pharmacies: item['pharmacyAdded'],
                                             ),
                                           ),
                                         );
                                       },
-                                      imageUrls: item['clinicImages'],
+
                                       title: item['name'],
                                       width: width,
                                       height: height,
                                       countOfImages:
-                                          item['clinicImages'].length,
+                                          item['pharmacyAdded'].length,
                                     );
                                   },
                                 );
@@ -320,7 +328,7 @@ class _ClinicsState extends State<Clinics> {
                                   top: 10,
                                 ),
                                 child: StreamBuilder<QuerySnapshot>(
-                                    stream: clinicStream,
+                                    stream: pharmaciesStream,
                                     builder: (context, snapshot) {
                                       if (snapshot.hasData == false) {
                                         return Center(
@@ -345,9 +353,9 @@ class _ClinicsState extends State<Clinics> {
                                                 context,
                                                 MaterialPageRoute(
                                                   builder: (_) =>
-                                                      Pharmacy_Clinics_Info(
+                                                      Pharmacy_Clinics_Info_Distributor(
                                                     name: item['uid'],
-                                                    pharmOrClinic: 'Clinic',
+                                                    pharmOrClinic: 'Pharmacy',
                                                   ),
                                                 ),
                                               );

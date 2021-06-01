@@ -4,24 +4,24 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:tracker_admin/Widgets/InfoContainer.dart';
 import 'package:tracker_admin/Widgets/RowInfo.dart';
-import 'package:tracker_admin/screens/Pharmacy/ViewPharmacy.dart';
 import 'dart:math' as math;
 
 import 'package:tracker_admin/screens/Pharmacy_Clinics_Info.dart';
+import 'package:tracker_admin/screens/admin_screens/Clinic/ViewClinic.dart';
 
-class Pharmacies extends StatefulWidget {
+class Clinics extends StatefulWidget {
   @override
-  _PharmaciesState createState() => _PharmaciesState();
+  _ClinicsState createState() => _ClinicsState();
 }
 
-class _PharmaciesState extends State<Pharmacies> {
+class _ClinicsState extends State<Clinics> {
   double width;
   double height;
   double opac;
   double opac2;
   // Variable that stores the distributors
   var distributorStream;
-  var pharmaciesStream;
+  var clinicStream;
   // variable to store urls in the
   List<String> imageURL;
   // connectivity of the application
@@ -56,11 +56,11 @@ class _PharmaciesState extends State<Pharmacies> {
     }
   }
 
-  getPharmacies() async {
+  getClinics() async {
     try {
       setState(() {
-        pharmaciesStream = FirebaseFirestore.instance
-            .collection('Pharmacy')
+        clinicStream = FirebaseFirestore.instance
+            .collection('Clinic')
             .orderBy('name')
             .snapshots();
       });
@@ -77,7 +77,7 @@ class _PharmaciesState extends State<Pharmacies> {
       setState(() {
         distributorStream = FirebaseFirestore.instance
             .collection('Distributor')
-            .where('pharmacyAdded', isNotEqualTo: []).snapshots();
+            .where('clinicsAdded', isNotEqualTo: []).snapshots();
       });
     } on Exception catch (e) {
       print(e);
@@ -92,7 +92,7 @@ class _PharmaciesState extends State<Pharmacies> {
     opac2 = 0;
     imageURL = [];
     selectedIndex = 1;
-    getPharmacies();
+    getClinics();
     getDistributors();
     checkInternet();
 
@@ -134,14 +134,14 @@ class _PharmaciesState extends State<Pharmacies> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Pharmacies',
+                      'Clinics',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: width / 14,
                       ),
                     ),
                     SizedBox(
-                      width: width / 10,
+                      width: width / 3.8,
                     ),
                     Text(
                       'View:',
@@ -166,7 +166,7 @@ class _PharmaciesState extends State<Pharmacies> {
                             setState(() {
                               selection[0] = true;
                               selection[1] = false;
-                              //change to all Pharmacies
+                              //change to all clinics
                               selectedIndex = 0;
                               opac2 = 1;
                               opac = 0;
@@ -177,13 +177,13 @@ class _PharmaciesState extends State<Pharmacies> {
                             setState(() {
                               selection[1] = true;
                               selection[0] = false;
-                              //change to distributor Pharmacies
+                              //change to distributor clinics
                               selectedIndex = 1;
 
                               opac2 = 0;
                               opac = 1;
                             });
-                            Fluttertoast.showToast(msg: 'All Pharmacies');
+                            Fluttertoast.showToast(msg: 'All Clinics');
                           }
                         },
                         constraints: BoxConstraints(
@@ -260,24 +260,24 @@ class _PharmaciesState extends State<Pharmacies> {
                                               .toInt())
                                           .withOpacity(1.0),
                                       description:
-                                          '${item['pharmacyAdded'].length} Pharmacies',
+                                          '${item['clinicsAdded'].length} Clinics',
                                       func: () {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (_) => ViewPharmacy(
+                                            builder: (_) => ViewClinic(
                                               pageName: item['name'],
-                                              pharmacies: item['pharmacyAdded'],
+                                              clinics: item['clinicsAdded'],
                                             ),
                                           ),
                                         );
                                       },
-                                      imageUrls: item['pharmacyImages'],
+
                                       title: item['name'],
                                       width: width,
                                       height: height,
                                       countOfImages:
-                                          item['pharmacyImages'].length,
+                                          item['clinicsAdded'].length,
                                     );
                                   },
                                 );
@@ -320,7 +320,7 @@ class _PharmaciesState extends State<Pharmacies> {
                                   top: 10,
                                 ),
                                 child: StreamBuilder<QuerySnapshot>(
-                                    stream: pharmaciesStream,
+                                    stream: clinicStream,
                                     builder: (context, snapshot) {
                                       if (snapshot.hasData == false) {
                                         return Center(
@@ -347,7 +347,7 @@ class _PharmaciesState extends State<Pharmacies> {
                                                   builder: (_) =>
                                                       Pharmacy_Clinics_Info(
                                                     name: item['uid'],
-                                                    pharmOrClinic: 'Pharmacy',
+                                                    pharmOrClinic: 'Clinic',
                                                   ),
                                                 ),
                                               );

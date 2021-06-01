@@ -7,7 +7,6 @@ class InfoContainer extends StatefulWidget {
   final Color color;
   final String title;
   final String description;
-  final List imageUrls;
   final Function func;
   final int countOfImages;
 
@@ -17,7 +16,6 @@ class InfoContainer extends StatefulWidget {
     @required this.color,
     @required this.title,
     @required this.description,
-    @required this.imageUrls,
     @required this.func,
     @required this.countOfImages,
   });
@@ -82,7 +80,7 @@ class _InfoContainerState extends State<InfoContainer> {
                                 ),
                               ),
                               SizedBox(
-                                height: 3,
+                                height: 5,
                               ),
                               Text(
                                 widget.description,
@@ -90,55 +88,6 @@ class _InfoContainerState extends State<InfoContainer> {
                                   fontSize: widget.width / 28,
                                   fontWeight: FontWeight.w300,
                                 ),
-                              ),
-                              SizedBox(
-                                height: 20,
-                              ),
-                              Row(
-                                children: [
-                                  Container(
-                                    height: widget.width / 9,
-                                    width: widget.width / 1.5,
-                                    child: ListView.builder(
-                                      //itemExtent: 4,
-                                      physics: NeverScrollableScrollPhysics(),
-                                      shrinkWrap: true,
-                                      scrollDirection: Axis.horizontal,
-                                      itemCount: widget.countOfImages > 4
-                                          ? 4
-                                          : widget.countOfImages,
-                                      itemBuilder:
-                                          (BuildContext context, int index) {
-                                        return CachedNetworkImage(
-                                          imageUrl:
-                                              // the 4th image URL
-                                              widget.imageUrls[index]
-                                                  .toString(),
-                                          imageBuilder:
-                                              (context, imageProvider) =>
-                                                  Container(
-                                            width: widget.width / 9,
-                                            height: widget.width / 9,
-                                            decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              image: DecorationImage(
-                                                image: imageProvider,
-                                                fit: BoxFit.cover,
-                                              ),
-                                            ),
-                                          ),
-                                          placeholder: (context, url) =>
-                                              CircularProgressIndicator(),
-                                          errorWidget: (context, url, error) =>
-                                              Icon(Icons.error),
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 10,
                               ),
                             ],
                           ),
@@ -164,7 +113,7 @@ class _InfoContainerState extends State<InfoContainer> {
               borderRadius: BorderRadius.circular(15),
               child: Ink(
                 width: widget.width,
-                height: widget.width / 2.6,
+                height: widget.width / 4,
               ),
               onTap: widget.func,
             ),

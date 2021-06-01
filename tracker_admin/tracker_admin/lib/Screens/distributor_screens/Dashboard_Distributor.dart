@@ -12,16 +12,13 @@ import 'package:tracker_admin/Widgets/Distributor/BarChartWeekly_Distributor.dar
 import 'package:tracker_admin/Widgets/PopupCard.dart';
 import 'package:tracker_admin/Widgets/RowInfo.dart';
 import 'package:tracker_admin/configs/HeroDialogRoute.dart';
-import 'package:tracker_admin/screens/Clinic/ViewClinic.dart';
-import 'package:tracker_admin/screens/MedicineInfo.dart';
 import 'package:tracker_admin/screens/MedicineInfo_WithoutBarcode.dart';
-import 'package:tracker_admin/screens/Pharmacy/ViewPharmacy.dart';
+import 'package:tracker_admin/screens/distributor_screens/AddPharmacy.dart';
+import 'package:tracker_admin/screens/distributor_screens/Clinics/Clinics_Distributor.dart';
 import 'package:tracker_admin/screens/distributor_screens/MedicineSearch_Distributor.dart';
 import 'package:tracker_admin/screens/StartingPage.dart';
-import 'package:tracker_admin/screens/admin_screens/History.dart';
-import 'package:tracker_admin/screens/admin_screens/MedicineModelInfo.dart';
-import 'package:tracker_admin/screens/distributor_screens/AddMedicine.dart';
 import 'package:tracker_admin/screens/distributor_screens/DistributorHistory.dart';
+import 'package:tracker_admin/screens/distributor_screens/Pharmacies/Pharmacies_Distributor.dart';
 import 'package:tracker_admin/screens/distributor_screens/Requests.dart';
 import 'package:tracker_admin/screens/ViewMedicine.dart';
 import 'package:tracker_admin/screens/distributor_screens/SelectMedicineModel.dart';
@@ -770,7 +767,7 @@ class _DistributorDashboardState extends State<DistributorDashboard> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (_) => ViewClinic(),
+                                  builder: (_) => Clinics_Distributors(),
                                 ),
                               );
                             },
@@ -796,7 +793,9 @@ class _DistributorDashboardState extends State<DistributorDashboard> {
                         //
                         // The second ADD CLINICS Button
                         GestureDetector(
-                          onTap: () {},
+                          onTap: () {
+                            
+                          },
                           child: Container(
                             child: Padding(
                               padding: const EdgeInsets.symmetric(
@@ -822,7 +821,7 @@ class _DistributorDashboardState extends State<DistributorDashboard> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (_) => ViewPharmacy(),
+                                builder: (_) => Pharmacies_Distributor(),
                               ),
                             );
                           },
@@ -844,7 +843,14 @@ class _DistributorDashboardState extends State<DistributorDashboard> {
                           ),
                         ),
                         GestureDetector(
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => AddPharmacy(),
+                              ),
+                            );
+                          },
                           child: Container(
                             child: Padding(
                               padding: const EdgeInsets.symmetric(
