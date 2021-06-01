@@ -2,9 +2,12 @@ import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:lottie/lottie.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 // ignore: camel_case_types
@@ -42,6 +45,7 @@ class _Pharmacy_Clinics_Info_DistributorState
   var info;
   List<Widget> numberOfImagesIndex;
   List pharmaciesAdded;
+  var distributorInfo;
 
   //
   //
@@ -93,6 +97,9 @@ class _Pharmacy_Clinics_Info_DistributorState
     }
   }
 
+  //
+  //
+  // Gets the current pharmacies added by the distributor
   getDistributorPharmacies() async {
     await FirebaseFirestore.instance
         .collection('Distributor')
@@ -105,13 +112,93 @@ class _Pharmacy_Clinics_Info_DistributorState
     });
   }
 
-  deletePharmaciesFromDistributorAndPharmacyCollection() async{
-    
+  //
+  //
+  // Gets the distributor info of the distributor that is currently logged in
+  getDistributor() async {
+    await FirebaseFirestore.instance
+        .collection('Distributor')
+        .doc(FirebaseAuth.instance.currentUser.email)
+        .get()
+        .then((value) {
+      setState(() {
+        distributorInfo = value.data();
+      });
+    });
+  }
+
+  //
+  //
+  //Deletes the pharmacy doc
+  deletePharmaciesFromDistributorAndPharmacyCollection() async {
+    setState(() {
+      pharmaciesAdded.remove(info['uid']);
+    });
+    return FirebaseFirestore.instance
+        .collection("Distributor")
+        .doc(info['addedBy'])
+        .update({
+      "pharmacyAdded": pharmaciesAdded,
+    }).then((value) {
+      FirebaseFirestore.instance
+          .collection('Pharmacy')
+          .doc(info['uid'])
+          .delete()
+          .catchError((error) => print("Failed to delete user: $error"))
+          .then((value) {
+        Navigator.pop(context);
+      });
+    });
+  }
+
+  //
+  //
+  // Updates the history document
+  updateHistory() async {
+    await FirebaseFirestore.instance
+        .collection("History")
+        .doc(DateTime.now().toString())
+        .set({
+          "timestamp": DateTime.now(),
+          "by": distributorInfo['email'],
+          "byCompany": distributorInfo['companyName'],
+          "image": distributorInfo['image'],
+          "name": info['name'] + ' pharmacy deleted',
+          "category": 'distributor',
+        })
+        .then((value) => deleteFolderContents(info['name']))
+        .then(
+            (value) => deletePharmaciesFromDistributorAndPharmacyCollection());
+  }
+
+  //
+  //
+  // Delete the user folder contents in firebase storage
+  deleteFolderContents(pharmacyName) {
+    String path = "Pharmacies/" + "$pharmacyName";
+    var ref = FirebaseStorage.instance.ref(path);
+
+    ref.listAll().then((dir) {
+      dir.items.forEach((fileRef) {
+        this.deleteFile(ref.fullPath, fileRef.name);
+      });
+      dir.prefixes.forEach((folderRef) {
+        this.deleteFolderContents(folderRef.fullPath);
+      });
+    }).catchError((error) => Fluttertoast.showToast(msg: "$error"));
+  }
+
+  deleteFile(pathToFile, fileName) {
+    var ref = FirebaseStorage.instance.ref(pathToFile);
+    var childRef = ref.child(fileName);
+    childRef.delete();
   }
 
   @override
   void initState() {
     super.initState();
+    getDistributor();
+
     opac = 0;
     opac2 = 0;
     index = 0;
@@ -120,6 +207,7 @@ class _Pharmacy_Clinics_Info_DistributorState
     getPharmacyInfo();
 
     Future.delayed(Duration(milliseconds: 1000), () {
+      getDistributorPharmacies();
       setState(() {
         opac2 = 1.0;
       });
@@ -242,7 +330,39 @@ class _Pharmacy_Clinics_Info_DistributorState
                   labelBackgroundColor: Colors.grey[800],
                   labelStyle: TextStyle(color: Colors.white),
                   onTap: () {
-                    getDistributorPharmacies();
+                    showDialog(
+                      context: context,
+                      builder: (_) => AlertDialog(
+                        title: Text('Delete ' + info['name'] + '?'),
+                        content: info['employees'].toString() == '[]'
+                            ? Text(
+                                'This will delete the pharmacy and its images folder.')
+                            : Text(
+                                'This will delete the pharmacy and its images folder.\n\nNote: You will however have to delete these pharmacists manually:\n ${info['employees'].toString()}'),
+                        actions: [
+                          TextButton(
+                            child: Text('Yes'),
+                            onPressed: () {
+                              Navigator.pop(context);
+                              showDialog(
+                                  context: context,
+                                  builder: (_) => customAlert());
+                              updateHistory();
+                              Future.delayed(Duration(milliseconds: 2100), () {
+                                Navigator.pop(context);
+                                //Navigator.pop(context);
+                              });
+                            },
+                          ),
+                          TextButton(
+                            child: Text('No'),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                          ),
+                        ],
+                      ),
+                    );
                   },
                 ),
                 SpeedDialChild(
@@ -687,5 +807,55 @@ class _Pharmacy_Clinics_Info_DistributorState
               ],
             ),
           );
+  }
+
+  //
+  //
+  //custom alert dialogue
+  customAlert() {
+    Future.delayed(Duration(milliseconds: 2000), () {
+      Navigator.pop(context);
+      //Navigator.pop(context);
+    });
+    return AlertDialog(
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      content: Container(
+        width: width,
+        height: height / 5,
+        decoration: BoxDecoration(
+          shape: BoxShape.rectangle,
+          color: Colors.transparent,
+          borderRadius: BorderRadius.all(Radius.circular(32.0)),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Center(
+              child: Container(
+                height: width / 4,
+                child: Lottie.asset(
+                  'assets/lottie/deletedSuccessfully.json',
+                  frameRate: FrameRate(144),
+                  repeat: false,
+                ),
+              ),
+            ),
+            SizedBox(
+              height: height / 30,
+            ),
+            Container(
+              child: Text(
+                'Pharmacy Deleted Successfully!',
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
