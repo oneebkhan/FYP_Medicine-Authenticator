@@ -59,8 +59,8 @@ class RowInfo extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      title.length > 23
-                          ? title.substring(0, 22) + '...'
+                      title.length > 20
+                          ? title.substring(0, 19) + '...'
                           : title,
                       style: TextStyle(
                         fontWeight: FontWeight.w600,

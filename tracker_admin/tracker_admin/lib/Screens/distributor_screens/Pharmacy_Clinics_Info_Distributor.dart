@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lottie/lottie.dart';
+import 'package:tracker_admin/screens/distributor_screens/EditPharmacy.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 // ignore: camel_case_types
@@ -318,7 +319,21 @@ class _Pharmacy_Clinics_Info_DistributorState
                   backgroundColor: Colors.blue[500],
                   labelBackgroundColor: Colors.grey[800],
                   labelStyle: TextStyle(color: Colors.white),
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => EditPharmacy(
+                          imageURL: info['imageURL'],
+                          location: info['location'],
+                          name: info['name'],
+                          ratings: info['rating'],
+                          timings: info['timings'],
+                          uid: info['uid'],
+                        ),
+                      ),
+                    );
+                  },
                 ),
                 SpeedDialChild(
                   child: Icon(
@@ -338,7 +353,7 @@ class _Pharmacy_Clinics_Info_DistributorState
                             ? Text(
                                 'This will delete the pharmacy and its images folder.')
                             : Text(
-                                'This will delete the pharmacy and its images folder.\n\nNote: You will however have to delete these pharmacists manually:\n ${info['employees'].toString()}'),
+                                'This will delete the pharmacy and its images folder.\n\nNote: You will however have to delete these pharmacists manually:\n${info['employees'].toString()}'),
                         actions: [
                           TextButton(
                             child: Text('Yes'),
