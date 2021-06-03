@@ -8,29 +8,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lottie/lottie.dart';
-import 'package:tracker_admin/screens/distributor_screens/EditPharmacy.dart';
+import 'package:tracker_admin/screens/distributor_screens/Clinics/EditClinic.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 // ignore: camel_case_types
-class Pharmacy_Clinics_Info_Distributor extends StatefulWidget {
+class ClinicInfo_Distributor extends StatefulWidget {
   final String name;
-  // if the field is 0 this is a pharmacy otherwise it is a clinic
-  final String pharmOrClinic;
 
-  Pharmacy_Clinics_Info_Distributor({
+  ClinicInfo_Distributor({
     Key key,
     this.name,
-    this.pharmOrClinic,
   }) : super(key: key);
 
   @override
-  _Pharmacy_Clinics_Info_DistributorState createState() =>
-      _Pharmacy_Clinics_Info_DistributorState();
+  _ClinicInfo_DistributorState createState() => _ClinicInfo_DistributorState();
 }
 
 // ignore: camel_case_types
-class _Pharmacy_Clinics_Info_DistributorState
-    extends State<Pharmacy_Clinics_Info_Distributor> {
+class _ClinicInfo_DistributorState extends State<ClinicInfo_Distributor> {
   double width;
   double height;
   double safePadding;
@@ -45,7 +40,7 @@ class _Pharmacy_Clinics_Info_DistributorState
   var page2 = PageController();
   var info;
   List<Widget> numberOfImagesIndex;
-  List pharmaciesAdded;
+  List clinicsAdded;
   var distributorInfo;
 
   //
@@ -78,12 +73,12 @@ class _Pharmacy_Clinics_Info_DistributorState
   //
   //
   // gets the firebase data of that particular medicine
-  getPharmacyInfo() async {
+  getClinicInfo() async {
     try {
       // ignore: unused_local_variable
       StreamSubscription<DocumentSnapshot> stream = await FirebaseFirestore
           .instance
-          .collection(widget.pharmOrClinic)
+          .collection('Clinic')
           .doc(widget.name)
           .snapshots()
           .listen((event) {
@@ -101,14 +96,14 @@ class _Pharmacy_Clinics_Info_DistributorState
   //
   //
   // Gets the current pharmacies added by the distributor
-  getDistributorPharmacies() async {
+  getDistributorClinics() async {
     await FirebaseFirestore.instance
         .collection('Distributor')
         .doc(info['addedBy'])
         .get()
         .then((value) {
       setState(() {
-        pharmaciesAdded = value.data()['pharmacyAdded'];
+        clinicsAdded = value.data()['clinicsAdded'];
       });
     });
   }
@@ -130,19 +125,19 @@ class _Pharmacy_Clinics_Info_DistributorState
 
   //
   //
-  //Deletes the pharmacy doc
-  deletePharmaciesFromDistributorAndPharmacyCollection() async {
+  //Deletes the clinics doc
+  deleteClinicsFromDistributorAndClinicCollection() async {
     setState(() {
-      pharmaciesAdded.remove(info['uid']);
+      clinicsAdded.remove(info['uid']);
     });
     return FirebaseFirestore.instance
         .collection("Distributor")
         .doc(info['addedBy'])
         .update({
-      "pharmacyAdded": pharmaciesAdded,
+      "clinicsAdded": clinicsAdded,
     }).then((value) {
       FirebaseFirestore.instance
-          .collection('Pharmacy')
+          .collection('Clinic')
           .doc(info['uid'])
           .delete()
           .catchError((error) => print("Failed to delete user: $error"))
@@ -164,19 +159,18 @@ class _Pharmacy_Clinics_Info_DistributorState
           "by": distributorInfo['email'],
           "byCompany": distributorInfo['companyName'],
           "image": distributorInfo['image'],
-          "name": info['name'] + ' pharmacy deleted',
+          "name": info['name'] + ' clinics deleted',
           "category": 'distributor',
         })
         .then((value) => deleteFolderContents(info['name']))
-        .then(
-            (value) => deletePharmaciesFromDistributorAndPharmacyCollection());
+        .then((value) => deleteClinicsFromDistributorAndClinicCollection());
   }
 
   //
   //
   // Delete the user folder contents in firebase storage
-  deleteFolderContents(pharmacyName) {
-    String path = "Pharmacies/" + "$pharmacyName";
+  deleteFolderContents(clinicsName) {
+    String path = "Clinics/" + "$clinicsName";
     var ref = FirebaseStorage.instance.ref(path);
 
     ref.listAll().then((dir) {
@@ -205,10 +199,10 @@ class _Pharmacy_Clinics_Info_DistributorState
     index = 0;
     index2 = 0;
     numberOfImagesIndex = [];
-    getPharmacyInfo();
+    getClinicInfo();
 
     Future.delayed(Duration(milliseconds: 1000), () {
-      getDistributorPharmacies();
+      getDistributorClinics();
       setState(() {
         opac2 = 1.0;
       });
@@ -239,7 +233,7 @@ class _Pharmacy_Clinics_Info_DistributorState
 
   //
   //
-  // The method to call the pharmacy or clinic
+  // The method to call the clinics or clinic
   void customLaunch(command) async {
     if (await canLaunch(command)) {
       await launch(command);
@@ -278,7 +272,7 @@ class _Pharmacy_Clinics_Info_DistributorState
             extendBodyBehindAppBar: true,
             backgroundColor: Colors.black,
             floatingActionButton: SpeedDial(
-              backgroundColor: Colors.blue[500],
+              backgroundColor: Color.fromARGB(255, 148, 210, 146),
               overlayColor: Colors.black,
               overlayOpacity: 0.4,
               animatedIcon: AnimatedIcons.menu_close,
@@ -290,7 +284,7 @@ class _Pharmacy_Clinics_Info_DistributorState
                     color: Colors.white,
                   ),
                   label: 'Go to Location',
-                  backgroundColor: Colors.blue[500],
+                  backgroundColor: Color.fromARGB(255, 148, 210, 146),
                   labelBackgroundColor: Colors.grey[800],
                   labelStyle: TextStyle(color: Colors.white),
                   onTap: () {
@@ -302,10 +296,10 @@ class _Pharmacy_Clinics_Info_DistributorState
                     Icons.phone,
                     color: Colors.white,
                   ),
-                  label: 'Call Pharmacy',
+                  label: 'Call Clinic',
                   labelBackgroundColor: Colors.grey[800],
                   labelStyle: TextStyle(color: Colors.white),
-                  backgroundColor: Colors.blue[500],
+                  backgroundColor: Color.fromARGB(255, 148, 210, 146),
                   onTap: () {
                     customLaunch('tel:' + info['phoneNumber']);
                   },
@@ -316,14 +310,14 @@ class _Pharmacy_Clinics_Info_DistributorState
                     color: Colors.white,
                   ),
                   label: 'Edit Info',
-                  backgroundColor: Colors.blue[500],
+                  backgroundColor: Color.fromARGB(255, 148, 210, 146),
                   labelBackgroundColor: Colors.grey[800],
                   labelStyle: TextStyle(color: Colors.white),
                   onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => EditPharmacy(
+                        builder: (_) => EditClinic(
                           imageURL: info['imageURL'],
                           location: info['location'],
                           name: info['name'],
@@ -340,8 +334,8 @@ class _Pharmacy_Clinics_Info_DistributorState
                     Icons.delete,
                     color: Colors.white,
                   ),
-                  label: 'Delete Pharmacy',
-                  backgroundColor: Colors.blue[500],
+                  label: 'Delete Clinic',
+                  backgroundColor: Color.fromARGB(255, 148, 210, 146),
                   labelBackgroundColor: Colors.grey[800],
                   labelStyle: TextStyle(color: Colors.white),
                   onTap: () {
@@ -349,11 +343,8 @@ class _Pharmacy_Clinics_Info_DistributorState
                       context: context,
                       builder: (_) => AlertDialog(
                         title: Text('Delete ' + info['name'] + '?'),
-                        content: info['employees'].toString() == '[]'
-                            ? Text(
-                                'This will delete the pharmacy and its images folder.')
-                            : Text(
-                                'This will delete the pharmacy and its images folder.\n\nNote: You will however have to delete these pharmacists manually:\n${info['employees'].toString()}'),
+                        content: Text(
+                            'This will delete the clinics and its images folder.'),
                         actions: [
                           TextButton(
                             child: Text('Yes'),
@@ -400,7 +391,7 @@ class _Pharmacy_Clinics_Info_DistributorState
                       );
                     }
                   },
-                  backgroundColor: Colors.blue[500],
+                  backgroundColor: Color.fromARGB(255, 148, 210, 146),
                   label:
                       index2 == 0 ? 'Go to Next Page' : 'Go to Previous Page',
                   labelBackgroundColor: Colors.grey[800],
@@ -508,7 +499,8 @@ class _Pharmacy_Clinics_Info_DistributorState
                                                 decoration: BoxDecoration(
                                                   shape: BoxShape.circle,
                                                   color: index == ind
-                                                      ? Colors.blue[200]
+                                                      ? Color.fromARGB(
+                                                          255, 148, 210, 146)
                                                       : Colors.grey[700],
                                                 ),
                                               ),
@@ -613,7 +605,7 @@ class _Pharmacy_Clinics_Info_DistributorState
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      'Pharmacy Location',
+                                      'Clinic Location',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         color: Colors.white,
@@ -624,7 +616,7 @@ class _Pharmacy_Clinics_Info_DistributorState
                                       height: 5,
                                     ),
                                     Text(
-                                      'The pharmacy is located in ' +
+                                      'The clinics is located in ' +
                                           info['location'],
                                       style: TextStyle(
                                         color: Colors.white,
@@ -674,62 +666,60 @@ class _Pharmacy_Clinics_Info_DistributorState
                             SizedBox(
                               height: 10,
                             ),
-                            widget.pharmOrClinic == 'Pharmacy'
-                                ? Container()
-                                : Padding(
-                                    padding: const EdgeInsets.only(bottom: 10),
-                                    child: Container(
-                                      width: width,
-                                      decoration: BoxDecoration(
-                                        color: Color.fromARGB(255, 50, 50, 50),
-                                        borderRadius: BorderRadius.circular(15),
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(20),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              'Notable Employees',
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.white,
-                                                fontSize: width / 20,
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              height: 5,
-                                            ),
-                                            info['employees'].length == 0
-                                                ? Text(
-                                                    'N/A',
-                                                    style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: width / 30,
-                                                    ),
-                                                  )
-                                                : ListView.builder(
-                                                    shrinkWrap: true,
-                                                    itemCount: info['employees']
-                                                        .length,
-                                                    itemBuilder:
-                                                        (BuildContext context,
-                                                            int i) {
-                                                      return Text(
-                                                        info['employees'][i],
-                                                        style: TextStyle(
-                                                          color: Colors.white,
-                                                          fontSize: width / 30,
-                                                        ),
-                                                      );
-                                                    },
-                                                  ),
-                                          ],
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 10),
+                              child: Container(
+                                width: width,
+                                decoration: BoxDecoration(
+                                  color: Color.fromARGB(255, 50, 50, 50),
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(20),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Notable Employees',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                          fontSize: width / 20,
                                         ),
                                       ),
-                                    ),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      info['employees'].length == 0
+                                          ? Text(
+                                              'N/A',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: width / 30,
+                                              ),
+                                            )
+                                          : ListView.builder(
+                                              shrinkWrap: true,
+                                              itemCount:
+                                                  info['employees'].length,
+                                              itemBuilder:
+                                                  (BuildContext context,
+                                                      int i) {
+                                                return Text(
+                                                  info['employees'][i],
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: width / 30,
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                    ],
                                   ),
+                                ),
+                              ),
+                            ),
 
                             //
                             //
@@ -862,7 +852,7 @@ class _Pharmacy_Clinics_Info_DistributorState
             ),
             Container(
               child: Text(
-                'Pharmacy Deleted Successfully!',
+                'Clinic Deleted Successfully!',
                 style: TextStyle(
                   color: Colors.white,
                 ),

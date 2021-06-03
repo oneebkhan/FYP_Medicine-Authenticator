@@ -6,6 +6,7 @@ import 'package:connectivity/connectivity.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
@@ -15,16 +16,16 @@ import 'package:tracker_admin/screens/admin_screens/AddDistributor.dart';
 import 'package:geocoder/geocoder.dart';
 
 // ignore: must_be_immutable
-class AddPharmacy extends StatefulWidget {
+class AddClinic extends StatefulWidget {
   @override
-  _AddPharmacyState createState() => _AddPharmacyState();
+  _AddClinicState createState() => _AddClinicState();
 }
 
-class _AddPharmacyState extends State<AddPharmacy> {
+class _AddClinicState extends State<AddClinic> {
   double width;
   double height;
   double safePadding;
-  TextEditingController pharmName = TextEditingController();
+  TextEditingController clinicName = TextEditingController();
   TextEditingController location = TextEditingController();
   TextEditingController phoneNumber = TextEditingController();
   TextEditingController rating = TextEditingController();
@@ -45,7 +46,7 @@ class _AddPharmacyState extends State<AddPharmacy> {
   int index;
   int index2;
   var info;
-  List distributorPharmacies = [];
+  List distributorClinics = [];
   GeoPoint latLong;
 
   //
@@ -61,10 +62,10 @@ class _AddPharmacyState extends State<AddPharmacy> {
             GeoPoint(first.coordinates.latitude, first.coordinates.longitude);
       });
       print(first.coordinates);
-    } on Error catch (e) {
-      Fluttertoast.showToast(msg: e.toString());
+      uploadFile();
+    } on Exception catch (e) {
+      Fluttertoast.showToast(msg: 'Invalid Address');
     }
-    uploadFile();
   }
 
   //
@@ -78,7 +79,7 @@ class _AddPharmacyState extends State<AddPharmacy> {
         .then((value) {
       setState(() {
         info = value.data();
-        distributorPharmacies = info['pharmacyAdded'];
+        distributorClinics = info['clinicsAdded'];
       });
     });
   }
@@ -143,7 +144,7 @@ class _AddPharmacyState extends State<AddPharmacy> {
         //saving the image to the cloud
         for (index2 = 0; index2 < image.length; index2++) {
           var snapshot = await _storage
-              .ref('Pharmacies/${pharmName.text}/image$index2.png')
+              .ref('Clinic/${clinicName.text}/image$index2.png')
               .putFile(image[index2]);
           //getting the image url
           var downloadURL = await snapshot.ref.getDownloadURL();
@@ -151,7 +152,7 @@ class _AddPharmacyState extends State<AddPharmacy> {
             uploadedFileURL.insert(index2, downloadURL);
           });
         }
-        addPharmacyInfo();
+        addClinicInfo();
         //
         //
         // updates the user image url field
@@ -186,27 +187,27 @@ class _AddPharmacyState extends State<AddPharmacy> {
   //
   //
   // this function adds distributor information to Firebase Firestore
-  addPharmacyInfo() async {
+  addClinicInfo() async {
     try {
       convertLatLong();
       setState(() {
-        distributorPharmacies
-            .add(pharmName.text + location.text.substring(0, 10));
+        distributorClinics
+            .add(clinicName.text + location.text.substring(0, 10));
       });
       // ignore: await_only_futures
       var firestore = await FirebaseFirestore.instance;
       firestore
-          .collection("Pharmacy")
-          .doc(pharmName.text + location.text.substring(0, 10))
+          .collection("Clinic")
+          .doc(clinicName.text + location.text.substring(0, 10))
           .set({
-        "name": pharmName.text,
+        "name": clinicName.text,
         "location": location.text,
         "companyName": info['companyName'],
         "employees": [],
         "phoneNumber": phoneNumber.text,
         "rating": rating.text,
         "timings": timings.text,
-        "uid": pharmName.text + location.text.substring(0, 10),
+        "uid": clinicName.text + location.text.substring(0, 10),
         "addedBy": info['email'],
         "imageURL": uploadedFileURL,
         "latLong": latLong,
@@ -220,17 +221,17 @@ class _AddPharmacyState extends State<AddPharmacy> {
           "by": info['email'],
           "byCompany": info['companyName'],
           "image": info['image'],
-          "name": 'Addition of ' + pharmName.text + ' as a Pharmacy',
+          "name": 'Addition of ' + clinicName.text + ' as a Clinic',
           "category": 'distributor',
         }).then((value) async {
           await FirebaseFirestore.instance
               .collection("Distributor")
               .doc(FirebaseAuth.instance.currentUser.email)
               .update({
-            "pharmacyAdded": distributorPharmacies,
+            "clinicsAdded": distributorClinics,
           });
         });
-        Fluttertoast.showToast(msg: 'Pharmacy created Succesfully!');
+        Fluttertoast.showToast(msg: 'Clinic created Succesfully!');
         setState(() {
           _isLoading = false;
         });
@@ -244,17 +245,17 @@ class _AddPharmacyState extends State<AddPharmacy> {
     }
   }
 
-  checkForPharmacy() async {
+  checkForClinic() async {
     var fire = await FirebaseFirestore.instance
-        .collection('Pharmacy')
-        .doc(pharmName.text)
+        .collection('Clinic')
+        .doc(clinicName.text)
         .get()
         .then((value) {
       if (value.data().toString() == 'null') {
         convertLatLong();
         return null;
       } else {
-        Fluttertoast.showToast(msg: 'Pharmacy already present!');
+        Fluttertoast.showToast(msg: 'Clinic already present!');
         return null;
       }
     });
@@ -328,7 +329,7 @@ class _AddPharmacyState extends State<AddPharmacy> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Add Pharmacy',
+                                'Add Clinic',
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: width / 16,
@@ -500,9 +501,9 @@ class _AddPharmacyState extends State<AddPharmacy> {
                                 height: 20,
                               ),
                               ContainerText(
-                                hint: 'Pharmacy Name',
+                                hint: 'Clinic Name',
                                 node: node,
-                                controller: pharmName,
+                                controller: clinicName,
                                 maxLength: 20,
                               ),
                               SizedBox(
@@ -564,23 +565,23 @@ class _AddPharmacyState extends State<AddPharmacy> {
                         if (con == true) {
                           Fluttertoast.showToast(
                               msg: 'No internet connection!');
-                        } else if (pharmName.text.isEmpty ||
+                        } else if (clinicName.text.isEmpty ||
                             location.text.isEmpty ||
                             phoneNumber.text.isEmpty ||
                             rating.text.isEmpty ||
                             timings.text.isEmpty) {
                           Fluttertoast.showToast(msg: 'Fill all the fields!');
-                        } else if (image == []) {
-                          Fluttertoast.showToast(msg: 'Select an image');
+                        } else if (image.length < 3) {
+                          Fluttertoast.showToast(msg: 'Select 3 images');
                         } else {
-                          checkForPharmacy();
+                          checkForClinic();
                         }
                       },
                       child: Container(
                         width: width / 1.1,
                         height: width / 8,
                         decoration: BoxDecoration(
-                          color: Color.fromARGB(255, 149, 192, 255),
+                          color: Color.fromARGB(255, 148, 210, 146),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Center(

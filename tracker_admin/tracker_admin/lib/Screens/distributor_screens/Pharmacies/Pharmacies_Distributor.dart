@@ -10,7 +10,7 @@ import 'dart:math' as math;
 
 import 'package:tracker_admin/screens/Pharmacy_Clinics_Info.dart';
 import 'package:tracker_admin/screens/admin_screens/Pharmacy/ViewPharmacy.dart';
-import 'package:tracker_admin/screens/distributor_screens/Pharmacy_Clinics_Info_Distributor.dart';
+import 'package:tracker_admin/screens/distributor_screens/Pharmacies/PharmacyInfo_Distributor.dart';
 
 class Pharmacies_Distributor extends StatefulWidget {
   @override
@@ -164,11 +164,11 @@ class _Pharmacies_DistributorState extends State<Pharmacies_Distributor> {
                       ),
                       child: ToggleButtons(
                         fillColor: Colors.white,
-                        highlightColor: Color.fromARGB(255, 170, 200, 240),
-                        splashColor: Color.fromARGB(255, 170, 200, 240),
+                        highlightColor: Color.fromARGB(255, 148, 210, 146),
+                        splashColor: Color.fromARGB(255, 148, 210, 146),
                         borderRadius: BorderRadius.circular(10),
                         focusColor: Colors.white,
-                        selectedColor: Color.fromARGB(255, 170, 200, 240),
+                        selectedColor: Color.fromARGB(255, 148, 210, 146),
                         onPressed: (int index) {
                           if (index == 0) {
                             setState(() {
@@ -353,9 +353,8 @@ class _Pharmacies_DistributorState extends State<Pharmacies_Distributor> {
                                                 context,
                                                 MaterialPageRoute(
                                                   builder: (_) =>
-                                                      Pharmacy_Clinics_Info_Distributor(
+                                                      PharmacyInfo_Distributor(
                                                     name: item['uid'],
-                                                    pharmOrClinic: 'Pharmacy',
                                                   ),
                                                 ),
                                               );

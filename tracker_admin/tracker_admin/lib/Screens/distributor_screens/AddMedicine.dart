@@ -214,11 +214,6 @@ class _AddMedicineState extends State<AddMedicine> {
           }
         },
         child: Scaffold(
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              print(widget.medName);
-            },
-          ),
           extendBodyBehindAppBar: true,
           backgroundColor: Color.fromARGB(255, 246, 246, 248),
           appBar: AppBar(
@@ -518,7 +513,7 @@ class _AddMedicineState extends State<AddMedicine> {
                         width: width / 1.1,
                         height: width / 8,
                         decoration: BoxDecoration(
-                          color: Color.fromARGB(255, 149, 192, 255),
+                          color: Color.fromARGB(255, 148, 210, 146),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Center(

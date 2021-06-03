@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity/connectivity.dart';
@@ -11,22 +12,23 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:tracker_admin/screens/admin_screens/AddDistributor.dart';
+import 'package:geocoder/geocoder.dart';
 
 // ignore: must_be_immutable
-class AddMedicineModel extends StatefulWidget {
+class AddPharmacy extends StatefulWidget {
   @override
-  _AddMedicineModelState createState() => _AddMedicineModelState();
+  _AddPharmacyState createState() => _AddPharmacyState();
 }
 
-class _AddMedicineModelState extends State<AddMedicineModel> {
+class _AddPharmacyState extends State<AddPharmacy> {
   double width;
   double height;
   double safePadding;
-  TextEditingController medName = TextEditingController();
-  TextEditingController price = TextEditingController();
-  TextEditingController dose = TextEditingController();
-  TextEditingController quantity = TextEditingController();
-  TextEditingController description = TextEditingController();
+  TextEditingController pharmName = TextEditingController();
+  TextEditingController location = TextEditingController();
+  TextEditingController phoneNumber = TextEditingController();
+  TextEditingController rating = TextEditingController();
+  TextEditingController timings = TextEditingController();
   TextEditingController activeIngredients = TextEditingController();
   TextEditingController otherIngredients = TextEditingController();
   TextEditingController sideEffects = TextEditingController();
@@ -43,18 +45,40 @@ class _AddMedicineModelState extends State<AddMedicineModel> {
   int index;
   int index2;
   var info;
+  List distributorPharmacies = [];
+  GeoPoint latLong;
 
   //
   //
-  //get Admin
-  getAdmin() async {
+  // save latitude and longitude for nearest pharmacy and clinics
+  convertLatLong() async {
+    try {
+      var addresses =
+          await Geocoder.local.findAddressesFromQuery(location.text);
+      var first = addresses.first;
+      setState(() {
+        latLong =
+            GeoPoint(first.coordinates.latitude, first.coordinates.longitude);
+      });
+      print(first.coordinates);
+      uploadFile();
+    } on Exception catch (e) {
+      Fluttertoast.showToast(msg: 'Invalid Address');
+    }
+  }
+
+  //
+  //
+  //get Distributor
+  getDistributor() async {
     await FirebaseFirestore.instance
-        .collection('Admin')
+        .collection('Distributor')
         .doc(FirebaseAuth.instance.currentUser.email)
         .get()
         .then((value) {
       setState(() {
         info = value.data();
+        distributorPharmacies = info['pharmacyAdded'];
       });
     });
   }
@@ -119,7 +143,7 @@ class _AddMedicineModelState extends State<AddMedicineModel> {
         //saving the image to the cloud
         for (index2 = 0; index2 < image.length; index2++) {
           var snapshot = await _storage
-              .ref('Medicine/${medName.text}/image$index2.png')
+              .ref('Pharmacies/${pharmName.text}/image$index2.png')
               .putFile(image[index2]);
           //getting the image url
           var downloadURL = await snapshot.ref.getDownloadURL();
@@ -127,7 +151,7 @@ class _AddMedicineModelState extends State<AddMedicineModel> {
             uploadedFileURL.insert(index2, downloadURL);
           });
         }
-        addMedicineModelInfo();
+        addPharmacyInfo();
         //
         //
         // updates the user image url field
@@ -162,23 +186,30 @@ class _AddMedicineModelState extends State<AddMedicineModel> {
   //
   //
   // this function adds distributor information to Firebase Firestore
-  addMedicineModelInfo() async {
+  addPharmacyInfo() async {
     try {
+      convertLatLong();
+      setState(() {
+        distributorPharmacies
+            .add(pharmName.text + location.text.substring(0, 10));
+      });
       // ignore: await_only_futures
       var firestore = await FirebaseFirestore.instance;
-      firestore.collection("MedicineModel").doc(medName.text).set({
-        "name": medName.text,
-        "activeIngredients": activeIngredients.text,
-        "companyName": compName.text,
-        "description": description.text,
-        "dose": dose.text,
-        "otherIngredients": otherIngredients.text,
-        "price": price.text,
-        "quantity": quantity.text,
-        "sideEffects": sideEffects.text,
-        "totalSales": 0,
-        "uses": uses.text,
+      firestore
+          .collection("Pharmacy")
+          .doc(pharmName.text + location.text.substring(0, 10))
+          .set({
+        "name": pharmName.text,
+        "location": location.text,
+        "companyName": info['companyName'],
+        "employees": [],
+        "phoneNumber": phoneNumber.text,
+        "rating": rating.text,
+        "timings": timings.text,
+        "uid": pharmName.text + location.text.substring(0, 10),
+        "addedBy": info['email'],
         "imageURL": uploadedFileURL,
+        "latLong": latLong,
         "lastEditedBy": {
           FirebaseAuth.instance.currentUser.email: Timestamp.now()
         },
@@ -189,10 +220,17 @@ class _AddMedicineModelState extends State<AddMedicineModel> {
           "by": info['email'],
           "byCompany": info['companyName'],
           "image": info['image'],
-          "name": 'Addition of ' + medName.text + ' model',
-          "category": 'admin',
+          "name": 'Addition of ' + pharmName.text + ' as a Pharmacy',
+          "category": 'distributor',
+        }).then((value) async {
+          await FirebaseFirestore.instance
+              .collection("Distributor")
+              .doc(FirebaseAuth.instance.currentUser.email)
+              .update({
+            "pharmacyAdded": distributorPharmacies,
+          });
         });
-        Fluttertoast.showToast(msg: 'Medicine Model created Succesfully!');
+        Fluttertoast.showToast(msg: 'Pharmacy created Succesfully!');
         setState(() {
           _isLoading = false;
         });
@@ -206,17 +244,17 @@ class _AddMedicineModelState extends State<AddMedicineModel> {
     }
   }
 
-  checkForMed() async {
+  checkForPharmacy() async {
     var fire = await FirebaseFirestore.instance
-        .collection('MedicineModel')
-        .doc(medName.text)
+        .collection('Pharmacy')
+        .doc(pharmName.text)
         .get()
         .then((value) {
       if (value.data().toString() == 'null') {
-        uploadFile();
+        convertLatLong();
         return null;
       } else {
-        Fluttertoast.showToast(msg: 'Medicine Model already present!');
+        Fluttertoast.showToast(msg: 'Pharmacy already present!');
         return null;
       }
     });
@@ -225,11 +263,12 @@ class _AddMedicineModelState extends State<AddMedicineModel> {
   @override
   void initState() {
     super.initState();
-    getAdmin();
+    getDistributor();
     List<File> _image = [];
     List<String> _uploadedFileURL = [];
     index2 = 0;
     index = 0;
+
     adminEmail = FirebaseAuth.instance.currentUser.email;
     checkInternet();
     subscription = Connectivity()
@@ -289,7 +328,7 @@ class _AddMedicineModelState extends State<AddMedicineModel> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Add Medicine Model',
+                                'Add Pharmacy',
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: width / 16,
@@ -461,17 +500,27 @@ class _AddMedicineModelState extends State<AddMedicineModel> {
                                 height: 20,
                               ),
                               ContainerText(
-                                hint: 'Medicine Name',
+                                hint: 'Pharmacy Name',
                                 node: node,
-                                controller: medName,
+                                controller: pharmName,
                                 maxLength: 20,
                               ),
                               SizedBox(
                                 height: 10,
                               ),
                               ContainerText(
-                                hint: 'Price',
-                                controller: price,
+                                  hint: 'Address',
+                                  controller: location,
+                                  node: node,
+                                  maxLength: 300,
+                                  maxLines: 8,
+                                  height: width / 3),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              ContainerText(
+                                hint: 'Phone Number',
+                                controller: phoneNumber,
                                 inputType: TextInputType.phone,
                                 node: node,
                                 maxLength: 30,
@@ -480,85 +529,22 @@ class _AddMedicineModelState extends State<AddMedicineModel> {
                                 height: 10,
                               ),
                               ContainerText(
-                                hint: 'Dose (Xmg)',
-                                controller: dose,
-                                inputType: TextInputType.phone,
+                                hint: 'Rating',
                                 node: node,
+                                controller: rating,
+                                maxLength: 1,
+                                inputType: TextInputType.number,
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              ContainerText(
+                                hint: 'Timings',
+                                node: node,
+                                controller: timings,
                                 maxLength: 30,
                               ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              ContainerText(
-                                hint: 'Quantity (Xml or X tablets)',
-                                node: node,
-                                controller: quantity,
-                                maxLength: 15,
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              ContainerText(
-                                hint: 'Description',
-                                node: node,
-                                controller: description,
-                                maxLength: 300,
-                                maxLines: 8,
-                                height: width / 3,
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              ContainerText(
-                                hint: 'Active Ingredients',
-                                node: node,
-                                controller: activeIngredients,
-                                maxLength: 300,
-                                maxLines: 8,
-                                height: width / 3,
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              ContainerText(
-                                hint: 'Other Ingredients',
-                                node: node,
-                                controller: otherIngredients,
-                                maxLength: 300,
-                                maxLines: 8,
-                                height: width / 3,
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              ContainerText(
-                                hint: 'Side Effects',
-                                node: node,
-                                controller: sideEffects,
-                                maxLength: 300,
-                                maxLines: 8,
-                                height: width / 3,
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              ContainerText(
-                                hint: 'Uses',
-                                node: node,
-                                controller: uses,
-                                maxLength: 300,
-                                maxLines: 8,
-                                height: width / 3,
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              ContainerText(
-                                hint: 'Company Name',
-                                node: node,
-                                controller: compName,
-                                maxLength: 300,
-                              ),
+
                               SizedBox(
                                 height: 20,
                               )
@@ -578,28 +564,23 @@ class _AddMedicineModelState extends State<AddMedicineModel> {
                         if (con == true) {
                           Fluttertoast.showToast(
                               msg: 'No internet connection!');
-                        } else if (medName.text.isEmpty ||
-                            activeIngredients.text.isEmpty ||
-                            compName.text.isEmpty ||
-                            description.text.isEmpty ||
-                            dose.text.isEmpty ||
-                            otherIngredients.text.isEmpty ||
-                            price.text.isEmpty ||
-                            quantity.text.isEmpty ||
-                            sideEffects.text.isEmpty ||
-                            uses.text.isEmpty) {
+                        } else if (pharmName.text.isEmpty ||
+                            location.text.isEmpty ||
+                            phoneNumber.text.isEmpty ||
+                            rating.text.isEmpty ||
+                            timings.text.isEmpty) {
                           Fluttertoast.showToast(msg: 'Fill all the fields!');
                         } else if (image.length < 3) {
                           Fluttertoast.showToast(msg: 'Select 3 images');
                         } else {
-                          checkForMed();
+                          checkForPharmacy();
                         }
                       },
                       child: Container(
                         width: width / 1.1,
                         height: width / 8,
                         decoration: BoxDecoration(
-                          color: Color.fromARGB(255, 149, 192, 255),
+                          color: Color.fromARGB(255, 148, 210, 146),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Center(

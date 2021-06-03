@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:tracker_admin/Widgets/RowInfo.dart';
 import 'package:tracker_admin/screens/Pharmacy_Clinics_Info.dart';
-import 'package:tracker_admin/screens/distributor_screens/Pharmacy_Clinics_Info_Distributor.dart';
+import 'package:tracker_admin/screens/distributor_screens/Clinics/ClinicInfo_Distributor.dart';
+import 'package:tracker_admin/screens/distributor_screens/Pharmacies/PharmacyInfo_Distributor.dart';
 
 class ViewClinic_Distributor extends StatefulWidget {
   // The name of the category opened
@@ -174,9 +175,8 @@ class _ViewClinic_DistributorState extends State<ViewClinic_Distributor> {
                                           context,
                                           MaterialPageRoute(
                                             builder: (_) =>
-                                                Pharmacy_Clinics_Info_Distributor(
+                                                ClinicInfo_Distributor(
                                               name: item['uid'],
-                                              pharmOrClinic: 'Clinic',
                                             ),
                                           ),
                                         );

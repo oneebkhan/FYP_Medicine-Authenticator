@@ -7,14 +7,13 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:lottie/lottie.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:tracker_admin/screens/admin_screens/AddDistributor.dart';
 
 // ignore: must_be_immutable
-class EditPharmacy extends StatefulWidget {
+class EditClinic extends StatefulWidget {
   final String name;
   final String location;
   final String timings;
@@ -22,7 +21,7 @@ class EditPharmacy extends StatefulWidget {
   final List imageURL;
   final String uid;
 
-  EditPharmacy({
+  EditClinic({
     this.imageURL,
     this.name,
     this.location,
@@ -32,10 +31,10 @@ class EditPharmacy extends StatefulWidget {
   });
 
   @override
-  _EditPharmacyState createState() => _EditPharmacyState();
+  _EditClinicState createState() => _EditClinicState();
 }
 
-class _EditPharmacyState extends State<EditPharmacy> {
+class _EditClinicState extends State<EditClinic> {
   double width;
   double height;
   double safePadding;
@@ -51,7 +50,7 @@ class _EditPharmacyState extends State<EditPharmacy> {
   var img1;
   var img2;
   var img3;
-  List<String> uploadedFileURL = [];
+  List uploadedFileURL = [];
   int index;
   int index2;
   List deleteimages;
@@ -186,23 +185,19 @@ class _EditPharmacyState extends State<EditPharmacy> {
       });
       try {
         //saving the image to the cloud
-        for (index2 = 0; index2 < widget.imageURL.length; index2++) {
+        for (index2 = 0; index2 < 3; index2++) {
           if (check[index2] == true) {
             var snapshot = await _storage
-                .ref('Pharmacies/${name.text}/image$index2.png')
+                .ref('Clinic/${name.text}/image$index2.png')
                 .putFile(images[index2]);
             //getting the image url
             var downloadURL = await snapshot.ref.getDownloadURL();
             setState(() {
-              uploadedFileURL.insert(index2, downloadURL);
-            });
-          } else {
-            setState(() {
-              uploadedFileURL.insert(index2, deleteimages[index2]);
+              uploadedFileURL[index2] = downloadURL;
             });
           }
         }
-        editPharmacyInfo(f);
+        editClinicInfo();
         //
         //
         // updates the user image url field
@@ -237,12 +232,12 @@ class _EditPharmacyState extends State<EditPharmacy> {
   //
   //
   // this function adds distributor information to Firebase Firestore
-  editPharmacyInfo(f) async {
-    List filesToBeUploaded = f;
+  editClinicInfo() async {
     try {
       // ignore: await_only_futures
       var firestore = await FirebaseFirestore.instance;
-      firestore.collection("Pharmacy").doc(widget.uid).update({
+      firestore.collection("Clinic").doc(widget.uid).update({
+        "imageURL": uploadedFileURL,
         "rating": ratings.text,
         "timings": timings.text,
         "lastEditedBy": {
@@ -255,10 +250,10 @@ class _EditPharmacyState extends State<EditPharmacy> {
           "by": info['email'],
           "byCompany": info['companyName'],
           "image": info['image'],
-          "name": name.text + ' pharmacy was edited',
+          "name": name.text + ' clinic was edited',
           "category": 'distributor',
-        });
-        Fluttertoast.showToast(msg: 'Pharmacy edited Succesfully!');
+        }).then((value) => print(uploadedFileURL));
+        Fluttertoast.showToast(msg: 'Clinic edited Succesfully!');
         setState(() {
           _isLoading = false;
         });
@@ -277,7 +272,7 @@ class _EditPharmacyState extends State<EditPharmacy> {
   void initState() {
     super.initState();
     getDistributor();
-    // medName.text = widget.medName;
+    uploadedFileURL = widget.imageURL;
     name.text = widget.name;
     location.text = widget.location;
     ratings.text = widget.ratings;
@@ -344,7 +339,7 @@ class _EditPharmacyState extends State<EditPharmacy> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Edit Pharmacy',
+                                'Edit Clinic',
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: width / 16,
@@ -357,7 +352,7 @@ class _EditPharmacyState extends State<EditPharmacy> {
                                 padding:
                                     const EdgeInsets.only(left: 5, bottom: 5),
                                 child: Text(
-                                  'Pharmacy Name:',
+                                  'Clinic Name:',
                                   style: TextStyle(
                                     fontSize: width / 25,
                                     color: Colors.grey[600],
@@ -422,7 +417,10 @@ class _EditPharmacyState extends State<EditPharmacy> {
                                                 CachedNetworkImage(
                                                   imageUrl:
                                                       // the old image
-                                                      widget.imageURL[0],
+                                                      widget.imageURL.length ==
+                                                              0
+                                                          ? 'https://cdn.iconscout.com/icon/free/png-512/data-not-found-1965034-1662569.png'
+                                                          : widget.imageURL[0],
                                                   imageBuilder: (context,
                                                           imageProvider) =>
                                                       Container(
@@ -560,7 +558,13 @@ class _EditPharmacyState extends State<EditPharmacy> {
                                                 CachedNetworkImage(
                                                   imageUrl:
                                                       // the old image
-                                                      widget.imageURL[1],
+                                                      widget.imageURL.length ==
+                                                                  1 ||
+                                                              widget.imageURL
+                                                                      .length ==
+                                                                  0
+                                                          ? 'https://cdn.iconscout.com/icon/free/png-512/data-not-found-1965034-1662569.png'
+                                                          : widget.imageURL[1],
                                                   imageBuilder: (context,
                                                           imageProvider) =>
                                                       Container(
@@ -699,7 +703,16 @@ class _EditPharmacyState extends State<EditPharmacy> {
                                                 CachedNetworkImage(
                                                   imageUrl:
                                                       // the old image
-                                                      widget.imageURL[2],
+                                                      widget.imageURL.length ==
+                                                                  2 ||
+                                                              widget.imageURL
+                                                                      .length ==
+                                                                  1 ||
+                                                              widget.imageURL
+                                                                      .length ==
+                                                                  0
+                                                          ? 'https://cdn.iconscout.com/icon/free/png-512/data-not-found-1965034-1662569.png'
+                                                          : widget.imageURL[2],
                                                   imageBuilder: (context,
                                                           imageProvider) =>
                                                       Container(
@@ -909,14 +922,14 @@ class _EditPharmacyState extends State<EditPharmacy> {
                           } else if (widget.imageURL == []) {
                             uploadFile(uploadedFileURL);
                           } else
-                            editPharmacyInfo(deleteimages);
+                            editClinicInfo();
                         }
                       },
                       child: Container(
                         width: width / 1.1,
                         height: width / 8,
                         decoration: BoxDecoration(
-                          color: Color.fromARGB(255, 149, 192, 255),
+                          color: Color.fromARGB(255, 148, 210, 146),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Center(

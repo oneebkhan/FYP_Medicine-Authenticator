@@ -13,7 +13,8 @@ import 'package:tracker_admin/Widgets/PopupCard.dart';
 import 'package:tracker_admin/Widgets/RowInfo.dart';
 import 'package:tracker_admin/configs/HeroDialogRoute.dart';
 import 'package:tracker_admin/screens/MedicineInfo_WithoutBarcode.dart';
-import 'package:tracker_admin/screens/distributor_screens/AddPharmacy.dart';
+import 'package:tracker_admin/screens/distributor_screens/Clinics/AddClinic.dart';
+import 'package:tracker_admin/screens/distributor_screens/Pharmacies/AddPharmacy.dart';
 import 'package:tracker_admin/screens/distributor_screens/Clinics/Clinics_Distributor.dart';
 import 'package:tracker_admin/screens/distributor_screens/MedicineSearch_Distributor.dart';
 import 'package:tracker_admin/screens/StartingPage.dart';
@@ -794,7 +795,12 @@ class _DistributorDashboardState extends State<DistributorDashboard> {
                         // The second ADD CLINICS Button
                         GestureDetector(
                           onTap: () {
-                            
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => AddClinic(),
+                              ),
+                            );
                           },
                           child: Container(
                             child: Padding(

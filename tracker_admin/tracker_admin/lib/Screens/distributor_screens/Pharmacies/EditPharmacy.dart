@@ -7,60 +7,41 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:lottie/lottie.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:tracker_admin/screens/admin_screens/AddDistributor.dart';
 
 // ignore: must_be_immutable
-class EditMedicineModel extends StatefulWidget {
-  final String medName;
-  final String price;
-  final String dose;
-  final String quantity;
-  final String description;
-  final String activeIngredients;
-  final String otherIngredients;
-  final String sideEffects;
-  final String uses;
-  final String compName;
+class EditPharmacy extends StatefulWidget {
+  final String name;
+  final String location;
+  final String timings;
+  final String ratings;
   final List imageURL;
-  final int sales;
+  final String uid;
 
-  EditMedicineModel({
-    this.medName,
-    this.price,
-    this.dose,
-    this.quantity,
-    this.description,
-    this.activeIngredients,
-    this.otherIngredients,
-    this.sideEffects,
-    this.uses,
-    this.compName,
+  EditPharmacy({
     this.imageURL,
-    this.sales,
+    this.name,
+    this.location,
+    this.timings,
+    this.ratings,
+    this.uid,
   });
 
   @override
-  _EditMedicineModelState createState() => _EditMedicineModelState();
+  _EditPharmacyState createState() => _EditPharmacyState();
 }
 
-class _EditMedicineModelState extends State<EditMedicineModel> {
+class _EditPharmacyState extends State<EditPharmacy> {
   double width;
   double height;
   double safePadding;
-  TextEditingController medName = TextEditingController();
-  TextEditingController price = TextEditingController();
-  TextEditingController dose = TextEditingController();
-  TextEditingController quantity = TextEditingController();
-  TextEditingController description = TextEditingController();
-  TextEditingController activeIngredients = TextEditingController();
-  TextEditingController otherIngredients = TextEditingController();
-  TextEditingController sideEffects = TextEditingController();
-  TextEditingController uses = TextEditingController();
-  TextEditingController compName = TextEditingController();
+  TextEditingController name = TextEditingController();
+  TextEditingController location = TextEditingController();
+  TextEditingController timings = TextEditingController();
+  TextEditingController ratings = TextEditingController();
   String currentDistributorEmail;
   bool _isLoading = false;
   bool con = true;
@@ -81,9 +62,9 @@ class _EditMedicineModelState extends State<EditMedicineModel> {
   //
   //
   //get Admin
-  getAdmin() async {
+  getDistributor() async {
     await FirebaseFirestore.instance
-        .collection('Admin')
+        .collection('Distributor')
         .doc(FirebaseAuth.instance.currentUser.email)
         .get()
         .then((value) {
@@ -207,7 +188,7 @@ class _EditMedicineModelState extends State<EditMedicineModel> {
         for (index2 = 0; index2 < 3; index2++) {
           if (check[index2] == true) {
             var snapshot = await _storage
-                .ref('Medicine/${medName.text}/image$index2.png')
+                .ref('Pharmacies/${name.text}/image$index2.png')
                 .putFile(images[index2]);
             //getting the image url
             var downloadURL = await snapshot.ref.getDownloadURL();
@@ -216,7 +197,7 @@ class _EditMedicineModelState extends State<EditMedicineModel> {
             });
           }
         }
-        editMedicineModelInfo(f);
+        editPharmacyInfo(f);
         //
         //
         // updates the user image url field
@@ -251,24 +232,15 @@ class _EditMedicineModelState extends State<EditMedicineModel> {
   //
   //
   // this function adds distributor information to Firebase Firestore
-  editMedicineModelInfo(f) async {
+  editPharmacyInfo(f) async {
     List filesToBeUploaded = f;
     try {
       // ignore: await_only_futures
       var firestore = await FirebaseFirestore.instance;
-      firestore.collection("MedicineModel").doc(medName.text).update({
-        "name": widget.medName,
-        "activeIngredients": activeIngredients.text,
-        "companyName": compName.text,
-        "description": description.text,
-        "dose": dose.text,
-        "otherIngredients": otherIngredients.text,
-        "price": price.text,
-        "quantity": quantity.text,
-        "sideEffects": sideEffects.text,
-        "totalSales": widget.sales,
-        "uses": uses.text,
+      firestore.collection("Pharmacy").doc(widget.uid).update({
         "imageURL": uploadedFileURL,
+        "rating": ratings.text,
+        "timings": timings.text,
         "lastEditedBy": {
           FirebaseAuth.instance.currentUser.email: Timestamp.now()
         },
@@ -279,10 +251,10 @@ class _EditMedicineModelState extends State<EditMedicineModel> {
           "by": info['email'],
           "byCompany": info['companyName'],
           "image": info['image'],
-          "name": medName.text + ' model was edited',
-          "category": 'admin',
+          "name": name.text + ' pharmacy was edited',
+          "category": 'distributor',
         });
-        Fluttertoast.showToast(msg: 'Medicine Model edited Succesfully!');
+        Fluttertoast.showToast(msg: 'Pharmacy edited Succesfully!');
         setState(() {
           _isLoading = false;
         });
@@ -300,18 +272,12 @@ class _EditMedicineModelState extends State<EditMedicineModel> {
   @override
   void initState() {
     super.initState();
-    getAdmin();
+    getDistributor();
     uploadedFileURL = widget.imageURL;
-    medName.text = widget.medName;
-    price.text = widget.price;
-    dose.text = widget.dose;
-    quantity.text = widget.quantity;
-    description.text = widget.description;
-    activeIngredients.text = widget.activeIngredients;
-    otherIngredients.text = widget.otherIngredients;
-    sideEffects.text = widget.sideEffects;
-    uses.text = widget.uses;
-    compName.text = widget.compName;
+    name.text = widget.name;
+    location.text = widget.location;
+    ratings.text = widget.ratings;
+    timings.text = widget.timings;
     deleteimages = widget.imageURL;
     checkInternet();
     subscription = Connectivity()
@@ -374,7 +340,7 @@ class _EditMedicineModelState extends State<EditMedicineModel> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Edit Medicine Model',
+                                'Edit Pharmacy',
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: width / 16,
@@ -387,7 +353,7 @@ class _EditMedicineModelState extends State<EditMedicineModel> {
                                 padding:
                                     const EdgeInsets.only(left: 5, bottom: 5),
                                 child: Text(
-                                  'Medicine Name:',
+                                  'Pharmacy Name:',
                                   style: TextStyle(
                                     fontSize: width / 25,
                                     color: Colors.grey[600],
@@ -397,8 +363,8 @@ class _EditMedicineModelState extends State<EditMedicineModel> {
                               ContainerText(
                                 enabled: false,
                                 node: node,
-                                hint: widget.medName,
-                                controller: medName,
+                                hint: widget.name,
+                                controller: name,
                                 maxLength: 30,
                               ),
                               SizedBox(
@@ -843,7 +809,7 @@ class _EditMedicineModelState extends State<EditMedicineModel> {
                                 padding:
                                     const EdgeInsets.only(left: 5, bottom: 5),
                                 child: Text(
-                                  'Price:',
+                                  'Location:',
                                   style: TextStyle(
                                     fontSize: width / 25,
                                     color: Colors.grey[600],
@@ -851,182 +817,79 @@ class _EditMedicineModelState extends State<EditMedicineModel> {
                                 ),
                               ),
                               ContainerText(
-                                hint: 'Price',
-                                controller: price,
-                                inputType: TextInputType.phone,
+                                hint: 'Location',
+                                controller: location,
                                 node: node,
-                                maxLength: 30,
+                                enabled: false,
+                                maxLength: 200,
+                                maxLines: 4,
                               ),
                               SizedBox(
                                 height: 10,
                               ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 5, bottom: 5),
-                                child: Text(
-                                  'Dose:',
-                                  style: TextStyle(
-                                    fontSize: width / 25,
-                                    color: Colors.grey[600],
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    flex: 10,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 5, bottom: 5),
+                                          child: Text(
+                                            'Rating:',
+                                            style: TextStyle(
+                                              fontSize: width / 25,
+                                              color: Colors.grey[600],
+                                            ),
+                                          ),
+                                        ),
+                                        ContainerText(
+                                          hint: 'Rating',
+                                          controller: ratings,
+                                          node: node,
+                                          maxLength: 10,
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              ),
-                              ContainerText(
-                                hint: 'Dose (Xmg)',
-                                controller: dose,
-                                inputType: TextInputType.phone,
-                                node: node,
-                                maxLength: 30,
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 5, bottom: 5),
-                                child: Text(
-                                  'Quantity:',
-                                  style: TextStyle(
-                                    fontSize: width / 25,
-                                    color: Colors.grey[600],
+                                  Expanded(
+                                    flex: 1,
+                                    child: SizedBox(
+                                      height: 20,
+                                    ),
                                   ),
-                                ),
-                              ),
-                              ContainerText(
-                                hint: 'Quantity (Xml or X tablets)',
-                                node: node,
-                                controller: quantity,
-                                maxLength: 15,
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 5, bottom: 5),
-                                child: Text(
-                                  'Description:',
-                                  style: TextStyle(
-                                    fontSize: width / 25,
-                                    color: Colors.grey[600],
+                                  Expanded(
+                                    flex: 10,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 5, bottom: 5),
+                                          child: Text(
+                                            'Timings:',
+                                            style: TextStyle(
+                                              fontSize: width / 25,
+                                              color: Colors.grey[600],
+                                            ),
+                                          ),
+                                        ),
+                                        ContainerText(
+                                          hint: 'Timings',
+                                          node: node,
+                                          controller: timings,
+                                          maxLength: 30,
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              ),
-                              ContainerText(
-                                hint: 'Description',
-                                node: node,
-                                controller: description,
-                                maxLength: 300,
-                                maxLines: 8,
-                                height: width / 3,
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 5, bottom: 5),
-                                child: Text(
-                                  'Active Ingredients:',
-                                  style: TextStyle(
-                                    fontSize: width / 25,
-                                    color: Colors.grey[600],
-                                  ),
-                                ),
-                              ),
-                              ContainerText(
-                                hint: 'Active Ingredients',
-                                node: node,
-                                controller: activeIngredients,
-                                maxLength: 300,
-                                maxLines: 8,
-                                height: width / 3,
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 5, bottom: 5),
-                                child: Text(
-                                  'Other Ingredients:',
-                                  style: TextStyle(
-                                    fontSize: width / 25,
-                                    color: Colors.grey[600],
-                                  ),
-                                ),
-                              ),
-                              ContainerText(
-                                hint: 'Other Ingredients',
-                                node: node,
-                                controller: otherIngredients,
-                                maxLength: 300,
-                                maxLines: 8,
-                                height: width / 3,
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 5, bottom: 5),
-                                child: Text(
-                                  'Side Effects:',
-                                  style: TextStyle(
-                                    fontSize: width / 25,
-                                    color: Colors.grey[600],
-                                  ),
-                                ),
-                              ),
-                              ContainerText(
-                                hint: 'Side Effects',
-                                node: node,
-                                controller: sideEffects,
-                                maxLength: 300,
-                                maxLines: 8,
-                                height: width / 3,
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 5, bottom: 5),
-                                child: Text(
-                                  'Uses:',
-                                  style: TextStyle(
-                                    fontSize: width / 25,
-                                    color: Colors.grey[600],
-                                  ),
-                                ),
-                              ),
-                              ContainerText(
-                                hint: 'Uses',
-                                node: node,
-                                controller: uses,
-                                maxLength: 300,
-                                maxLines: 8,
-                                height: width / 3,
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 5, bottom: 5),
-                                child: Text(
-                                  'Company Name:',
-                                  style: TextStyle(
-                                    fontSize: width / 25,
-                                    color: Colors.grey[600],
-                                  ),
-                                ),
-                              ),
-                              ContainerText(
-                                hint: 'Company Name',
-                                node: node,
-                                controller: compName,
-                                maxLength: 300,
+                                ],
                               ),
                               SizedBox(
                                 height: 20,
@@ -1047,15 +910,9 @@ class _EditMedicineModelState extends State<EditMedicineModel> {
                         if (con == true) {
                           Fluttertoast.showToast(
                               msg: 'No internet connection!');
-                        } else if (activeIngredients.text.isEmpty ||
-                            compName.text.isEmpty ||
-                            description.text.isEmpty ||
-                            dose.text.isEmpty ||
-                            otherIngredients.text.isEmpty ||
-                            price.text.isEmpty ||
-                            quantity.text.isEmpty ||
-                            sideEffects.text.isEmpty ||
-                            uses.text.isEmpty) {
+                        } else if (name.text.isEmpty ||
+                            ratings.text.isEmpty ||
+                            timings.text.isEmpty) {
                           Fluttertoast.showToast(msg: 'Fill all the fields!');
                         } else {
                           setState(() {
@@ -1066,14 +923,14 @@ class _EditMedicineModelState extends State<EditMedicineModel> {
                           } else if (widget.imageURL == []) {
                             uploadFile(uploadedFileURL);
                           } else
-                            editMedicineModelInfo(deleteimages);
+                            editPharmacyInfo(deleteimages);
                         }
                       },
                       child: Container(
                         width: width / 1.1,
                         height: width / 8,
                         decoration: BoxDecoration(
-                          color: Color.fromARGB(255, 149, 192, 255),
+                          color: Color.fromARGB(255, 148, 210, 146),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Center(
