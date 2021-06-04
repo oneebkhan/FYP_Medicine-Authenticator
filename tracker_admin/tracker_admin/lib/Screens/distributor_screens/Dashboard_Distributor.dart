@@ -24,6 +24,9 @@ import 'package:tracker_admin/screens/distributor_screens/Requests.dart';
 import 'package:tracker_admin/screens/ViewMedicine.dart';
 import 'package:tracker_admin/screens/distributor_screens/SelectMedicineModel.dart';
 import 'package:tracker_admin/screens/distributor_screens/ViewTopMedicine.dart';
+import 'package:tracker_admin/screens/distributor_screens/pharmacist/SearchPharmacist.dart';
+import 'package:tracker_admin/screens/distributor_screens/pharmacist/SelectPharmacy.dart';
+import 'package:tracker_admin/screens/distributor_screens/pharmacist/ViewPharmacists.dart';
 
 class Dashboard_Distributor extends StatefulWidget {
   final String distCompName;
@@ -958,7 +961,14 @@ class _DistributorDashboardState extends State<DistributorDashboard> {
                         Padding(
                           padding: const EdgeInsets.only(bottom: 15),
                           child: GestureDetector(
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => SelectPharmacy(),
+                                ),
+                              );
+                            },
                             child: Container(
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(
@@ -986,8 +996,8 @@ class _DistributorDashboardState extends State<DistributorDashboard> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (_) => ViewMedicine(
-                                  pageName: 'View Medicine',
+                                builder: (_) => ViewPharmacists(
+                                  pageName: 'View Pharmacists',
                                 ),
                               ),
                             );
@@ -1010,21 +1020,31 @@ class _DistributorDashboardState extends State<DistributorDashboard> {
                             ),
                           ),
                         ),
-                        Container(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 5, horizontal: 5),
-                            child: Image(
-                              width: widget.width / 4.9,
-                              height: widget.width / 4.6,
-                              image: AssetImage(
-                                'assets/icons/Distributor_dashboard_pharmacist/searchPharmacist.png',
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => SearchPharmacist(),
+                              ),
+                            );
+                          },
+                          child: Container(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 5, horizontal: 5),
+                              child: Image(
+                                width: widget.width / 4.9,
+                                height: widget.width / 4.6,
+                                image: AssetImage(
+                                  'assets/icons/Distributor_dashboard_pharmacist/searchPharmacist.png',
+                                ),
                               ),
                             ),
-                          ),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: col,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: col,
+                            ),
                           ),
                         ),
                       ],
