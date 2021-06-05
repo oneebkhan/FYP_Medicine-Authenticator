@@ -204,17 +204,6 @@ class _Pharmacy_Clinics_InfoState extends State<Pharmacy_Clinics_Info> {
                 ),
                 SpeedDialChild(
                   child: Icon(
-                    Icons.edit,
-                    color: Colors.white,
-                  ),
-                  label: 'Edit Info',
-                  backgroundColor: Colors.blue[500],
-                  labelBackgroundColor: Colors.grey[800],
-                  labelStyle: TextStyle(color: Colors.white),
-                  onTap: () {},
-                ),
-                SpeedDialChild(
-                  child: Icon(
                     index2 == 0
                         ? Icons.keyboard_arrow_down_outlined
                         : Icons.keyboard_arrow_up_outlined,

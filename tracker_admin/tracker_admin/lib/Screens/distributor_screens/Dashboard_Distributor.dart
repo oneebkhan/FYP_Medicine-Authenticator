@@ -14,12 +14,14 @@ import 'package:tracker_admin/Widgets/RowInfo.dart';
 import 'package:tracker_admin/configs/HeroDialogRoute.dart';
 import 'package:tracker_admin/screens/MedicineInfo_WithoutBarcode.dart';
 import 'package:tracker_admin/screens/distributor_screens/Clinics/AddClinic.dart';
+import 'package:tracker_admin/screens/distributor_screens/Clinics/SearchClinics.dart';
 import 'package:tracker_admin/screens/distributor_screens/Pharmacies/AddPharmacy.dart';
 import 'package:tracker_admin/screens/distributor_screens/Clinics/Clinics_Distributor.dart';
 import 'package:tracker_admin/screens/distributor_screens/MedicineSearch_Distributor.dart';
 import 'package:tracker_admin/screens/StartingPage.dart';
 import 'package:tracker_admin/screens/distributor_screens/DistributorHistory.dart';
 import 'package:tracker_admin/screens/distributor_screens/Pharmacies/Pharmacies_Distributor.dart';
+import 'package:tracker_admin/screens/distributor_screens/Pharmacies/SearchPharmacies.dart';
 import 'package:tracker_admin/screens/distributor_screens/Requests.dart';
 import 'package:tracker_admin/screens/ViewMedicine.dart';
 import 'package:tracker_admin/screens/distributor_screens/SelectMedicineModel.dart';
@@ -869,6 +871,58 @@ class _DistributorDashboardState extends State<DistributorDashboard> {
                                 height: widget.width / 4.6,
                                 image: AssetImage(
                                     'assets/icons/Distributor_dashboard_pharmacy/addPharmacy.png'),
+                              ),
+                            ),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: col,
+                            ),
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => SearchPharmacies(),
+                              ),
+                            );
+                          },
+                          child: Container(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 5, horizontal: 5),
+                              child: Image(
+                                width: widget.width / 4.9,
+                                height: widget.width / 4.6,
+                                image: AssetImage(
+                                    'assets/icons/Distributor_dashboard_pharmacy/searchPharmacy.png'),
+                              ),
+                            ),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: col,
+                            ),
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => SearchClinics(),
+                              ),
+                            );
+                          },
+                          child: Container(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 5, horizontal: 5),
+                              child: Image(
+                                width: widget.width / 4.9,
+                                height: widget.width / 4.6,
+                                image: AssetImage(
+                                    'assets/icons/Distributor_dashboard_pharmacy/searchClinic.png'),
                               ),
                             ),
                             decoration: BoxDecoration(

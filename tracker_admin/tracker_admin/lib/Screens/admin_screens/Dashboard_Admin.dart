@@ -15,6 +15,7 @@ import 'package:tracker_admin/configs/HeroDialogRoute.dart';
 import 'package:tracker_admin/screens/StartingPage.dart';
 import 'package:tracker_admin/screens/admin_screens/AddMedicineModel.dart';
 import 'package:tracker_admin/screens/admin_screens/Clinic/Clinics.dart';
+import 'package:tracker_admin/screens/admin_screens/Clinic/SearchClinic_Admin.dart';
 import 'package:tracker_admin/screens/admin_screens/Distributor.dart';
 import 'package:tracker_admin/screens/admin_screens/Pharmacy/Pharmacies.dart';
 import 'package:tracker_admin/screens/admin_screens/SearchDistributors.dart';
@@ -24,6 +25,7 @@ import 'package:tracker_admin/screens/admin_screens/AddDistributor.dart';
 import 'package:tracker_admin/screens/admin_screens/History.dart';
 import 'package:tracker_admin/screens/admin_screens/ContactDevs.dart';
 import 'package:tracker_admin/screens/admin_screens/ViewMedicineModel.dart';
+import 'package:tracker_admin/screens/distributor_screens/Pharmacies/SearchPharmacies.dart';
 
 class Dashboard_Admin extends StatefulWidget {
   @override
@@ -813,6 +815,64 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                 height: widget.width / 4.6,
                                 image: AssetImage(
                                     'assets/icons/admin_pharmacies_clinics/viewPharmacies.png'),
+                              ),
+                            ),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: col,
+                            ),
+                          ),
+                        ),
+                        //
+                        //
+                        // The second VIEW PHARMACIES Button
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => SearchPharmacies(),
+                              ),
+                            );
+                          },
+                          child: Container(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 5, horizontal: 5),
+                              child: Image(
+                                width: widget.width / 4.9,
+                                height: widget.width / 4.6,
+                                image: AssetImage(
+                                    'assets/icons/admin_pharmacies_clinics/searchPharmacy.png'),
+                              ),
+                            ),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: col,
+                            ),
+                          ),
+                        ),
+                        //
+                        //
+                        // The second VIEW PHARMACIES Button
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => SearchClinic_Admin(),
+                              ),
+                            );
+                          },
+                          child: Container(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 5, horizontal: 5),
+                              child: Image(
+                                width: widget.width / 4.9,
+                                height: widget.width / 4.6,
+                                image: AssetImage(
+                                    'assets/icons/admin_pharmacies_clinics/searchClinic.png'),
                               ),
                             ),
                             decoration: BoxDecoration(

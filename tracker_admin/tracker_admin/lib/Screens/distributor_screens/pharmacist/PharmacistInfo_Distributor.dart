@@ -11,6 +11,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:tracker_admin/screens/admin_screens/EditDistributor.dart';
+import 'package:tracker_admin/screens/distributor_screens/pharmacist/EditPharmacist.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 // ignore: camel_case_types
@@ -328,21 +329,17 @@ class _PharmacistsInfo_DistributorState
                   labelBackgroundColor: Colors.grey[800],
                   labelStyle: TextStyle(color: Colors.white),
                   onTap: () {
-                    showDialog(context: context, builder: (_) => customAlert());
-                    print(pharmacistsList);
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (_) => EditDistributor(
-                    //       companyName: pharmacistStream['companyName'],
-                    //       email: pharmacistStream['email'],
-                    //       location: pharmacistStream['location'],
-                    //       name: pharmacistStream['name'],
-                    //       phoneNumber: pharmacistStream['phoneNumber'],
-                    //       image: pharmacistStream['image'],
-                    //     ),
-                    //   ),
-                    // );
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => EditPharmacist(
+                          email: pharmacistStream['email'],
+                          name: pharmacistStream['name'],
+                          phoneNumber: pharmacistStream['phoneNumber'],
+                          image: pharmacistStream['image'],
+                        ),
+                      ),
+                    );
                   },
                 ),
                 SpeedDialChild(
