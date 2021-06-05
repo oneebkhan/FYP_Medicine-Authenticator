@@ -55,6 +55,26 @@ class _Dashboard_DistributorState extends State<Dashboard_Distributor> {
   int medCount;
   int pharmCount;
   int clinicCount;
+  bool con;
+  var subscription;
+  var medID;
+  var medName;
+
+  //
+  //
+  //Check internet connection
+  checkInternet() async {
+    var connectivityResult = await Connectivity().checkConnectivity();
+    if (connectivityResult == ConnectivityResult.none) {
+      Fluttertoast.showToast(msg: 'Not Connected to the Internet!');
+      setState(() {
+        con = true;
+      });
+    } else
+      setState(() {
+        con = false;
+      });
+  }
 
   //
   //
@@ -173,6 +193,13 @@ class _Dashboard_DistributorState extends State<Dashboard_Distributor> {
   @override
   void initState() {
     super.initState();
+    medID = '';
+    subscription = Connectivity()
+        .onConnectivityChanged
+        .listen((ConnectivityResult result) {
+      checkInternet();
+    });
+    checkInternet();
     opac = 1;
     opac2 = 0;
     index = 0;

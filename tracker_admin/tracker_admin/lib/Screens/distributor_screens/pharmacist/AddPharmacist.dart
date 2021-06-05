@@ -278,6 +278,7 @@ class _AddPharmacistState extends State<AddPharmacist> {
         "salesNumber": 0,
         "pharmacyName": widget.pharmName,
         "pharmacyID": widget.uid,
+        "saleID": [],
         "EditedBy": {by: Timestamp.now()},
       }).then((value) async {
         await FirebaseFirestore.instance
