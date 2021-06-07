@@ -210,6 +210,7 @@ class _AddPharmacyState extends State<AddPharmacy> {
         "addedBy": info['email'],
         "imageURL": uploadedFileURL,
         "latLong": latLong,
+        "availableMedicine": [],
         "lastEditedBy": {
           FirebaseAuth.instance.currentUser.email: Timestamp.now()
         },

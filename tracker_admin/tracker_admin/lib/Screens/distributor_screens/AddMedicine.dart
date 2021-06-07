@@ -102,6 +102,8 @@ class _AddMedicineState extends State<AddMedicine> {
         "registrant": registrant.text,
         "soldAt": '',
         "sold": '',
+        "soldAtPharmacyID": '',
+        "soldAtPharmacyName": '',
       }).then((_) async {
         var fire = await FirebaseFirestore.instance;
         fire.collection("History").doc(DateTime.now().toString()).set({
