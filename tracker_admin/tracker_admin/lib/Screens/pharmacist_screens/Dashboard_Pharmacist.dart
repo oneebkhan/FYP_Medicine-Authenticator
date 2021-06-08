@@ -23,6 +23,7 @@ import 'package:qrscan/qrscan.dart' as scanner;
 import 'package:tracker_admin/screens/pharmacist_screens/AddMedicine_Pharmacist.dart';
 import 'package:tracker_admin/screens/pharmacist_screens/PharmacistHistory.dart';
 import 'package:tracker_admin/screens/pharmacist_screens/PharmacyMedicine.dart';
+import 'package:tracker_admin/screens/pharmacist_screens/RemoveMedicine_Pharmacist.dart';
 
 class Dashboard_Pharmacist extends StatefulWidget {
   Dashboard_Pharmacist({Key key}) : super(key: key);
@@ -863,8 +864,7 @@ class _PharmacistDashboardState extends State<PharmacistDashboard> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (_) => PharmacyMedicine(
-                                      pageName: 'Medicine in Pharmacy',
+                                    builder: (_) => RemoveMedicine_Pharmacist(
                                       availableMedicine:
                                           widget.medicineInPharmacy,
                                     ),

@@ -1433,33 +1433,6 @@ class _DistributorStatisticsState extends State<DistributorStatistics> {
                     SizedBox(
                       height: 10,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 10),
-                      child: TextButton(
-                        style: ButtonStyle(
-                          overlayColor: MaterialStateProperty.all<Color>(
-                            Color.fromARGB(255, 110, 200, 110).withOpacity(0.5),
-                          ),
-                          padding:
-                              MaterialStateProperty.all<EdgeInsetsGeometry>(
-                            EdgeInsets.all(0),
-                          ),
-                          backgroundColor: MaterialStateProperty.all<Color>(
-                            col,
-                          ),
-                        ),
-                        onPressed: () {},
-                        child: Center(
-                          child: Text(
-                            'Generate Report',
-                            style: TextStyle(
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
                   ],
                 ),
               ),

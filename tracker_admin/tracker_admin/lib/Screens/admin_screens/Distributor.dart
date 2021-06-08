@@ -445,32 +445,6 @@ class _DistributorState extends State<Distributor> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'Sales: ',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: width / 20,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  Text(
-                                    info['salesNumber'].toString(),
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: width / 27,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
                                     'Email: ',
                                     style: TextStyle(
                                       color: Colors.white,

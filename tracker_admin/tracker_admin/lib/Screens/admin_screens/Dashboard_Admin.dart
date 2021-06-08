@@ -12,6 +12,7 @@ import 'package:tracker_admin/Widgets/Admin/BarchartMonthly.dart';
 import 'package:tracker_admin/Widgets/PopupCard.dart';
 import 'package:tracker_admin/Widgets/RowInfo.dart';
 import 'package:tracker_admin/configs/HeroDialogRoute.dart';
+import 'package:tracker_admin/screens/MedicineInfo_WithoutBarcode.dart';
 import 'package:tracker_admin/screens/StartingPage.dart';
 import 'package:tracker_admin/screens/admin_screens/AddMedicineModel.dart';
 import 'package:tracker_admin/screens/admin_screens/Clinic/Clinics.dart';
@@ -26,6 +27,7 @@ import 'package:tracker_admin/screens/admin_screens/History.dart';
 import 'package:tracker_admin/screens/admin_screens/ContactDevs.dart';
 import 'package:tracker_admin/screens/admin_screens/ViewMedicineModel.dart';
 import 'package:tracker_admin/screens/distributor_screens/Pharmacies/SearchPharmacies.dart';
+import 'package:tracker_admin/screens/distributor_screens/ViewTopMedicine.dart';
 
 class Dashboard_Admin extends StatefulWidget {
   @override
@@ -1121,6 +1123,7 @@ class _AdminStatisticsState extends State<AdminStatistics> {
   bool con = true;
   var subscription;
   var historyStream;
+  var basicMedStream;
 
   //
   //
@@ -1167,12 +1170,27 @@ class _AdminStatisticsState extends State<AdminStatistics> {
     }
   }
 
+  getTopMedicineName() async {
+    try {
+      setState(() {
+        basicMedStream = FirebaseFirestore.instance
+            .collection('MedicineModel')
+            .orderBy('totalSales', descending: true)
+            .limit(5)
+            .snapshots();
+      });
+    } on Exception catch (e) {
+      print(e);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     getDistributors();
     checkInternet();
     getHistory();
+    getTopMedicineName();
     subscription = Connectivity()
         .onConnectivityChanged
         .listen((ConnectivityResult result) {
@@ -1529,7 +1547,7 @@ class _AdminStatisticsState extends State<AdminStatistics> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Top Distributors',
+                          'Top Medicine',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: widget.width / 16,
@@ -1556,7 +1574,8 @@ class _AdminStatisticsState extends State<AdminStatistics> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (_) => ViewDistributors(),
+                                  builder: (_) => ViewTopMedicine(
+                                      pageName: 'View Top Medicine'),
                                 ),
                               );
                             },
@@ -1569,7 +1588,7 @@ class _AdminStatisticsState extends State<AdminStatistics> {
                       ],
                     ),
                     SizedBox(
-                      height: widget.height / 30,
+                      height: widget.height / 40,
                     ),
                     con == true
                         ? Center(
@@ -1580,7 +1599,7 @@ class _AdminStatisticsState extends State<AdminStatistics> {
                             ),
                           )
                         : StreamBuilder<QuerySnapshot>(
-                            stream: distributorStream,
+                            stream: basicMedStream,
                             builder: (context, snapshot) {
                               if (snapshot.hasData == false) {
                                 return Center(
@@ -1595,20 +1614,20 @@ class _AdminStatisticsState extends State<AdminStatistics> {
                                   QueryDocumentSnapshot item =
                                       snapshot.data.docs[index];
                                   return RowInfo(
-                                    imageURL: item['image'] == ''
+                                    imageURL: item['imageURL'][0] == ''
                                         ? 'https://www.spicefactors.com/wp-content/uploads/default-user-image.png'
-                                        : item['image'],
-                                    location: item['email'],
+                                        : item['imageURL'][0],
+                                    location: 'Sales: ' +
+                                        item['totalSales'].toString(),
                                     width: widget.width,
-                                    title: item['name'] +
-                                        ' - ' +
-                                        item['companyName'],
+                                    title: item['name'],
                                     func: () {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (_) => Distributor(
-                                            dist: item['email'].toString(),
+                                          builder: (_) =>
+                                              MedicineInfo_WithoutBarcode(
+                                            name: item['name'],
                                           ),
                                         ),
                                       );
