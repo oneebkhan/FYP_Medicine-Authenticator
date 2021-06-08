@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
-class PopupCard extends StatelessWidget {
+class PopupCard_Distributor extends StatelessWidget {
   final String dateTime;
   final String by;
   final String image;
@@ -10,7 +10,7 @@ class PopupCard extends StatelessWidget {
   double width;
   double height;
 
-  PopupCard({
+  PopupCard_Distributor({
     Key key,
     this.dateTime,
     this.by,
@@ -41,7 +41,7 @@ class PopupCard extends StatelessWidget {
                   Container(
                     width: width,
                     decoration: BoxDecoration(
-                      color: Color.fromARGB(255, 149, 191, 255),
+                      color: Color.fromARGB(255, 148, 210, 146),
                       borderRadius: BorderRadius.only(
                         bottomLeft: Radius.circular(7),
                         bottomRight: Radius.circular(7),
@@ -122,6 +122,9 @@ class PopupCard extends StatelessWidget {
                   ),
                   Center(
                     child: TextButton(
+                      style: TextButton.styleFrom(
+                        primary: Color.fromARGB(255, 148, 210, 146),
+                      ),
                       onPressed: () {
                         Navigator.pop(context);
                       },

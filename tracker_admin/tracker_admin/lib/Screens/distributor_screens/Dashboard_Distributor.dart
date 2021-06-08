@@ -10,6 +10,7 @@ import 'package:tracker_admin/Widgets/Distributor/BarChartDaily_Distributor.dart
 import 'package:tracker_admin/Widgets/Distributor/BarChartMonthly_Distributor.dart';
 import 'package:tracker_admin/Widgets/Distributor/BarChartWeekly_Distributor.dart';
 import 'package:tracker_admin/Widgets/PopupCard.dart';
+import 'package:tracker_admin/Widgets/PopupCard_Distributor.dart';
 import 'package:tracker_admin/Widgets/RowInfo.dart';
 import 'package:tracker_admin/configs/HeroDialogRoute.dart';
 import 'package:tracker_admin/screens/MedicineInfo_WithoutBarcode.dart';
@@ -1572,7 +1573,7 @@ class _DistributorStatisticsState extends State<DistributorStatistics> {
                                           Navigator.of(context).push(
                                               HeroDialogRoute(
                                                   builder: (context) {
-                                            return PopupCard(
+                                            return PopupCard_Distributor(
                                               tag: item['timestamp'].toString(),
                                               by: item['by'].toString(),
                                               dateTime: DateFormat.yMMMd()

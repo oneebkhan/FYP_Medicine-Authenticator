@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:intl/intl.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -11,12 +12,16 @@ import 'package:tracker_admin/Widgets/Admin/BarChartWeekly.dart';
 import 'package:tracker_admin/Widgets/Admin/BarChartDaily.dart';
 import 'package:tracker_admin/Widgets/Distributor/BarChartMonthly_Distributor.dart';
 import 'package:tracker_admin/Widgets/Distributor/BarChartWeekly_Distributor.dart';
+import 'package:tracker_admin/Widgets/PopupCard.dart';
+import 'package:tracker_admin/Widgets/PopupCard_Pharmacist.dart';
 import 'package:tracker_admin/Widgets/RowInfo.dart';
+import 'package:tracker_admin/configs/HeroDialogRoute.dart';
 import 'package:tracker_admin/screens/StartingPage.dart';
 import 'package:tracker_admin/screens/distributor_screens/Requests.dart';
 import 'package:tracker_admin/screens/ViewMedicine.dart';
 import 'package:qrscan/qrscan.dart' as scanner;
 import 'package:tracker_admin/screens/pharmacist_screens/AddMedicine_Pharmacist.dart';
+import 'package:tracker_admin/screens/pharmacist_screens/PharmacistHistory.dart';
 import 'package:tracker_admin/screens/pharmacist_screens/PharmacyMedicine.dart';
 
 class Dashboard_Pharmacist extends StatefulWidget {
@@ -390,6 +395,11 @@ class _Dashboard_PharmacistState extends State<Dashboard_Pharmacist> {
             scan: _scan,
             scanGallery: _scanPhoto,
             medicineInPharmacy: medicineInPharmacy,
+            compName: pharmacistStream == null
+                ? '!'
+                : pharmacistStream['companyName'],
+            medicineInPharmacyCount:
+                medicineInPharmacy == null ? 0 : medicineInPharmacy.length,
           ),
         ),
       ),
@@ -410,6 +420,8 @@ class PharmacistDashboard extends StatefulWidget {
   Function scan;
   Function scanGallery;
   final List medicineInPharmacy;
+  final int medicineInPharmacyCount;
+  final String compName;
 
   PharmacistDashboard({
     Key key,
@@ -421,6 +433,8 @@ class PharmacistDashboard extends StatefulWidget {
     this.scan,
     this.scanGallery,
     this.medicineInPharmacy,
+    this.compName,
+    this.medicineInPharmacyCount,
   }) : super(key: key);
 
   @override
@@ -429,6 +443,56 @@ class PharmacistDashboard extends StatefulWidget {
 
 class _PharmacistDashboardState extends State<PharmacistDashboard> {
   Color col = Colors.red[400];
+  bool con;
+  var historyStream;
+  var subscription;
+
+  //
+  //
+  //Check internet connection
+  checkInternet() async {
+    var connectivityResult = await Connectivity().checkConnectivity();
+    if (connectivityResult == ConnectivityResult.none) {
+      Fluttertoast.showToast(msg: 'Not Connected to the Internet!');
+      setState(() {
+        con = true;
+      });
+    } else
+      setState(() {
+        con = false;
+      });
+  }
+
+  getHistory() async {
+    try {
+      setState(() {
+        historyStream = FirebaseFirestore.instance
+            .collection('History')
+            .where('category', isEqualTo: 'pharmacist')
+            .where('byCompany', isEqualTo: widget.compName)
+            .orderBy('timestamp', descending: true)
+            .limit(5)
+            .snapshots();
+      });
+    } on Exception catch (e) {
+      print(e);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    checkInternet();
+    Future.delayed(Duration(milliseconds: 1000), () {
+      getHistory();
+    });
+
+    subscription = Connectivity()
+        .onConnectivityChanged
+        .listen((ConnectivityResult result) {
+      checkInternet();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -649,41 +713,6 @@ class _PharmacistDashboardState extends State<PharmacistDashboard> {
                                 ),
                               ),
                             ),
-                            //
-                            //
-                            // The second SEARCH MEDICINE Button
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 15.0),
-                              child: GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (_) => PharmacyMedicine(
-                                        pageName: 'View Medicine',
-                                      ),
-                                    ),
-                                  );
-                                },
-                                child: Container(
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 5, horizontal: 5),
-                                    child: Image(
-                                      width: widget.width / 4.9,
-                                      height: widget.width / 4.6,
-                                      image: AssetImage(
-                                        'assets/icons/pharmacy_dashboard_medicine/viewAuthenticated.png',
-                                      ),
-                                    ),
-                                  ),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: col,
-                                  ),
-                                ),
-                              ),
-                            ),
                           ],
                         ),
                       ],
@@ -692,7 +721,7 @@ class _PharmacistDashboardState extends State<PharmacistDashboard> {
                 ),
               ),
               SizedBox(
-                height: 20,
+                height: 35,
               ),
               //
               //
@@ -741,9 +770,11 @@ class _PharmacistDashboardState extends State<PharmacistDashboard> {
                               ),
                               child: Center(
                                 child: Text(
-                                  widget.authenticMedCount.toString() == 'null'
+                                  widget.medicineInPharmacyCount.toString() ==
+                                          'null'
                                       ? '!'
-                                      : widget.authenticMedCount.toString(),
+                                      : widget.medicineInPharmacyCount
+                                          .toString(),
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontSize: widget.width / 30,
@@ -753,12 +784,9 @@ class _PharmacistDashboardState extends State<PharmacistDashboard> {
                             )
                           ],
                         ),
-                        SizedBox(
-                          height: 3,
-                        ),
 
                         SizedBox(
-                          height: 20,
+                          height: 25,
                         ),
                         //
                         //
@@ -830,6 +858,37 @@ class _PharmacistDashboardState extends State<PharmacistDashboard> {
                                 ),
                               ),
                             ),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => PharmacyMedicine(
+                                      pageName: 'Medicine in Pharmacy',
+                                      availableMedicine:
+                                          widget.medicineInPharmacy,
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: Container(
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 5, horizontal: 5),
+                                  child: Image(
+                                    width: widget.width / 4.9,
+                                    height: widget.width / 4.6,
+                                    image: AssetImage(
+                                      'assets/icons/pharmacy_dashboard_medicine/removeMedicine.png',
+                                    ),
+                                  ),
+                                ),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: col,
+                                ),
+                              ),
+                            ),
                           ],
                         ),
                       ],
@@ -839,11 +898,146 @@ class _PharmacistDashboardState extends State<PharmacistDashboard> {
               ),
 
               SizedBox(
-                height: 30,
+                height: 35,
+              ),
+              //
+              //
+              // The History pane
+              Center(
+                child: Container(
+                  width: widget.width,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    color: con == true ? Colors.grey[200] : Colors.white,
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 20),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'History',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: widget.width / 16,
+                              ),
+                            ),
+                            Container(
+                              width: 65,
+                              height: 30,
+                              decoration: BoxDecoration(
+                                color: col,
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              child: TextButton(
+                                style: ButtonStyle(
+                                  padding: MaterialStateProperty.all<
+                                      EdgeInsetsGeometry>(
+                                    EdgeInsets.all(0),
+                                  ),
+                                  textStyle:
+                                      MaterialStateProperty.all<TextStyle>(
+                                    TextStyle(color: Colors.white),
+                                  ),
+                                ),
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => PharmacistHistory(
+                                        compName: widget.compName,
+                                      ),
+                                    ),
+                                  );
+                                },
+                                child: Text(
+                                  'View All',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: widget.height / 40,
+                        ),
+                        con == true
+                            ? Center(
+                                child: Container(
+                                  width: widget.width / 6,
+                                  height: widget.width / 6,
+                                  child: CircularProgressIndicator(),
+                                ),
+                              )
+                            : StreamBuilder<QuerySnapshot>(
+                                stream: historyStream,
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData == false) {
+                                    return Center(
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  }
+                                  return ListView.builder(
+                                    shrinkWrap: true,
+                                    physics: NeverScrollableScrollPhysics(),
+                                    itemCount: snapshot.data.docs.length,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      QueryDocumentSnapshot item =
+                                          snapshot.data.docs[index];
+                                      return Hero(
+                                        tag: item['timestamp'].toString(),
+                                        child: Material(
+                                          borderRadius:
+                                              BorderRadius.circular(15.0),
+                                          color: Colors.white,
+                                          child: RowInfo(
+                                            imageURL: item['image'] == ''
+                                                ? 'https://www.spicefactors.com/wp-content/uploads/default-user-image.png'
+                                                : item['image'],
+                                            location: DateFormat.yMMMd()
+                                                .add_jm()
+                                                .format(
+                                                    item['timestamp'].toDate()),
+                                            width: widget.width,
+                                            title: item['name'],
+                                            func: () {
+                                              Navigator.of(context).push(
+                                                  HeroDialogRoute(
+                                                      builder: (context) {
+                                                return PopupCard_Pharmacist(
+                                                  tag: item['timestamp']
+                                                      .toString(),
+                                                  by: item['by'].toString(),
+                                                  dateTime: DateFormat.yMMMd()
+                                                      .add_jm()
+                                                      .format(item['timestamp']
+                                                          .toDate())
+                                                      .toString(),
+                                                  image: item['image'],
+                                                  name: item['name'],
+                                                );
+                                              }));
+                                            },
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  );
+                                }),
+                      ],
+                    ),
+                  ),
+                ),
               ),
 
               SizedBox(
-                height: 20,
+                height: 50,
               ),
             ],
           ),

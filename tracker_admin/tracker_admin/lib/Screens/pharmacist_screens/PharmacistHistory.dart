@@ -2,34 +2,34 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:tracker_admin/Widgets/PopupCard.dart';
-import 'package:tracker_admin/Widgets/PopupCard_Distributor.dart';
+import 'package:tracker_admin/Widgets/PopupCard_Pharmacist.dart';
 import 'package:tracker_admin/Widgets/RowInfo.dart';
 import 'package:tracker_admin/configs/HeroDialogRoute.dart';
 import 'package:tracker_admin/screens/Pharmacy_Clinics_Info.dart';
 
-class DistributorHistory extends StatefulWidget {
+class PharmacistHistory extends StatefulWidget {
   // The name of the category opened
   final String compName;
 
-  const DistributorHistory({
+  const PharmacistHistory({
     Key key,
     this.compName,
   }) : super(key: key);
 
   @override
-  _DistributorHistoryState createState() => _DistributorHistoryState();
+  _PharmacistHistoryState createState() => _PharmacistHistoryState();
 }
 
-class _DistributorHistoryState extends State<DistributorHistory> {
+class _PharmacistHistoryState extends State<PharmacistHistory> {
   double opac;
-  var distributorHistoryStream;
+  var historyStream;
 
   getHistory() async {
     try {
       setState(() {
-        distributorHistoryStream = FirebaseFirestore.instance
+        historyStream = FirebaseFirestore.instance
             .collection('History')
-            .where('category', whereIn: ['distributor', 'pharmacist'])
+            .where('category', isEqualTo: 'pharmacist')
             .where('byCompany', isEqualTo: widget.compName)
             .orderBy('timestamp', descending: true)
             .snapshots();
@@ -109,7 +109,7 @@ class _DistributorHistoryState extends State<DistributorHistory> {
                         top: 20,
                       ),
                       child: StreamBuilder<QuerySnapshot>(
-                          stream: distributorHistoryStream,
+                          stream: historyStream,
                           builder: (context, snapshot) {
                             if (snapshot.hasData == false) {
                               return Center(
@@ -138,7 +138,7 @@ class _DistributorHistoryState extends State<DistributorHistory> {
                                       func: () {
                                         Navigator.of(context).push(
                                             HeroDialogRoute(builder: (context) {
-                                          return PopupCard_Distributor(
+                                          return PopupCard_Pharmacist(
                                             tag: item['timestamp'].toString(),
                                             by: item['by'].toString(),
                                             dateTime: DateFormat.yMMMd()
