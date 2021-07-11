@@ -15,8 +15,35 @@ class BarChartMonthly extends StatefulWidget {
   ];
   final double width;
   final Function func;
+  final int jan;
+  final int feb;
+  final int mar;
+  final int apr;
+  final int may;
+  final int jun;
+  final int jul;
+  final int aug;
+  final int sep;
+  final int oct;
+  final int nov;
+  final int dec;
 
-  BarChartMonthly({this.width, this.func});
+  BarChartMonthly({
+    this.width,
+    this.func,
+    this.jan,
+    this.feb,
+    this.mar,
+    this.apr,
+    this.may,
+    this.jun,
+    this.jul,
+    this.aug,
+    this.sep,
+    this.oct,
+    this.nov,
+    this.dec,
+  });
 
   @override
   State<StatefulWidget> createState() => BarChartMonthlyState();
@@ -105,7 +132,7 @@ class BarChartMonthlyState extends State<BarChartMonthly> {
           width: width,
           backDrawRodData: BackgroundBarChartRodData(
             show: true,
-            y: 20,
+            y: 10,
             colors: [barBackgroundColor],
           ),
         ),
@@ -117,29 +144,41 @@ class BarChartMonthlyState extends State<BarChartMonthly> {
   List<BarChartGroupData> showingGroups() => List.generate(12, (i) {
         switch (i) {
           case 0:
-            return makeGroupData(0, 5, isTouched: i == touchedIndex);
+            return makeGroupData(0, widget.jan.toDouble(),
+                isTouched: i == touchedIndex);
           case 1:
-            return makeGroupData(1, 6.5, isTouched: i == touchedIndex);
+            return makeGroupData(1, widget.feb.toDouble(),
+                isTouched: i == touchedIndex);
           case 2:
-            return makeGroupData(2, 5, isTouched: i == touchedIndex);
+            return makeGroupData(2, widget.mar.toDouble(),
+                isTouched: i == touchedIndex);
           case 3:
-            return makeGroupData(3, 7.5, isTouched: i == touchedIndex);
+            return makeGroupData(3, widget.apr.toDouble(),
+                isTouched: i == touchedIndex);
           case 4:
-            return makeGroupData(4, 9, isTouched: i == touchedIndex);
+            return makeGroupData(4, widget.may.toDouble(),
+                isTouched: i == touchedIndex);
           case 5:
-            return makeGroupData(5, 11.5, isTouched: i == touchedIndex);
+            return makeGroupData(5, widget.jun.toDouble(),
+                isTouched: i == touchedIndex);
           case 6:
-            return makeGroupData(6, 6.5, isTouched: i == touchedIndex);
+            return makeGroupData(6, widget.jul.toDouble(),
+                isTouched: i == touchedIndex);
           case 7:
-            return makeGroupData(7, 6.5, isTouched: i == touchedIndex);
+            return makeGroupData(7, widget.aug.toDouble(),
+                isTouched: i == touchedIndex);
           case 8:
-            return makeGroupData(8, 6.5, isTouched: i == touchedIndex);
+            return makeGroupData(8, widget.sep.toDouble(),
+                isTouched: i == touchedIndex);
           case 9:
-            return makeGroupData(9, 6.5, isTouched: i == touchedIndex);
+            return makeGroupData(9, widget.oct.toDouble(),
+                isTouched: i == touchedIndex);
           case 10:
-            return makeGroupData(10, 6.5, isTouched: i == touchedIndex);
+            return makeGroupData(10, widget.nov.toDouble(),
+                isTouched: i == touchedIndex);
           case 11:
-            return makeGroupData(11, 6.5, isTouched: i == touchedIndex);
+            return makeGroupData(11, widget.dec.toDouble(),
+                isTouched: i == touchedIndex);
           default:
             return null;
         }

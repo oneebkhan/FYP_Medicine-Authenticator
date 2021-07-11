@@ -109,6 +109,11 @@ class _ClinicsState extends State<Clinics> {
     height = MediaQuery.of(context).size.height;
 
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        backgroundColor: Color.fromARGB(255, 140, 180, 255),
+        child: Icon(Icons.location_on),
+      ),
       extendBodyBehindAppBar: true,
       backgroundColor: Color.fromARGB(255, 246, 246, 248),
       appBar: AppBar(

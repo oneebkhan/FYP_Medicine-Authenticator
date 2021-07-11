@@ -15,8 +15,19 @@ class BarChartWeekly extends StatefulWidget {
   ];
   final double width;
   final Function func;
+  final int first;
+  final int second;
+  final int third;
+  final int fourth;
 
-  BarChartWeekly({this.width, this.func});
+  BarChartWeekly({
+    this.width,
+    this.func,
+    this.first,
+    this.second,
+    this.third,
+    this.fourth,
+  });
 
   @override
   State<StatefulWidget> createState() => BarChartWeeklyState();
@@ -108,7 +119,7 @@ class BarChartWeeklyState extends State<BarChartWeekly> {
           width: width,
           backDrawRodData: BackgroundBarChartRodData(
             show: true,
-            y: 20,
+            y: 5,
             colors: [barBackgroundColor],
           ),
         ),
@@ -120,13 +131,17 @@ class BarChartWeeklyState extends State<BarChartWeekly> {
   List<BarChartGroupData> showingGroups() => List.generate(4, (i) {
         switch (i) {
           case 0:
-            return makeGroupData(0, 5, isTouched: i == touchedIndex);
+            return makeGroupData(0, widget.first.toDouble(),
+                isTouched: i == touchedIndex);
           case 1:
-            return makeGroupData(1, 6.5, isTouched: i == touchedIndex);
+            return makeGroupData(1, widget.second.toDouble(),
+                isTouched: i == touchedIndex);
           case 2:
-            return makeGroupData(2, 5, isTouched: i == touchedIndex);
+            return makeGroupData(2, widget.third.toDouble(),
+                isTouched: i == touchedIndex);
           case 3:
-            return makeGroupData(3, 7.5, isTouched: i == touchedIndex);
+            return makeGroupData(3, widget.fourth.toDouble(),
+                isTouched: i == touchedIndex);
           default:
             return null;
         }
