@@ -15,13 +15,13 @@ class BarChartDaily extends StatefulWidget {
   ];
   final Function func;
   final double width;
-  final int mon;
-  final int tues;
-  final int wed;
-  final int thurs;
-  final int fri;
-  final int sat;
-  final int sun;
+  int mon;
+  int tues;
+  int wed;
+  int thurs;
+  int fri;
+  int sat;
+  int sun;
 
   BarChartDaily({
     this.width,
