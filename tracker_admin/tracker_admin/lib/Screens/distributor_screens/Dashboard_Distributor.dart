@@ -13,6 +13,9 @@ import 'package:tracker_admin/Widgets/PopupCard.dart';
 import 'package:tracker_admin/Widgets/PopupCard_Distributor.dart';
 import 'package:tracker_admin/Widgets/RowInfo.dart';
 import 'package:tracker_admin/configs/HeroDialogRoute.dart';
+import 'package:tracker_admin/models/Daily.dart';
+import 'package:tracker_admin/models/Monthly.dart';
+import 'package:tracker_admin/models/Weekly.dart';
 import 'package:tracker_admin/screens/MedicineInfo_WithoutBarcode.dart';
 import 'package:tracker_admin/screens/distributor_screens/Clinics/AddClinic.dart';
 import 'package:tracker_admin/screens/distributor_screens/Clinics/SearchClinics.dart';
@@ -60,6 +63,201 @@ class _Dashboard_DistributorState extends State<Dashboard_Distributor> {
   var subscription;
   var medID;
   var medName;
+  Monthly month = Monthly();
+  Weekly week = Weekly();
+  Daily day = Daily();
+
+  //
+  //
+  // the function to get sales numbers of the monthly graph
+  Future getSalesNumberMonthly() {
+    try {
+      FirebaseFirestore.instance
+          .collection('Sales')
+          .orderBy('timestamp', descending: true)
+          .where('timestamp',
+              isGreaterThanOrEqualTo:
+                  Timestamp.fromDate(DateTime(DateTime.now().year)))
+          .where('under', isEqualTo: FirebaseAuth.instance.currentUser.email)
+          .snapshots()
+          .listen((event) {
+        event.docs.forEach((element) {
+          DateTime date = (element.data()['timestamp'] as Timestamp).toDate();
+          //switch case for performance
+          //adds 1 to the month if there was a transaction in that month
+          switch (date.month) {
+            case 1:
+              {
+                month.january++;
+              }
+              break;
+            case 2:
+              {
+                month.febuary++;
+              }
+              break;
+            case 3:
+              {
+                month.march++;
+              }
+              break;
+            case 4:
+              {
+                month.april++;
+              }
+              break;
+            case 5:
+              {
+                month.may++;
+              }
+              break;
+            case 6:
+              {
+                month.june++;
+              }
+              break;
+            case 7:
+              {
+                month.july++;
+              }
+              break;
+            case 8:
+              {
+                month.august++;
+              }
+              break;
+            case 9:
+              {
+                month.september++;
+              }
+              break;
+            case 10:
+              {
+                month.october++;
+              }
+              break;
+            case 11:
+              {
+                month.november++;
+              }
+              break;
+            case 12:
+              {
+                month.december++;
+              }
+              break;
+            default:
+              {
+                print("Invalid choice");
+              }
+              break;
+          }
+        });
+      });
+    } on Exception catch (e) {
+      print(e);
+    }
+  }
+
+  //
+  //
+  // the function to get sales numbers of the weekly graph
+  Future getSalesNumberWeekly() {
+    try {
+      FirebaseFirestore.instance
+          .collection('Sales')
+          .orderBy('timestamp', descending: true)
+          .where('timestamp',
+              isGreaterThanOrEqualTo: Timestamp.fromDate(
+                  DateTime(DateTime.now().year, DateTime.now().month)))
+          .where('under', isEqualTo: FirebaseAuth.instance.currentUser.email)
+          .snapshots()
+          .listen((event) {
+        event.docs.forEach((element) {
+          DateTime date = (element.data()['timestamp'] as Timestamp).toDate();
+          //adds 1 to the week if there was a transaction in that week
+          if (date.day >= 1 && date.day <= 7) {
+            week.first++;
+          } else if (date.day >= 8 && date.day <= 14) {
+            week.second++;
+          } else if (date.day >= 15 && date.day <= 21) {
+            week.third++;
+          } else if (date.day >= 22 && date.day <= 31) {
+            week.fourth++;
+          }
+        });
+      });
+    } on Exception catch (e) {
+      print(e);
+    }
+  }
+
+  //
+  //
+  // the function to get sales numbers of the daily graph
+  Future getSalesNumberDaily() {
+    try {
+      FirebaseFirestore.instance
+          .collection('Sales')
+          .orderBy('timestamp', descending: true)
+          .where('timestamp',
+              isGreaterThanOrEqualTo: Timestamp.fromDate(DateTime.now()
+                  .subtract(Duration(days: DateTime.now().weekday - 1))))
+          .where('under', isEqualTo: FirebaseAuth.instance.currentUser.email)
+          .snapshots()
+          .listen((event) {
+        event.docs.forEach((element) {
+          DateTime date = (element.data()['timestamp'] as Timestamp).toDate();
+          //switch case for better performance
+          //adds 1 to the day if there was a transaction in that day
+          switch (date.weekday) {
+            case 1:
+              {
+                day.monday++;
+              }
+              break;
+            case 2:
+              {
+                day.tuesday++;
+              }
+              break;
+            case 3:
+              {
+                day.wednesday++;
+              }
+              break;
+            case 4:
+              {
+                day.thursday++;
+              }
+              break;
+            case 5:
+              {
+                day.friday++;
+              }
+              break;
+            case 6:
+              {
+                day.saturday++;
+              }
+              break;
+            case 7:
+              {
+                day.sunday++;
+              }
+              break;
+            default:
+              {
+                print("Invalid choice");
+              }
+              break;
+          }
+        });
+      });
+    } on Exception catch (e) {
+      print(e);
+    }
+  }
 
   //
   //
@@ -210,6 +408,9 @@ class _Dashboard_DistributorState extends State<Dashboard_Distributor> {
     getPharmacy();
     getPharmacists();
     getMedRequests();
+    getSalesNumberMonthly();
+    getSalesNumberWeekly();
+    getSalesNumberDaily();
   }
 
   void dispose() {
@@ -355,6 +556,37 @@ class _Dashboard_DistributorState extends State<Dashboard_Distributor> {
                         height: height,
                         count: count,
                         distCompName: widget.distCompName,
+                        //monthly start
+                        january: month.january,
+                        febuary: month.febuary,
+                        march: month.march,
+                        april: month.april,
+                        may: month.may,
+                        june: month.june,
+                        july: month.july,
+                        august: month.august,
+                        september: month.september,
+                        october: month.october,
+                        november: month.november,
+                        december: month.december,
+                        //monthly end
+
+                        //weekly start
+                        first: week.first,
+                        second: week.second,
+                        third: week.third,
+                        fourth: week.fourth,
+                        //weekly end
+
+                        //daily start
+                        monday: day.monday,
+                        tuesday: day.tuesday,
+                        wednesday: day.wednesday,
+                        thursday: day.thursday,
+                        friday: day.friday,
+                        saturday: day.saturday,
+                        sunday: day.sunday,
+                        //daily end
                       ),
                     ),
                   ),
@@ -1153,6 +1385,37 @@ class DistributorStatistics extends StatefulWidget {
   final double height;
   final int count;
   final String distCompName;
+  //The Monthly variables
+  int january;
+  int febuary;
+  int march;
+  int april;
+  int may;
+  int june;
+  int july;
+  int august;
+  int september;
+  int october;
+  int november;
+  int december;
+  //Monthly variables end
+
+  //The weekly variables
+  int first;
+  int second;
+  int third;
+  int fourth;
+  //Weekly variables end
+
+  //The daily variables
+  int monday;
+  int tuesday;
+  int wednesday;
+  int thursday;
+  int friday;
+  int saturday;
+  int sunday;
+  //the daily variables end
 
   DistributorStatistics({
     Key key,
@@ -1160,6 +1423,37 @@ class DistributorStatistics extends StatefulWidget {
     @required this.height,
     this.count,
     this.distCompName,
+    //month start
+    this.march,
+    this.april,
+    this.august,
+    this.december,
+    this.febuary,
+    this.january,
+    this.july,
+    this.june,
+    this.may,
+    this.november,
+    this.october,
+    this.september,
+    //month end
+
+    //week start
+    this.first,
+    this.second,
+    this.third,
+    this.fourth,
+    //week end
+
+    //day start
+    this.monday,
+    this.tuesday,
+    this.wednesday,
+    this.thursday,
+    this.friday,
+    this.saturday,
+    this.sunday,
+    //day end
   }) : super(key: key);
 
   @override
@@ -1376,15 +1670,28 @@ class _DistributorStatisticsState extends State<DistributorStatistics> {
                                     borderRadius: BorderRadius.circular(15),
                                   ),
                                   child: Padding(
-                                      padding: const EdgeInsets.only(
-                                        left: 15,
-                                        right: 15,
-                                        bottom: 10,
-                                        top: 15,
-                                      ),
-                                      child: BarChartMonthly_Distributor(
-                                        width: widget.width,
-                                      )),
+                                    padding: const EdgeInsets.only(
+                                      left: 15,
+                                      right: 15,
+                                      bottom: 10,
+                                      top: 15,
+                                    ),
+                                    child: BarChartMonthly_Distributor(
+                                      width: widget.width,
+                                      jan: widget.january,
+                                      feb: widget.febuary,
+                                      mar: widget.march,
+                                      apr: widget.april,
+                                      may: widget.may,
+                                      jun: widget.june,
+                                      jul: widget.july,
+                                      aug: widget.august,
+                                      sep: widget.september,
+                                      oct: widget.october,
+                                      nov: widget.november,
+                                      dec: widget.december,
+                                    ),
+                                  ),
                                 ),
                                 SizedBox(
                                   width: 20,
@@ -1396,14 +1703,20 @@ class _DistributorStatisticsState extends State<DistributorStatistics> {
                                     borderRadius: BorderRadius.circular(15),
                                   ),
                                   child: Padding(
-                                      padding: const EdgeInsets.only(
-                                        left: 15,
-                                        right: 15,
-                                        bottom: 10,
-                                        top: 15,
-                                      ),
-                                      child: BarChartWeekly_Distributor(
-                                          width: widget.width)),
+                                    padding: const EdgeInsets.only(
+                                      left: 15,
+                                      right: 15,
+                                      bottom: 10,
+                                      top: 15,
+                                    ),
+                                    child: BarChartWeekly_Distributor(
+                                      width: widget.width,
+                                      first: widget.first,
+                                      second: widget.second,
+                                      third: widget.third,
+                                      fourth: widget.fourth,
+                                    ),
+                                  ),
                                 ),
                                 SizedBox(
                                   width: 20,
@@ -1415,14 +1728,23 @@ class _DistributorStatisticsState extends State<DistributorStatistics> {
                                     borderRadius: BorderRadius.circular(15),
                                   ),
                                   child: Padding(
-                                      padding: const EdgeInsets.only(
-                                        left: 15,
-                                        right: 15,
-                                        bottom: 10,
-                                        top: 15,
-                                      ),
-                                      child: BarChartDaily_Distributor(
-                                          width: widget.width)),
+                                    padding: const EdgeInsets.only(
+                                      left: 15,
+                                      right: 15,
+                                      bottom: 10,
+                                      top: 15,
+                                    ),
+                                    child: BarChartDaily_Distributor(
+                                      width: widget.width,
+                                      mon: widget.monday,
+                                      tues: widget.tuesday,
+                                      wed: widget.wednesday,
+                                      thurs: widget.thursday,
+                                      fri: widget.friday,
+                                      sat: widget.saturday,
+                                      sun: widget.sunday,
+                                    ),
+                                  ),
                                 ),
                                 SizedBox(
                                   width: 20,

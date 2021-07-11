@@ -15,10 +15,10 @@ class BarChartWeekly extends StatefulWidget {
   ];
   final double width;
   final Function func;
-  final int first;
-  final int second;
-  final int third;
-  final int fourth;
+  int first;
+  int second;
+  int third;
+  int fourth;
 
   BarChartWeekly({
     this.width,

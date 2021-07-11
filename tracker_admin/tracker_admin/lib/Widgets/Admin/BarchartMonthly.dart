@@ -15,18 +15,18 @@ class BarChartMonthly extends StatefulWidget {
   ];
   final double width;
   final Function func;
-  final int jan;
-  final int feb;
-  final int mar;
-  final int apr;
-  final int may;
-  final int jun;
-  final int jul;
-  final int aug;
-  final int sep;
-  final int oct;
-  final int nov;
-  final int dec;
+  int jan;
+  int feb;
+  int mar;
+  int apr;
+  int may;
+  int jun;
+  int jul;
+  int aug;
+  int sep;
+  int oct;
+  int nov;
+  int dec;
 
   BarChartMonthly({
     this.width,
