@@ -10,8 +10,10 @@ import 'package:tracker/Models/CoronaModel.dart';
 import 'package:tracker/Widgets/CarroselWidgets.dart';
 import 'package:tracker/screens/About.dart';
 import 'package:tracker/screens/Clinic/Clinics.dart';
+import 'package:tracker/screens/Clinic/SearchClinic.dart';
 import 'package:tracker/screens/MedicineInfo.dart';
 import 'package:tracker/screens/Pharmacy/Pharmacies.dart';
+import 'package:tracker/screens/Pharmacy/SearchPharmacy.dart';
 import 'package:tracker/screens/Search.dart';
 import 'package:tracker/screens/Tips.dart';
 import 'package:tracker/screens/ViewMedicine.dart';
@@ -573,6 +575,70 @@ class _DashboardState extends State<Dashboard> {
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(10),
                                     color: Color.fromARGB(255, 149, 192, 255),
+                                  ),
+                                ),
+                              ),
+                              //
+                              //
+                              // The second search CLINICS button
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 15),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (_) => SearchClinic(),
+                                      ),
+                                    );
+                                  },
+                                  child: Container(
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 5, horizontal: 5),
+                                      child: Image(
+                                        width: width / 4.9,
+                                        height: width / 4.6,
+                                        image: AssetImage(
+                                            'assets/icons/user_pharmacies_clinics/searchClinic.png'),
+                                      ),
+                                    ),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: Color.fromARGB(255, 149, 192, 255),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              //
+                              //
+                              // The third search pharmacies button
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 15),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (_) => SearchPharmacy(),
+                                      ),
+                                    );
+                                  },
+                                  child: Container(
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 5, horizontal: 5),
+                                      child: Image(
+                                        width: width / 4.9,
+                                        height: width / 4.6,
+                                        image: AssetImage(
+                                            'assets/icons/user_pharmacies_clinics/searchPharmacy.png'),
+                                      ),
+                                    ),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: Color.fromARGB(255, 149, 192, 255),
+                                    ),
                                   ),
                                 ),
                               ),
