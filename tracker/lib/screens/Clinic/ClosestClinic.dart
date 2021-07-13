@@ -33,10 +33,10 @@ class _ClosestClinicState extends State<ClosestClinic> {
             element.data()['latLong'].longitude,
             location.latitude,
             location.longitude);
-        if (distance <= 1000000000) {
+        if (distance <= 10000) {
           setState(() {
             clinicsNearYou.add({
-              "distance": distance.toInt(),
+              "distance": distance,
               "document": element.data(),
             });
           });
@@ -81,12 +81,16 @@ class _ClosestClinicState extends State<ClosestClinic> {
       });
   }
 
+  //
+  //
+  //dtermine users position
   Future<Position> determinePosition() async {
     bool serviceEnabled;
     LocationPermission permission;
 
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
+      Fluttertoast.showToast(msg: 'Location services are disabled');
       return Future.error('Location services are disabled.');
     }
 
@@ -99,8 +103,11 @@ class _ClosestClinicState extends State<ClosestClinic> {
     }
 
     if (permission == LocationPermission.deniedForever) {
+      Fluttertoast.showToast(
+          msg:
+              'Location permissions are permanently denied, we cannot request permissions');
       return Future.error(
-          'Location permissions are permanently denied, we cannot request permissions.');
+          'Location permissions are permanently denied, we cannot request permissions');
     }
     await Geolocator.getCurrentPosition().then((value) {
       setState(() {
@@ -247,7 +254,9 @@ class _ClosestClinicState extends State<ClosestClinic> {
                                             padding:
                                                 const EdgeInsets.only(left: 12),
                                             child: Text(
-                                              item["distance"].toString() +
+                                              (item["distance"] / 1000)
+                                                      .toInt()
+                                                      .toString() +
                                                   ' kms away from you',
                                               style: TextStyle(
                                                 fontSize: width / 32,
