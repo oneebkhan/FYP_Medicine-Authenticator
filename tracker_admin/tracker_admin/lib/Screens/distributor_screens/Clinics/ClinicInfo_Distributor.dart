@@ -666,61 +666,6 @@ class _ClinicInfo_DistributorState extends State<ClinicInfo_Distributor> {
                             SizedBox(
                               height: 10,
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 10),
-                              child: Container(
-                                width: width,
-                                decoration: BoxDecoration(
-                                  color: Color.fromARGB(255, 50, 50, 50),
-                                  borderRadius: BorderRadius.circular(15),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(20),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Notable Employees',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white,
-                                          fontSize: width / 20,
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 5,
-                                      ),
-                                      info['employees'].length == 0
-                                          ? Text(
-                                              'N/A',
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: width / 30,
-                                              ),
-                                            )
-                                          : ListView.builder(
-                                              shrinkWrap: true,
-                                              itemCount:
-                                                  info['employees'].length,
-                                              itemBuilder:
-                                                  (BuildContext context,
-                                                      int i) {
-                                                return Text(
-                                                  info['employees'][i],
-                                                  style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: width / 30,
-                                                  ),
-                                                );
-                                              },
-                                            ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-
                             //
                             //
                             // To be removed if there is no barcode search

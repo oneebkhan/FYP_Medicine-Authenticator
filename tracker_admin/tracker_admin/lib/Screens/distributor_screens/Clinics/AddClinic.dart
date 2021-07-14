@@ -203,7 +203,6 @@ class _AddClinicState extends State<AddClinic> {
         "name": clinicName.text,
         "location": location.text,
         "companyName": info['companyName'],
-        "employees": [],
         "phoneNumber": phoneNumber.text,
         "rating": rating.text,
         "timings": timings.text,

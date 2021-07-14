@@ -519,7 +519,7 @@ class _Pharmacy_Clinics_InfoState extends State<Pharmacy_Clinics_Info> {
                             SizedBox(
                               height: 10,
                             ),
-                            widget.pharmOrClinic == 'Pharmacy'
+                            widget.pharmOrClinic == 'Clinic'
                                 ? Container()
                                 : Padding(
                                     padding: const EdgeInsets.only(bottom: 10),
