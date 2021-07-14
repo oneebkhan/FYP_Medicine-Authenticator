@@ -1,8 +1,13 @@
 import 'dart:async';
 import 'dart:math';
+import 'dart:typed_data';
+import 'package:flutter/services.dart';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:syncfusion_flutter_pdf/pdf.dart';
+import 'package:tracker_admin/configs/mobile.dart';
 
 class BarChartWeekly extends StatefulWidget {
   final List<Color> availableColors = [
@@ -13,8 +18,8 @@ class BarChartWeekly extends StatefulWidget {
     Colors.pink,
     Colors.redAccent,
   ];
+
   final double width;
-  final Function func;
   int first;
   int second;
   int third;
@@ -22,7 +27,6 @@ class BarChartWeekly extends StatefulWidget {
 
   BarChartWeekly({
     this.width,
-    this.func,
     this.first,
     this.second,
     this.third,
@@ -36,10 +40,104 @@ class BarChartWeekly extends StatefulWidget {
 class BarChartWeeklyState extends State<BarChartWeekly> {
   final Color barBackgroundColor = const Color.fromARGB(255, 149, 191, 255);
   final Duration animDuration = const Duration(milliseconds: 250);
-
   int touchedIndex;
-
   bool isPlaying = false;
+
+  //
+  //
+  // makes a pdf summary
+  Future<void> _createPDF() async {
+    PdfDocument document = PdfDocument();
+    final page = document.pages.add();
+
+    //the image at the top
+    page.graphics.drawImage(
+      PdfBitmap(await _readImageData('FYP.png')),
+      Rect.fromLTRB(0, 0, 0, 0),
+    );
+
+    //The top heading
+    page.graphics.drawString(
+      'Weekly Summary',
+      PdfStandardFont(PdfFontFamily.helvetica, 30),
+      bounds: Rect.fromLTRB(0, 100, 0, 0),
+    );
+    page.graphics.drawString(
+      'This document is for the administrator or the equivalent \nauthority to view the sales in the month, in a weekly format. \nThe information is confidential and should not be shared \noutside the organisation unless given permission.',
+      PdfStandardFont(PdfFontFamily.helvetica, 18),
+      bounds: Rect.fromLTRB(0, 150, 0, 0),
+    );
+    page.graphics.drawString(
+      'Compiled On: ' +
+          DateFormat.yMMMd().add_jm().format(DateTime.now()).toString(),
+      PdfStandardFont(PdfFontFamily.helvetica, 18),
+      bounds: Rect.fromLTRB(0, 270, 0, 0),
+    );
+
+    //making a table
+    PdfGrid grid = PdfGrid();
+    //theme
+    grid.style = PdfGridStyle(
+      font: PdfStandardFont(PdfFontFamily.helvetica, 25),
+      cellPadding: PdfPaddings(
+        left: 5,
+        right: 2,
+        top: 2,
+        bottom: 2,
+      ),
+    );
+    grid.columns.add(count: 2);
+    grid.headers.add(1);
+
+    //making the table headers
+    PdfGridRow header = grid.headers[0];
+    header.cells[0].value = 'Week of the Month';
+    header.cells[1].value = 'Sales';
+    grid.headers.applyStyle(PdfGridRowStyle(
+      font: PdfStandardFont(
+        PdfFontFamily.helvetica,
+        25,
+        style: PdfFontStyle.bold,
+      ),
+    ));
+
+    //---------------Rows in the table-----------------
+    PdfGridRow row = grid.rows.add();
+    row.cells[0].value = 'First Week';
+    row.cells[1].value = widget.first.toString();
+
+    row = grid.rows.add();
+    row.cells[0].value = 'Second Week';
+    row.cells[1].value = widget.second.toString();
+
+    row = grid.rows.add();
+    row.cells[0].value = 'Third Week';
+    row.cells[1].value = widget.third.toString();
+
+    row = grid.rows.add();
+    row.cells[0].value = 'Fourth Week';
+    row.cells[1].value = widget.fourth.toString();
+    //----------------rows end here---------------------
+
+    //drawing the table on the pdf
+    grid.draw(
+      page: document.pages.add(),
+      bounds: const Rect.fromLTWH(0, 0, 0, 0),
+    );
+
+    List<int> bytes = document.save();
+    document.dispose();
+
+    saveAndLaunchFile(bytes, 'Weekly.pdf');
+  }
+
+  //
+  //
+  //show image in the pdf file
+  Future<Uint8List> _readImageData(String name) async {
+    final data = await rootBundle.load('assets/icons/$name');
+    return data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +164,7 @@ class BarChartWeeklyState extends State<BarChartWeekly> {
               child: InkWell(
                 splashColor: Colors.white.withOpacity(0.5),
                 onTap: () {
-                  widget.func();
+                  _createPDF();
                 },
                 customBorder: CircleBorder(),
                 child: Ink(

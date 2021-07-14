@@ -138,6 +138,8 @@ class _Dashboard_PharmacistState extends State<Dashboard_Pharmacist> {
               "soldAtPharmacyID": pharmacistStream['pharmacyID'],
             }).then((value) {
               updateHistory();
+            }).then((value) {
+              medicineSaleCountIncrease(medName);
             });
           } else {
             Fluttertoast.showToast(msg: 'Medicine already sold');
@@ -187,6 +189,8 @@ class _Dashboard_PharmacistState extends State<Dashboard_Pharmacist> {
               "soldAtPharmacyID": pharmacistStream['pharmacyID'],
             }).then((value) {
               updateHistory();
+            }).then((value) {
+              medicineSaleCountIncrease(medName);
             });
           } else {
             Fluttertoast.showToast(msg: 'Medicine already sold');
@@ -323,6 +327,13 @@ class _Dashboard_PharmacistState extends State<Dashboard_Pharmacist> {
         medicineInPharmacy = value.data()['availableMedicine'];
       });
     });
+  }
+
+  medicineSaleCountIncrease(String name) {
+    FirebaseFirestore.instance
+        .collection('MedicineModel')
+        .doc(name)
+        .update({"totalSales": FieldValue.increment(1)});
   }
 
   @override

@@ -29,7 +29,7 @@ class _HistoryState extends State<History> {
       setState(() {
         historyStream = FirebaseFirestore.instance
             .collection('History')
-            .orderBy('timestamp', descending: false)
+            .orderBy('timestamp', descending: true)
             .snapshots();
       });
     } on Exception catch (e) {
