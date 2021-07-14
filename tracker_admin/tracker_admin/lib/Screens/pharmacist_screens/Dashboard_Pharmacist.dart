@@ -136,6 +136,7 @@ class _Dashboard_PharmacistState extends State<Dashboard_Pharmacist> {
               "sold": DateTime.now(),
               "soldAt": pharmacistStream['pharmacyLocation'],
               "soldAtPharmacyID": pharmacistStream['pharmacyID'],
+              "soldAtPharmacyName": pharmacistStream['pharmacyName'],
             }).then((value) {
               updateHistory();
             }).then((value) {
@@ -187,6 +188,7 @@ class _Dashboard_PharmacistState extends State<Dashboard_Pharmacist> {
               "sold": DateTime.now(),
               "soldAt": pharmacistStream['pharmacyLocation'],
               "soldAtPharmacyID": pharmacistStream['pharmacyID'],
+              "soldAtPharmacyName": pharmacistStream['pharmacyName'],
             }).then((value) {
               updateHistory();
             }).then((value) {
