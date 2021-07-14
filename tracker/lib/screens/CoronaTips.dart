@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tracker/Models/CoronaModel.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:tracker/screens/VaccineInfo.dart';
 
 class CoronaTips extends StatefulWidget {
   const CoronaTips({Key key});
@@ -100,6 +101,108 @@ class _CoronaTipsState extends State<CoronaTips> {
                   children: [
                     SizedBox(
                       height: width / 10,
+                    ),
+                    Text(
+                      'Vaccine Information',
+                      style: TextStyle(
+                        fontSize: width / 15,
+                        fontFamily: 'Montserrat',
+                        fontWeight: FontWeight.w600,
+                        color: Colors.grey[800],
+                      ),
+                    ),
+                    SizedBox(
+                      height: width / 20,
+                    ),
+                    Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => VaccineInfo(),
+                            ),
+                          );
+                        },
+                        child: Ink(
+                          width: width,
+                          padding: EdgeInsets.symmetric(
+                            horizontal: width / 50,
+                            vertical: width / 30,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Color.fromARGB(255, 240, 100, 100),
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                width: width / 5,
+                                height: width / 5,
+                                margin: EdgeInsets.only(left: 15),
+                                child: Center(
+                                  child: Image(
+                                    image: AssetImage(
+                                        'assets/images/vaccine1.png'),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(width: 10),
+                              Row(
+                                children: [
+                                  Container(
+                                    width: width / 2.2,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          'Corona Vaccines',
+                                          style: TextStyle(
+                                            fontSize: width / 25,
+                                            fontFamily: 'Montserrat',
+                                            fontWeight: FontWeight.w400,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 3,
+                                        ),
+                                        Text(
+                                          'Tap to find corona vaccines, their descriptions and their side effects.',
+                                          style: TextStyle(
+                                            fontSize: width / 35,
+                                            fontFamily: 'Montserrat',
+                                            fontWeight: FontWeight.w400,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Container(
+                                    height: width / 6,
+                                    child: Center(
+                                      child: Icon(
+                                        Icons.arrow_forward_ios_sharp,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: width / 15,
                     ),
                     Text(
                       'Precautions',
