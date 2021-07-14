@@ -8,7 +8,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lottie/lottie.dart';
+import 'package:tracker_admin/Widgets/RowInfo.dart';
 import 'package:tracker_admin/screens/distributor_screens/Pharmacies/EditPharmacy.dart';
+import 'package:tracker_admin/screens/distributor_screens/pharmacist/PharmacistInfo_Distributor.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 // ignore: camel_case_types
@@ -44,6 +46,7 @@ class _PharmacyInfo_DistributorState extends State<PharmacyInfo_Distributor> {
   List pharmaciesAdded;
   List clinicsAdded;
   var distributorInfo;
+  var pharmacistStream;
 
   //
   //
@@ -91,6 +94,22 @@ class _PharmacyInfo_DistributorState extends State<PharmacyInfo_Distributor> {
       });
     } on Exception catch (e) {
       print(e);
+      Fluttertoast.showToast(msg: '$e');
+    }
+  }
+
+  //
+  //
+  //get the pharmacists list
+  getPharmacistList() {
+    try {
+      setState(() {
+        pharmacistStream = FirebaseFirestore.instance
+            .collection('Pharmacist')
+            .where('email', whereIn: info['employees'])
+            .snapshots();
+      });
+    } on Exception catch (e) {
       Fluttertoast.showToast(msg: '$e');
     }
   }
@@ -206,6 +225,7 @@ class _PharmacyInfo_DistributorState extends State<PharmacyInfo_Distributor> {
 
     Future.delayed(Duration(milliseconds: 1000), () {
       getDistributorPharmacies();
+      getPharmacistList();
       setState(() {
         opac2 = 1.0;
       });
@@ -342,39 +362,110 @@ class _PharmacyInfo_DistributorState extends State<PharmacyInfo_Distributor> {
                   labelBackgroundColor: Colors.grey[800],
                   labelStyle: TextStyle(color: Colors.white),
                   onTap: () {
-                    showDialog(
-                      context: context,
-                      builder: (_) => AlertDialog(
-                        title: Text('Delete ' + info['name'] + '?'),
-                        content: info['employees'].toString() == '[]'
-                            ? Text(
-                                'This will delete the pharmacy and its images folder.')
-                            : Text(
-                                'This will delete the pharmacy and its images folder.\n\nNote: You will however have to delete these pharmacists manually:\n${info['employees'].toString()}'),
-                        actions: [
-                          TextButton(
-                            child: Text('Yes'),
-                            onPressed: () {
-                              Navigator.pop(context);
-                              showDialog(
-                                  context: context,
-                                  builder: (_) => customAlert());
-                              updateHistory();
-                              Future.delayed(Duration(milliseconds: 2100), () {
-                                Navigator.pop(context);
-                                //Navigator.pop(context);
-                              });
-                            },
-                          ),
-                          TextButton(
-                            child: Text('No'),
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                          ),
-                        ],
-                      ),
-                    );
+                    info['employees'].toString() == '[]'
+                        ? showDialog(
+                            context: context,
+                            builder: (_) => AlertDialog(
+                              title: Text('Delete ' + info['name'] + '?'),
+                              content: Text(
+                                  'This will delete the pharmacy and its images folder.'),
+                              actions: [
+                                TextButton(
+                                  child: Text('Yes'),
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                    showDialog(
+                                        context: context,
+                                        builder: (_) => customAlert());
+                                    updateHistory();
+                                    Future.delayed(Duration(milliseconds: 2100),
+                                        () {
+                                      Navigator.pop(context);
+                                      //Navigator.pop(context);
+                                    });
+                                  },
+                                ),
+                                TextButton(
+                                  child: Text('No'),
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                              ],
+                            ),
+                          )
+                        : showDialog(
+                            context: context,
+                            builder: (_) => AlertDialog(
+                              content: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                      'You will have to delete all the associated pharmacists below before deleting the pharmacy:'),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Container(
+                                    height: height / 5,
+                                    width: width,
+                                    child: StreamBuilder(
+                                      stream: pharmacistStream,
+                                      builder: (BuildContext context,
+                                          AsyncSnapshot snapshot) {
+                                        if (!snapshot.hasData) {
+                                          return Container(
+                                            height: 20,
+                                            width: 20,
+                                            child: FittedBox(
+                                              fit: BoxFit.contain,
+                                              child:
+                                                  CircularProgressIndicator(),
+                                            ),
+                                          );
+                                        }
+                                        return ListView.builder(
+                                          shrinkWrap: true,
+                                          itemCount: snapshot.data.docs.length,
+                                          itemBuilder: (BuildContext context,
+                                              int index) {
+                                            QueryDocumentSnapshot item =
+                                                snapshot.data.docs[index];
+                                            return RowInfo(
+                                              width: width,
+                                              title: item['name'],
+                                              imageURL: item['image'],
+                                              location: item['email'],
+                                              func: () {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (_) =>
+                                                        PharmacistsInfo_Distributor(
+                                                      pharm: item['email'],
+                                                      pharmacyID:
+                                                          item['pharmacyID'],
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                            );
+                                          },
+                                        );
+                                      },
+                                    ),
+                                  )
+                                ],
+                              ),
+                              actions: [
+                                TextButton(
+                                  child: Text('OK'),
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                              ],
+                            ),
+                          );
                   },
                 ),
                 SpeedDialChild(

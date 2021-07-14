@@ -9,6 +9,7 @@ import 'package:tracker_admin/screens/admin_screens/Distributor.dart';
 import 'package:tracker_admin/screens/distributor_screens/AddMedicine.dart';
 import 'package:tracker_admin/screens/distributor_screens/pharmacist/AddPharmacist.dart';
 import 'package:tracker_admin/screens/admin_screens/AddDistributor.dart';
+import 'package:tracker_admin/screens/distributor_screens/pharmacist/PharmacistInfo_Distributor.dart';
 
 class SearchPharmacist extends StatefulWidget {
   SearchPharmacist({Key key}) : super(key: key);
@@ -253,21 +254,17 @@ class _SearchPharmacistState extends State<SearchPharmacist> {
                                                   width: width,
                                                   title: item['name'],
                                                   func: () {
-                                                    // Navigator.pushReplacement(
-                                                    //   context,
-                                                    //   MaterialPageRoute(
-                                                    //     builder: (_) =>
-                                                    //         AddPharmacist(
-                                                    //       pharmName:
-                                                    //           item['name'],
-                                                    //       location:
-                                                    //           item['location'],
-                                                    //       compName: item[
-                                                    //           'companyName'],
-                                                    //       uid: item['uid'],
-                                                    //     ),
-                                                    //   ),
-                                                    // );
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (_) =>
+                                                            PharmacistsInfo_Distributor(
+                                                          pharm: item['email'],
+                                                          pharmacyID: item[
+                                                              'pharmacyID'],
+                                                        ),
+                                                      ),
+                                                    );
                                                   },
                                                 );
                                               } else {
