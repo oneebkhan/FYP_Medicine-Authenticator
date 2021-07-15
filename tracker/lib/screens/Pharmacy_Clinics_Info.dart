@@ -6,6 +6,7 @@ import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:tracker/screens/MedicineInfo_WithoutBarcode.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 // ignore: camel_case_types
@@ -555,6 +556,8 @@ class _Pharmacy_Clinics_InfoState extends State<Pharmacy_Clinics_Info> {
                                                     ),
                                                   )
                                                 : ListView.builder(
+                                                    physics:
+                                                        NeverScrollableScrollPhysics(),
                                                     shrinkWrap: true,
                                                     itemCount: info['employees']
                                                         .length,
@@ -566,6 +569,88 @@ class _Pharmacy_Clinics_InfoState extends State<Pharmacy_Clinics_Info> {
                                                         style: TextStyle(
                                                           color: Colors.white,
                                                           fontSize: width / 30,
+                                                        ),
+                                                      );
+                                                    },
+                                                  ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+
+                            widget.pharmOrClinic == 'Clinic'
+                                ? Container()
+                                : Padding(
+                                    padding: const EdgeInsets.only(bottom: 10),
+                                    child: Container(
+                                      width: width,
+                                      decoration: BoxDecoration(
+                                        color: Color.fromARGB(255, 50, 50, 50),
+                                        borderRadius: BorderRadius.circular(15),
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(20),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              'Available Medicine',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.white,
+                                                fontSize: width / 20,
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height: 5,
+                                            ),
+                                            info['availableMedicine'].length ==
+                                                    0
+                                                ? Text(
+                                                    'N/A',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: width / 30,
+                                                    ),
+                                                  )
+                                                : ListView.builder(
+                                                    shrinkWrap: true,
+                                                    physics:
+                                                        NeverScrollableScrollPhysics(),
+                                                    itemCount: info[
+                                                            'availableMedicine']
+                                                        .length,
+                                                    itemBuilder:
+                                                        (BuildContext context,
+                                                            int i) {
+                                                      return Material(
+                                                        color:
+                                                            Colors.transparent,
+                                                        child: InkWell(
+                                                          onTap: () {
+                                                            Navigator.push(
+                                                              context,
+                                                              MaterialPageRoute(
+                                                                builder: (_) =>
+                                                                    MedicineInfo_WithoutBarcode(
+                                                                  name: info[
+                                                                      'availableMedicine'][i],
+                                                                ),
+                                                              ),
+                                                            );
+                                                          },
+                                                          child: Text(
+                                                            info['availableMedicine']
+                                                                [i],
+                                                            style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontSize:
+                                                                  width / 30,
+                                                            ),
+                                                          ),
                                                         ),
                                                       );
                                                     },
