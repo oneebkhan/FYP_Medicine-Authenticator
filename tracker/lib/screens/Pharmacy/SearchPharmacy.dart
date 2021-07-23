@@ -224,12 +224,8 @@ class _SearchPharmacyState extends State<SearchPharmacy> {
                                         }
                                         return ListView.builder(
                                             shrinkWrap: true,
-                                            itemCount: snapshot
-                                                        .data.docs.length >
-                                                    6
-                                                ? 6
-                                                : snapshot.data.docs
-                                                    .length, //snapshotData.docs.length,
+                                            itemCount:
+                                                snapshot.data.docs.length,
                                             itemBuilder: (BuildContext context,
                                                 int index) {
                                               QueryDocumentSnapshot item =
